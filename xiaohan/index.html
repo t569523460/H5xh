@@ -2,101 +2,76 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 手机端优化视口设置 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>小寒 · 寻阳记</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
+        /* 重置样式 */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
+        }
+        
         body {
-            font-family: 'Microsoft YaHei', 'STKaiti', serif; /* 使用更有书法感的字体 */
-            background: linear-gradient(to bottom, #e6f7ff 0%, #f0f9ff 100%); /* 淡蓝渐变天空 */
+            font-family: 'Microsoft YaHei', 'STKaiti', sans-serif;
+            background: linear-gradient(to bottom, #e6f7ff 0%, #f0f9ff 100%);
             color: #333;
             height: 100vh;
+            height: -webkit-fill-available; /* 移动端全高 */
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            touch-action: pan-x pan-y; /* 优化触摸操作 */
         }
+        
+        /* 顶部标题栏 */
         .header {
             text-align: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            border-bottom: 1px solid #ccc;
-            z-index: 10;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid #e0e0e0;
+            z-index: 100;
+            flex-shrink: 0;
+            backdrop-filter: blur(10px); /* 毛玻璃效果 */
+            -webkit-backdrop-filter: blur(10px);
         }
+        
         .header h1 { 
-            color: #2c5282; /* 深蓝色 */
-            margin-bottom: 5px;
-            font-size: 1.8rem;
+            color: #2c5282;
+            margin-bottom: 4px;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
+        
         .subtitle {
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            opacity: 0.9;
         }
-        /* 核心画布容器 */
-     /* 核心画布容器 - 已优化移动端 */
-.scroll-container {
-    flex: 1;
-    overflow-x: auto;
-    overflow-y: hidden;
-    position: relative;
-    -webkit-overflow-scrolling: touch; /*  iOS平滑滚动 */
-}
-
-.painting {
-    min-width: 1500px; /* 改为最小宽度 */
-    width: auto; /* 自动宽度 */
-    height: 100%;
-    background: url('background.png') center/cover no-repeat;
-    position: relative;
-    cursor: pointer;
-}
-
-/* 移动端响应式设计 */
-@media screen and (max-width: 768px) {
-    .painting {
-        min-width: 1200px; /* 手机端宽度 */
-    }
-    
-    .hotspot {
-        width: 70px !important;
-        height: 70px !important;
-        min-width: 70px;
-        min-height: 70px;
-    }
-    
-    .hotspot i {
-        font-size: 22px !important;
-    }
-    
-    .knowledge-card {
-        width: 95% !important;
-        max-width: 95% !important;
-        padding: 15px;
-        bottom: 10px;
-    }
-    
-    .card-title {
-        font-size: 1.2rem;
-    }
-}
-
-/* 触摸设备优化 */
-@media (hover: none) and (pointer: coarse) {
-    .hotspot {
-        background-color: rgba(255, 215, 0, 0.15);
-    }
-    
-    .hotspot:active {
-        background-color: rgba(255, 215, 0, 0.3);
-        transform: scale(0.95);
-        transition: transform 0.1s;
-    }
-    
-    body {
-        -webkit-tap-highlight-color: transparent; /* 移除点击高亮 */
-    }
-}
-        /* 可点击的热区样式 */
+        
+        /* 核心画卷容器 - 手机优化 */
+        .scroll-container {
+            flex: 1;
+            overflow-x: auto;
+            overflow-y: hidden;
+            position: relative;
+            -webkit-overflow-scrolling: touch; /* iOS平滑滚动 */
+            overscroll-behavior-x: contain; /* 防止过度滚动 */
+        }
+        
+        /* 画卷主体 - 改为最小宽度适应手机 */
+        .painting {
+            min-width: 1200px; /* 手机端优化宽度 */
+            height: 100%;
+            background: url('background.png') center/cover no-repeat;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        /* 触摸友好的热点样式 */
         .hotspot {
             position: absolute;
             border-radius: 50%;
@@ -104,74 +79,334 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s;
-            z-index: 2;
+            transition: all 0.3s ease;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(139, 69, 19, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        .hotspot:hover { background-color: rgba(255, 215, 0, 0.1); }
+        
+        /* 移动端触摸反馈 */
+        @media (hover: none) and (pointer: coarse) {
+            .hotspot {
+                min-width: 70px;
+                min-height: 70px;
+                background: rgba(255, 255, 255, 0.25);
+            }
+            
+            .hotspot:active {
+                background: rgba(255, 215, 0, 0.4);
+                transform: scale(0.92);
+                transition: transform 0.1s;
+            }
+        }
+        
+        /* 桌面端悬停效果 */
+        @media (hover: hover) {
+            .hotspot:hover {
+                background: rgba(255, 215, 0, 0.2);
+                transform: scale(1.05);
+                border-color: rgba(139, 69, 19, 0.5);
+            }
+        }
+        
         .hotspot i {
-            color: rgba(139, 69, 19, 0.7); /* 棕色图标 */
-            font-size: 24px;
+            color: rgba(139, 69, 19, 0.9);
+            font-size: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
-        /* 三候热区的具体位置 (需根据背景图调整) */
-        .hotspot-sky { top: 20%; left: 70%; width: 80px; height: 80px; } /* 天空-雁 */
-        .hotspot-tree { top: 50%; left: 40%; width: 70px; height: 70px; } /* 树枝-鹊 */
-        .hotspot-grass { top: 75%; left: 60%; width: 65px; height: 65px; } /* 草丛-雉 */
-        /* 动态元素 (大雁、喜鹊、野鸡) - 初始隐藏 */
+        
+        /* 三个热点的具体位置（需根据您的背景图调整） */
+        .hotspot-sky { 
+            top: 20%; 
+            left: 70%; 
+            width: 80px; 
+            height: 80px; 
+        }
+        
+        .hotspot-tree { 
+            top: 50%; 
+            left: 40%; 
+            width: 75px; 
+            height: 75px; 
+        }
+        
+        .hotspot-grass { 
+            top: 75%; 
+            left: 60%; 
+            width: 70px; 
+            height: 70px; 
+        }
+        
+        /* 动态元素 */
         .dynamic-element {
             position: absolute;
-            opacity: 0; /* 默认不可见 */
-            transition: opacity 0.5s;
-            pointer-events: none; /* 不干扰点击 */
-            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 5;
+            will-change: transform, opacity; /* 性能优化 */
         }
-        #geese { top: 15%; left: 80%; width: 150px; }
-        #magpie { top: 45%; left: 38%; width: 60px; }
-        #pheasant { top: 70%; left: 55%; width: 80px; }
-        /* 知识卡片样式 */
+        
+        #geese { 
+            top: 15%; 
+            left: 80%; 
+            width: 140px; 
+            height: auto;
+        }
+        
+        #magpie { 
+            top: 45%; 
+            left: 38%; 
+            width: 65px; 
+            height: auto;
+        }
+        
+        #pheasant { 
+            top: 70%; 
+            left: 55%; 
+            width: 85px; 
+            height: auto;
+        }
+        
+        /* 知识卡片 - 手机优化 */
         .knowledge-card {
             position: absolute;
-            bottom: 20px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             border-left: 5px solid #2c5282;
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 90%;
-            width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 18px;
+            width: 92%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             opacity: 0;
-            transition: opacity 0.8s ease;
-            z-index: 100;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            z-index: 200;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
-        .knowledge-card.show { opacity: 1; }
+        
+        .knowledge-card.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
         .card-title {
             color: #2c5282;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: bold;
         }
-        .card-content { line-height: 1.6; color: #555; }
+        
+        .card-content {
+            line-height: 1.6;
+            color: #555;
+            font-size: 0.95rem;
+        }
+        
+        /* 操作提示 */
         .hint {
             text-align: center;
             padding: 10px;
-            color: #888;
-            font-size: 0.9rem;
+            color: #777;
+            font-size: 0.85rem;
             position: absolute;
             bottom: 5px;
             width: 100%;
+            z-index: 50;
+            background: linear-gradient(transparent, rgba(255,255,255,0.7));
+        }
+        
+        /* 音乐控制按钮 */
+        .music-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 300;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .music-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .music-btn i {
+            color: #2c5282;
+            font-size: 22px;
+        }
+        
+        /* 加载动画 */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f0f9ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+        
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e6f7ff;
+            border-top: 4px solid #2c5282;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        /* 动画关键帧 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes flyAcross {
+            0% { 
+                transform: translateX(100px) translateY(0) rotate(0deg); 
+                opacity: 0.8; 
+            }
+            100% { 
+                transform: translateX(-300px) translateY(-20px) rotate(-5deg); 
+                opacity: 0; 
+            }
+        }
+        
+        .fly-animation { 
+            animation: flyAcross 3.5s ease-in-out forwards; 
+        }
+        
+        @keyframes hop {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-12px) rotate(-8deg); }
+            75% { transform: translateY(-6px) rotate(8deg); }
+        }
+        
+        .hop-animation { 
+            animation: hop 1.2s ease-in-out 2; 
+        }
+        
+        @keyframes call {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        
+        .call-animation { 
+            animation: call 0.7s ease-in-out 3; 
+            filter: drop-shadow(0 0 8px rgba(255, 200, 0, 0.6));
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 12px;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .hotspot {
+                width: 70px !important;
+                height: 70px !important;
+            }
+            
+            .hotspot i {
+                font-size: 24px;
+            }
+            
+            .knowledge-card {
+                width: 95%;
+                padding: 15px;
+                bottom: 10px;
+            }
+            
+            .card-title {
+                font-size: 1.2rem;
+            }
+            
+            .card-content {
+                font-size: 0.9rem;
+            }
+            
+            .music-btn {
+                width: 40px;
+                height: 40px;
+                top: 12px;
+                right: 12px;
+            }
+            
+            .music-btn i {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .painting {
+                min-width: 1000px;
+            }
+            
+            .hotspot {
+                width: 65px !important;
+                height: 65px !important;
+            }
+            
+            .hotspot i {
+                font-size: 22px;
+            }
+            
+            #geese { width: 120px; }
+            #magpie { width: 55px; }
+            #pheasant { width: 70px; }
         }
     </style>
 </head>
 <body>
+    <!-- 加载动画 -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+    
+    <!-- 音乐控制按钮 -->
+    <button class="music-btn" id="musicBtn" title="音乐开关">
+        <i class="fas fa-volume-up"></i>
+    </button>
+    
     <!-- 页头 -->
     <div class="header">
         <h1><i class="fas fa-snowflake"></i> 小寒 · 寻阳记</h1>
         <p class="subtitle">点击画卷中的印记，探寻冬日里萌动的阳气</p>
     </div>
-
+    
     <!-- 核心画卷区域 -->
     <div class="scroll-container" id="scrollContainer">
         <div class="painting" id="mainPainting">
@@ -185,183 +420,227 @@
             <div class="hotspot hotspot-grass" id="hotspotGrass" title="点击探寻三候">
                 <i class="fas fa-kiwi-bird"></i>
             </div>
-
-            <!-- 动态元素 (需替换为你的图片或SVG) -->
+            
+            <!-- 动态元素 -->
             <img src="大雁.png" alt="北飞的大雁" class="dynamic-element" id="geese">
             <img src="喜鹊.png" alt="筑巢的喜鹊" class="dynamic-element" id="magpie">
             <img src="雏鸡.png" alt="鸣叫的野鸡" class="dynamic-element" id="pheasant">
         </div>
     </div>
-
+    
     <!-- 知识点提示卡片 -->
     <div class="knowledge-card" id="knowledgeCard">
         <div class="card-title" id="cardTitle"><i class="fas fa-seedling"></i> 小寒一候：雁北乡</div>
         <p class="card-content" id="cardContent">
-            此时阳气已动，大雁开始向北迁徙。古人认为候鸟是阴阳变化的先知，“乡”是趋向之意。
+            此时阳气已动，大雁开始向北迁徙。古人认为候鸟是阴阳变化的先知，"乡"是趋向之意。
         </p>
     </div>
-
+    
     <!-- 操作提示 -->
-    <p class="hint"><i class="fas fa-hand-point-up"></i> 请点击画卷上的图标，探索小寒三候</p>
-
+    <p class="hint"><i class="fas fa-hand-point-up"></i> 点击画卷上的图标，探索小寒三候</p>
+    
+    <!-- 背景音乐（自动播放） -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
+    
     <script>
-        // DOM 元素
-        const hotspots = {
-            sky: document.getElementById('hotspotSky'),
-            tree: document.getElementById('hotspotTree'),
-            grass: document.getElementById('hotspotGrass')
-        };
-        const elements = {
-            geese: document.getElementById('geese'),
-            magpie: document.getElementById('magpie'),
-            pheasant: document.getElementById('pheasant')
-        };
-        const knowledgeCard = document.getElementById('knowledgeCard');
-        const cardTitle = document.getElementById('cardTitle');
-        const cardContent = document.getElementById('cardContent');
-
-        // 知识库：小寒三候的详细解释
-        const knowledgeBase = {
-            sky: {
-                title: '小寒一候：雁北乡',
-                icon: '<i class="fas fa-dove"></i>',
-                content: '“雁北乡”的“乡”是趋向之意。此时阳气已动，大雁是顺阴阳而迁移的候鸟，它们开始感知到春信，启程向北方的故乡飞回。这是小寒节气阳气萌动的最初征兆。',
-                element: 'geese'
-            },
-            tree: {
-                title: '小寒二候：鹊始巢',
-                icon: '<i class="fas fa-feather-alt"></i>',
-                content: '喜鹊感知到阳气回升，开始衔来树枝，精心修筑巢穴，为春天的繁衍做准备。鹊巢的搭建，是自然界阳气积聚的直观体现。',
-                element: 'magpie'
-            },
-            grass: {
-                title: '小寒三候：雉始雊',
-                icon: '<i class="fas fa-kiwi-bird"></i>',
-                content: '“雊”是鸣叫的意思。羽毛鲜艳的野鸡（雉）在接近四九时，因感到阳气的生长而开始发出求偶的鸣叫。生命在严寒中已开始律动。',
-                element: 'pheasant'
-            }
-        };
-
-        // 当前激活的状态
-        let activeState = null;
-
-        // 为每个热点绑定点击事件
-        Object.keys(hotspots).forEach(key => {
-            hotspots[key].addEventListener('click', () => activateHotspot(key));
-        });
-
-        // 激活热点的函数
-        function activateHotspot(key) {
-            // 如果点击的是已激活的，则关闭
-            if (activeState === key) {
-                resetActivation();
-                return;
-            }
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 隐藏加载动画
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+            }, 800);
             
-            const info = knowledgeBase[key];
+            // DOM 元素
+            const hotspots = {
+                sky: document.getElementById('hotspotSky'),
+                tree: document.getElementById('hotspotTree'),
+                grass: document.getElementById('hotspotGrass')
+            };
             
-            // 1. 更新知识卡片
-            cardTitle.innerHTML = `${info.icon} ${info.title}`;
-            cardContent.textContent = info.content;
-            knowledgeCard.classList.add('show');
+            const elements = {
+                geese: document.getElementById('geese'),
+                magpie: document.getElementById('magpie'),
+                pheasant: document.getElementById('pheasant')
+            };
             
-            // 2. 显示对应的动态元素并添加动画类
-            const elementToShow = elements[info.element];
-            elementToShow.style.opacity = '1';
+            const knowledgeCard = document.getElementById('knowledgeCard');
+            const cardTitle = document.getElementById('cardTitle');
+            const cardContent = document.getElementById('cardContent');
+            const bgMusic = document.getElementById('bgMusic');
+            const musicBtn = document.getElementById('musicBtn');
+            const musicIcon = musicBtn.querySelector('i');
             
-            // 根据不同的元素添加不同的动画效果
-            elementToShow.classList.remove('fly-animation', 'hop-animation', 'call-animation');
-            void elementToShow.offsetWidth; // 触发重排以重置动画
+            // 知识库
+            const knowledgeBase = {
+                sky: {
+                    title: '小寒一候：雁北乡',
+                    icon: '<i class="fas fa-dove"></i>',
+                    content: '“雁北乡”的"乡"是趋向之意。此时阳气已动，大雁是顺阴阳而迁移的候鸟，它们开始感知到春信，启程向北方的故乡飞回。这是小寒节气阳气萌动的最初征兆。',
+                    element: 'geese'
+                },
+                tree: {
+                    title: '小寒二候：鹊始巢',
+                    icon: '<i class="fas fa-feather-alt"></i>',
+                    content: '喜鹊感知到阳气回升，开始衔来树枝，精心修筑巢穴，为春天的繁衍做准备。鹊巢的搭建，是自然界阳气积聚的直观体现。',
+                    element: 'magpie'
+                },
+                grass: {
+                    title: '小寒三候：雉始雊',
+                    icon: '<i class="fas fa-kiwi-bird"></i>',
+                    content: '"雊"是鸣叫的意思。羽毛鲜艳的野鸡（雉）在接近四九时，因感到阳气的生长而开始发出求偶的鸣叫。生命在严寒中已开始律动。',
+                    element: 'pheasant'
+                }
+            };
             
-            if (info.element === 'geese') {
-                elementToShow.classList.add('fly-animation'); // 大雁飞过
-            } else if (info.element === 'magpie') {
-                elementToShow.classList.add('hop-animation'); // 喜鹊跳跃
-            } else if (info.element === 'pheasant') {
-                elementToShow.classList.add('call-animation'); // 雉鸡鸣叫
-            }
+            let activeState = null;
+            let musicStarted = false;
             
-            // 3. 更新状态
-            activeState = key;
+            // 初始化音乐
+            bgMusic.volume = 0.25;
             
-            // 4. 自动滚动到合适位置 (增强体验)
-            const container = document.getElementById('scrollContainer');
-            const hotspotRect = hotspots[key].getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            
-            container.scrollLeft += (hotspotRect.left - containerRect.left) - containerRect.width / 2 + hotspotRect.width / 2;
-        }
-
-        // 重置所有激活状态
-        function resetActivation() {
-            knowledgeCard.classList.remove('show');
-            Object.values(elements).forEach(el => {
-                el.style.opacity = '0';
-                el.className = 'dynamic-element'; // 移除所有动画类
+            // 音乐控制
+            musicBtn.addEventListener('click', function() {
+                if (bgMusic.paused) {
+                    bgMusic.play();
+                    musicIcon.className = 'fas fa-volume-up';
+                } else {
+                    bgMusic.pause();
+                    musicIcon.className = 'fas fa-volume-mute';
+                }
             });
-            activeState = null;
-        }
-
-        // 点击画布其他区域也可以关闭卡片
-        document.getElementById('mainPainting').addEventListener('click', function(e) {
-            // 如果点击的不是热点本身
-            if (!e.target.closest('.hotspot')) {
-                resetActivation();
+            
+            // 触摸设备优化：添加触摸事件
+            Object.keys(hotspots).forEach(key => {
+                const hotspot = hotspots[key];
+                
+                // 点击事件
+                hotspot.addEventListener('click', () => activateHotspot(key));
+                
+                // 触摸事件（移动端）
+                hotspot.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    this.style.transform = 'scale(0.95)';
+                    this.style.backgroundColor = 'rgba(255, 215, 0, 0.3)';
+                });
+                
+                hotspot.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    this.style.transform = '';
+                    this.style.backgroundColor = '';
+                    activateHotspot(key);
+                });
+            });
+            
+            // 激活热点函数
+            function activateHotspot(key) {
+                // 如果是第一次交互，启动音乐
+                if (!musicStarted) {
+                    bgMusic.play().catch(e => {
+                        console.log('音乐播放需要用户交互');
+                    });
+                    musicStarted = true;
+                }
+                
+                // 如果点击的是已激活的，则关闭
+                if (activeState === key) {
+                    resetActivation();
+                    return;
+                }
+                
+                const info = knowledgeBase[key];
+                
+                // 更新知识卡片
+                cardTitle.innerHTML = `${info.icon} ${info.title}`;
+                cardContent.textContent = info.content;
+                knowledgeCard.classList.add('show');
+                
+                // 显示动态元素并添加动画
+                const elementToShow = elements[info.element];
+                elementToShow.style.opacity = '1';
+                
+                // 移除旧动画，添加新动画
+                elementToShow.classList.remove('fly-animation', 'hop-animation', 'call-animation');
+                void elementToShow.offsetWidth; // 触发重排
+                
+                if (info.element === 'geese') {
+                    elementToShow.classList.add('fly-animation');
+                } else if (info.element === 'magpie') {
+                    elementToShow.classList.add('hop-animation');
+                } else if (info.element === 'pheasant') {
+                    elementToShow.classList.add('call-animation');
+                }
+                
+                // 更新状态
+                activeState = key;
+                
+                // 自动滚动到合适位置（移动端优化）
+                const container = document.getElementById('scrollContainer');
+                const hotspotRect = hotspots[key].getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
+                
+                const scrollLeft = (hotspotRect.left - containerRect.left) - 
+                                 (containerRect.width / 2) + 
+                                 (hotspotRect.width / 2);
+                
+                container.scrollBy({
+                    left: scrollLeft,
+                    behavior: 'smooth'
+                });
             }
+            
+            // 重置激活状态
+            function resetActivation() {
+                knowledgeCard.classList.remove('show');
+                Object.values(elements).forEach(el => {
+                    el.style.opacity = '0';
+                    el.className = 'dynamic-element';
+                });
+                activeState = null;
+            }
+            
+            // 点击画布其他区域关闭卡片
+            document.getElementById('mainPainting').addEventListener('click', function(e) {
+                if (!e.target.closest('.hotspot')) {
+                    resetActivation();
+                }
+            });
+            
+            // 触摸设备：点击空白处关闭卡片
+            document.getElementById('mainPainting').addEventListener('touchend', function(e) {
+                if (!e.target.closest('.hotspot')) {
+                    resetActivation();
+                }
+            });
+            
+            // 页面点击时尝试播放音乐（解决浏览器自动播放限制）
+            document.addEventListener('click', function initAudio() {
+                if (!musicStarted && bgMusic.paused) {
+                    bgMusic.play().catch(e => {});
+                    musicStarted = true;
+                }
+                document.removeEventListener('click', initAudio);
+            }, { once: true });
+            
+            // 页面加载后尝试播放音乐
+            setTimeout(() => {
+                if (!musicStarted) {
+                    bgMusic.play().catch(e => {});
+                    musicStarted = true;
+                }
+            }, 1000);
+            
+            // 防止移动端双击缩放
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
         });
     </script>
-
-    <!-- 添加CSS动画关键帧 -->
-    <style>
-        /* 大雁飞行动画 */
-        @keyframes flyAcross {
-            0% { transform: translateX(100px) translateY(0); opacity: 0.8; }
-            100% { transform: translateX(-300px) translateY(-20px); opacity: 0; }
-        }
-        .fly-animation { animation: flyAcross 4s ease-in-out forwards; }
-
-        /* 喜鹊跳跃/筑巢动画 */
-        @keyframes hop {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-10px) rotate(-5deg); }
-            75% { transform: translateY(-5px) rotate(5deg); }
-        }
-        .hop-animation { animation: hop 1.5s ease-in-out 2; }
-
-        /* 野鸡鸣叫动画 */
-        @keyframes call {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-          .call-animation {
-        animation: call 0.8s ease-in-out 3;
-        filter: drop-shadow(0 0 5px rgba(255, 200, 0, 0.7));
-    }
-    </style>
-
-<!-- 背景音乐 -->
-<audio id="bgMusic" loop>
-    <source src="Richard Clayderman - Chinese Garden.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-// 背景音乐控制
-const bgMusic = document.getElementById('bgMusic');
-bgMusic.volume = 0.3;
-
-// 用户第一次与页面交互时开始播放
-document.addEventListener('click', function initAudio() {
-    bgMusic.play().catch(e => {
-        console.log('自动播放被阻止，用户需要手动允许');
-    });
-    document.removeEventListener('click', initAudio);
-}, { once: true });
-
-// 页面加载后尝试播放
-window.addEventListener('load', function() {
-    bgMusic.play().catch(e => {});
-});
-</script>
-
 </body>
 </html>
