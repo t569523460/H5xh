@@ -56,85 +56,14 @@
             filter: brightness(0.8);
         }
         
-        /* 鸟类交互图标容器 */
-        .bird-icons-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 4;
-            pointer-events: none;
-        }
-        
-        /* 鸟类交互图标样式 */
-        .bird-icon {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-            pointer-events: auto;
-            z-index: 5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s;
-        }
-        
-        .bird-icon:hover {
-            transform: scale(1.1);
-        }
-        
-        .bird-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
-        }
-        
-        .bird-label {
-            margin-top: 5px;
-            background-color: rgba(10, 31, 61, 0.7);
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            color: white;
-            white-space: nowrap;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* 喜鹊位置和动画 */
-        #magpie-icon {
-            top: 15%;
-            right: 10%;
-            animation: floatUpDown 3s ease-in-out infinite alternate;
-        }
-        
-        /* 大雁位置和动画 */
-        #wild-goose-icon {
-            top: 20%;
-            left: 10%;
-            animation: floatUpDown 4s ease-in-out infinite alternate-reverse;
-        }
-        
-        /* 雏鸡位置和动画 */
-        #chick-icon {
-            bottom: 25%;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: callOut 2s ease-in-out infinite;
-        }
-        
-        /* 页面内容 */
-        .page-content {
+        /* 第一页样式 */
+        #page1 .page-content {
             position: relative;
             z-index: 3;
             width: 90%;
             max-width: 600px;
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             background-color: rgba(10, 31, 61, 0.7);
             border-radius: 20px;
             backdrop-filter: blur(10px);
@@ -143,21 +72,129 @@
             margin-top: 20px;
         }
         
+        /* 第二、三、四页样式 - 放大鸟类 */
+        #page2, #page3, #page4 {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .bird-zoom-container {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .bird-zoom-title {
+            font-size: 2.2rem;
+            color: #fff;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            letter-spacing: 3px;
+        }
+        
+        .bird-zoom-subtitle {
+            font-size: 1.3rem;
+            color: #b3e0ff;
+            margin-bottom: 20px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        
+        .bird-zoom-image {
+            width: 80%;
+            max-width: 400px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+            margin-bottom: 30px;
+            animation: birdFloat 4s ease-in-out infinite alternate;
+        }
+        
+        .bird-info-btn {
+            background-color: rgba(77, 171, 247, 0.8);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+        }
+        
+        .bird-info-btn:hover {
+            background-color: rgba(100, 190, 255, 0.9);
+            transform: scale(1.05);
+        }
+        
+        /* 第一页鸟类背景 */
+        .bird-bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        .bird-bg {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            opacity: 0.7;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+        }
+        
+        /* 大雁背景位置和动画 */
+        .bg-wild-goose {
+            top: 20%;
+            left: 10%;
+            animation: floatUpDown 5s ease-in-out infinite alternate-reverse;
+        }
+        
+        /* 喜鹊背景位置和动画 */
+        .bg-magpie {
+            top: 15%;
+            right: 10%;
+            animation: floatUpDown 4s ease-in-out infinite alternate;
+        }
+        
+        /* 雏鸡背景位置和动画 */
+        .bg-chick {
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: callOut 3s ease-in-out infinite;
+        }
+        
         /* 标题样式 */
         .page-title {
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: #fff;
             margin-bottom: 15px;
-            letter-spacing: 5px;
+            letter-spacing: 8px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
         
         .page-subtitle {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             color: #b3e0ff;
             margin-bottom: 30px;
             font-weight: normal;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
         }
         
         .page-description {
@@ -268,15 +305,6 @@
             margin-bottom: 20px;
         }
         
-        .panel-image {
-            width: 100%;
-            height: 200px;
-            object-fit: contain;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-        
         .close-btn {
             position: absolute;
             top: 15px;
@@ -299,6 +327,42 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
         
+        /* 滑动提示 */
+        .swipe-hint {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInOut 3s infinite;
+        }
+        
+        /* 遮罩层 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 15;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
         /* 动画定义 */
         @keyframes floatUpDown {
             0% {
@@ -306,6 +370,15 @@
             }
             100% {
                 transform: translateY(20px);
+            }
+        }
+        
+        @keyframes birdFloat {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                transform: translateY(-15px) scale(1.03);
             }
         }
         
@@ -330,64 +403,85 @@
             }
         }
         
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
         /* 响应式调整 */
         @media (max-height: 700px) {
-            .bird-icon {
-                width: 60px;
-                height: 60px;
-            }
-            
             .page-title {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .page-subtitle {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
             }
             
             .page-content {
-                padding: 15px;
+                padding: 20px;
                 margin-top: 10px;
+            }
+            
+            .bird-bg {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .bird-zoom-title {
+                font-size: 1.8rem;
+            }
+            
+            .bird-zoom-image {
+                max-width: 300px;
             }
         }
         
         @media (max-width: 768px) {
             .page-title {
-                font-size: 2rem;
-                letter-spacing: 3px;
+                font-size: 2.2rem;
+                letter-spacing: 5px;
             }
             
             .page-subtitle {
-                font-size: 1.1rem;
-                letter-spacing: 1px;
+                font-size: 1.2rem;
+                letter-spacing: 2px;
             }
             
             .page-description {
                 font-size: 1rem;
             }
             
-            .bird-icon {
-                width: 70px;
-                height: 70px;
+            .bird-bg {
+                width: 90px;
+                height: 90px;
             }
             
-            .bird-label {
-                font-size: 0.8rem;
-                padding: 3px 8px;
-            }
-            
-            #magpie-icon {
-                top: 12%;
-                right: 5%;
-            }
-            
-            #wild-goose-icon {
+            .bg-wild-goose {
                 top: 15%;
                 left: 5%;
             }
             
-            #chick-icon {
-                bottom: 22%;
+            .bg-magpie {
+                top: 12%;
+                right: 5%;
+            }
+            
+            .bird-zoom-title {
+                font-size: 1.8rem;
+            }
+            
+            .bird-zoom-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .bird-zoom-image {
+                max-width: 300px;
+            }
+            
+            .bird-info-btn {
+                padding: 10px 25px;
+                font-size: 1rem;
             }
             
             .info-panel {
@@ -405,20 +499,29 @@
         
         @media (max-width: 480px) {
             .page-title {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
+                letter-spacing: 3px;
             }
             
             .page-subtitle {
                 font-size: 1rem;
             }
             
-            .bird-icon {
-                width: 60px;
-                height: 60px;
+            .bird-bg {
+                width: 70px;
+                height: 70px;
             }
             
-            .bird-label {
-                font-size: 0.7rem;
+            .bird-zoom-title {
+                font-size: 1.6rem;
+            }
+            
+            .bird-zoom-subtitle {
+                font-size: 1rem;
+            }
+            
+            .bird-zoom-image {
+                max-width: 250px;
             }
             
             .controls {
@@ -432,47 +535,6 @@
                 font-size: 1.2rem;
             }
         }
-        
-        /* 滑动提示 */
-        .swipe-hint {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: rgba(0, 0, 0, 0.3);
-            padding: 8px 15px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInOut 3s infinite;
-        }
-        
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-        
-        /* 遮罩层 */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 15;
-            display: none;
-        }
-        
-        .overlay.active {
-            display: block;
-        }
     </style>
 </head>
 <body>
@@ -482,86 +544,68 @@
         <div class="swiper-page" id="page1" data-page="1">
             <img class="page-bg" src="background.png" alt="小寒背景">
             
+            <!-- 鸟类背景 -->
+            <div class="bird-bg-container">
+                <img class="bird-bg bg-wild-goose" src="大雁.png" alt="大雁">
+                <img class="bird-bg bg-magpie" src="喜鹊.png" alt="喜鹊">
+                <img class="bird-bg bg-chick" src="雏鸡.png" alt="雏鸡">
+            </div>
+            
             <div class="page-content">
                 <h1 class="page-title">小 寒</h1>
-                <h2 class="page-subtitle">十二月节，月初寒尚小，故云</h2>
+                <h2 class="page-subtitle">一候雁北乡 · 二候鹊始巢 · 三候雉始雊</h2>
                 <div class="page-description">
-                    <p>小寒，是二十四节气中的第23个节气，冬季的第5个节气。冷气积久而寒，小寒是天气寒冷但还没有到极点的意思，它与大寒、小暑、大暑及处暑一样，都是表示气温冷暖变化的节气。</p>
+                    <p>小寒，是二十四节气中的第23个节气，冬季的第5个节气。冷气积久而寒，小寒是天气寒冷但还没有到极点的意思。</p>
                     <br>
-                    <p>小寒节气的特点就是寒冷，但是却还没有冷到极致。冬至之后，冷空气频繁南下，气温持续降低，温度在小寒、大寒之际降到最低。</p>
+                    <p>小寒有三候：一候雁北乡，二候鹊始巢，三候雉始雊。意思是小寒时节，大雁开始北迁，喜鹊开始筑巢，雉鸡开始鸣叫。</p>
+                    <br>
+                    <p>这些物候现象标志着阳气渐升，春天即将到来。向左滑动探索小寒三候...</p>
                 </div>
             </div>
         </div>
         
-        <!-- 第二页：一候雁北乡 -->
+        <!-- 第二页：放大展示大雁 -->
         <div class="swiper-page" id="page2" data-page="2">
             <img class="page-bg" src="background.png" alt="小寒背景">
             
-            <div class="page-content">
-                <h1 class="page-title">一候：雁北乡</h1>
-                <h2 class="page-subtitle">大雁开始向北迁徙</h2>
-                <div class="page-description">
-                    <p>"乡"是趋向之意。大雁是顺阴阳而迁徙的候鸟，小寒时节阳气已动，大雁开始向北迁徙。</p>
-                    <br>
-                    <p>虽然大雁还不是迁移到我国的最北方，但已离开了南方最热的地方。大雁的迁徙路线通常都非常固定，它们记忆力惊人，能够凭借地形、河流、山脉等作为导航标志。</p>
-                    <br>
-                    <p>古人观察到这一现象，认为这是阳气渐升的表现，预示着春天即将到来。</p>
-                </div>
+            <div class="bird-zoom-container">
+                <h2 class="bird-zoom-title">一候：雁北乡</h2>
+                <h3 class="bird-zoom-subtitle">大雁开始向北迁徙</h3>
+                <img class="bird-zoom-image" src="大雁.png" alt="大雁">
+                <button class="bird-info-btn" data-bird="wild-goose">
+                    <i class="fas fa-info-circle"></i>
+                    <span>了解大雁</span>
+                </button>
             </div>
         </div>
         
-        <!-- 第三页：二候鹊始巢 -->
+        <!-- 第三页：放大展示喜鹊 -->
         <div class="swiper-page" id="page3" data-page="3">
             <img class="page-bg" src="background.png" alt="小寒背景">
             
-            <div class="page-content">
-                <h1 class="page-title">二候：鹊始巢</h1>
-                <h2 class="page-subtitle">喜鹊开始筑巢</h2>
-                <div class="page-description">
-                    <p>喜鹊是适应能力比较强的鸟类，喜欢将巢筑在民宅旁的大树上，在居民点附近活动。</p>
-                    <br>
-                    <p>在小寒节气前后，喜鹊感受到阳气的生长，开始衔草筑巢，为春天的繁殖做准备。喜鹊的巢通常建在高大的树木上，结构精巧，入口在侧面，能够有效防风避雨。</p>
-                    <br>
-                    <p>喜鹊在中国是吉祥的象征，自古有画鹊兆喜的风俗。民间认为喜鹊的叫声能带来好运和喜事。</p>
-                </div>
+            <div class="bird-zoom-container">
+                <h2 class="bird-zoom-title">二候：鹊始巢</h2>
+                <h3 class="bird-zoom-subtitle">喜鹊开始筑巢</h3>
+                <img class="bird-zoom-image" src="喜鹊.png" alt="喜鹊">
+                <button class="bird-info-btn" data-bird="magpie">
+                    <i class="fas fa-info-circle"></i>
+                    <span>了解喜鹊</span>
+                </button>
             </div>
         </div>
         
-        <!-- 第四页：三候雉始雊 -->
+        <!-- 第四页：放大展示雉鸡 -->
         <div class="swiper-page" id="page4" data-page="4">
             <img class="page-bg" src="background.png" alt="小寒背景">
             
-            <div class="page-content">
-                <h1 class="page-title">三候：雉始雊</h1>
-                <h2 class="page-subtitle">雉鸡开始鸣叫</h2>
-                <div class="page-description">
-                    <p>"雊"是鸣叫的意思。雉鸡也叫野鸡，是一种羽毛华丽的鸟类。</p>
-                    <br>
-                    <p>在小寒时节，雉鸡感受到阳气的生长而开始鸣叫求偶。雄性雉鸡的叫声洪亮而富有节奏，它们通过鸣叫来宣示领地、吸引雌性。</p>
-                    <br>
-                    <p>雉鸡的鸣叫声在古代常被文人墨客写入诗词中，成为冬季里的一抹生机。雉鸡的叫声标志着早春的气息即将到来。</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 鸟类交互图标容器 -->
-        <div class="bird-icons-container">
-            <!-- 大雁图标 -->
-            <div class="bird-icon" id="wild-goose-icon" data-bird="wild-goose">
-                <img src="大雁.png" alt="大雁">
-                <div class="bird-label">大雁</div>
-            </div>
-            
-            <!-- 喜鹊图标 -->
-            <div class="bird-icon" id="magpie-icon" data-bird="magpie">
-                <img src="喜鹊.png" alt="喜鹊">
-                <div class="bird-label">喜鹊</div>
-            </div>
-            
-            <!-- 雏鸡图标 -->
-            <div class="bird-icon" id="chick-icon" data-bird="chick">
-                <img src="雏鸡.png" alt="雏鸡">
-                <div class="bird-label">雉鸡</div>
+            <div class="bird-zoom-container">
+                <h2 class="bird-zoom-title">三候：雉始雊</h2>
+                <h3 class="bird-zoom-subtitle">雉鸡开始鸣叫</h3>
+                <img class="bird-zoom-image" src="雏鸡.png" alt="雉鸡">
+                <button class="bird-info-btn" data-bird="chick">
+                    <i class="fas fa-info-circle"></i>
+                    <span>了解雉鸡</span>
+                </button>
             </div>
         </div>
         
@@ -608,7 +652,6 @@
             <i class="fas fa-dove"></i>
             <span>喜鹊</span>
         </h2>
-        <img class="panel-image" id="panelImage" src="喜鹊.png" alt="鸟类图片">
         <div class="panel-content" id="panelContent">
             <!-- 内容将通过JavaScript动态填充 -->
         </div>
@@ -627,9 +670,8 @@
             const infoPanel = document.getElementById('infoPanel');
             const overlay = document.getElementById('overlay');
             const panelTitle = document.getElementById('panelTitle');
-            const panelImage = document.getElementById('panelImage');
             const panelContent = document.getElementById('panelContent');
-            const birdIcons = document.querySelectorAll('.bird-icon');
+            const birdInfoBtns = document.querySelectorAll('.bird-info-btn');
             const swipeHint = document.getElementById('swipeHint');
             
             // 当前页面索引
@@ -646,19 +688,16 @@
                 'magpie': {
                     title: '喜鹊',
                     icon: 'fas fa-dove',
-                    image: '喜鹊.png',
                     content: '小寒二候"鹊始巢"。喜鹊是适应能力比较强的鸟类，喜欢将巢筑在民宅旁的大树上，在居民点附近活动。在小寒节气前后，喜鹊感受到阳气的生长，开始衔草筑巢，为春天的繁殖做准备。<br><br>喜鹊的巢通常建在高大的树木上，结构精巧，入口在侧面，能够有效防风避雨。喜鹊在中国是吉祥的象征，自古有画鹊兆喜的风俗。民间认为喜鹊的叫声能带来好运和喜事。'
                 },
                 'wild-goose': {
                     title: '大雁',
                     icon: 'fas fa-feather-alt',
-                    image: '大雁.png',
                     content: '小寒一候"雁北乡"。"乡"是趋向之意。大雁是顺阴阳而迁徙的候鸟，小寒时节阳气已动，大雁开始向北迁徙。<br><br>虽然大雁还不是迁移到我国的最北方，但已离开了南方最热的地方。大雁的迁徙路线通常都非常固定，它们记忆力惊人，能够凭借地形、河流、山脉等作为导航标志。<br><br>古人观察到这一现象，认为这是阳气渐升的表现，预示着春天即将到来。'
                 },
                 'chick': {
                     title: '雉鸡',
                     icon: 'fas fa-kiwi-bird',
-                    image: '雏鸡.png',
                     content: '小寒三候"雉始雊"。"雊"是鸣叫的意思。雉鸡也叫野鸡，是一种羽毛华丽的鸟类。<br><br>在小寒时节，雉鸡感受到阳气的生长而开始鸣叫求偶。雄性雉鸡的叫声洪亮而富有节奏，它们通过鸣叫来宣示领地、吸引雌性。<br><br>雉鸡的鸣叫声在古代常被文人墨客写入诗词中，成为冬季里的一抹生机。雉鸡的叫声标志着早春的气息即将到来。'
                 }
             };
@@ -742,7 +781,6 @@
                 
                 // 更新面板内容
                 panelTitle.innerHTML = `<i class="${info.icon}"></i><span>${info.title}</span>`;
-                panelImage.src = info.image;
                 panelContent.innerHTML = info.content;
                 
                 // 显示遮罩和面板
@@ -818,9 +856,9 @@
                 // 遮罩点击事件
                 overlay.addEventListener('click', closeInfoPanel);
                 
-                // 为每个鸟类图标添加点击事件
-                birdIcons.forEach(icon => {
-                    icon.addEventListener('click', function(e) {
+                // 为每个鸟类信息按钮添加点击事件
+                birdInfoBtns.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
                         e.stopPropagation();
                         const birdType = this.getAttribute('data-bird');
                         showBirdInfo(birdType);
