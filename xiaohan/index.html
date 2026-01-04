@@ -75,15 +75,15 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        /* 调整后的热点位置 - 加大水平间距 */
+        /* 修改后的热点位置 - 喜鹊(左)和大雁(右)互换位置 */
         .hotspot-1 {
-            top: 18%;    /* 大雁 - 往上一点 */
-            left: 75%;   /* 往右移 */
+            top: 18%;    /* 喜鹊 - 往上一点 */
+            left: 30%;   /* 左边位置 */
         }
         
         .hotspot-2 {
-            top: 48%;    /* 喜鹊 - 居中 */
-            left: 30%;   /* 往左移很多 */
+            top: 48%;    /* 大雁 - 居中 */
+            left: 75%;   /* 右边位置 */
         }
         
         .hotspot-3 {
@@ -105,16 +105,17 @@
             transition: opacity 0.5s;
         }
         
+        /* 修改后的动物位置 - 与热点对应 */
         #bird1 {
-            top: 12%;    /* 大雁位置 */
-            left: 82%;
-            width: 160px;
+            top: 12%;    /* 喜鹊位置 */
+            left: 25%;   /* 左边 */
+            width: 75px;
         }
         
         #bird2 {
-            top: 42%;    /* 喜鹊位置 */
-            left: 25%;   /* 往左移 */
-            width: 75px;
+            top: 42%;    /* 大雁位置 */
+            left: 82%;   /* 右边 */
+            width: 160px;
         }
         
         #bird3 {
@@ -198,8 +199,8 @@
         
         /* 动画 */
         @keyframes fly {
-            0% { transform: translateX(100px) translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateX(-350px) translateY(-25px) rotate(-5deg); opacity: 0; }
+            0% { transform: translateX(-100px) translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateX(350px) translateY(-25px) rotate(5deg); opacity: 0; }
         }
         
         @keyframes jump {
@@ -213,6 +214,13 @@
             50% { transform: scale(1.15); }
         }
         
+        @keyframes peck {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(-5deg); }
+            50% { transform: translateY(5px) rotate(5deg); }
+            75% { transform: translateY(-5px) rotate(-5deg); }
+        }
+        
         .fly {
             animation: fly 3.5s ease-in-out forwards;
         }
@@ -223,6 +231,10 @@
         
         .shake {
             animation: shake 0.6s ease-in-out 3;
+        }
+        
+        .peck {
+            animation: peck 1.5s ease-in-out 2;
         }
         
         /* 移动端优化 */
@@ -241,12 +253,12 @@
             /* 手机端进一步调整位置 */
             .hotspot-1 {
                 top: 15%;
-                left: 72%;
+                left: 28%; /* 喜鹊左 */
             }
             
             .hotspot-2 {
                 top: 45%;
-                left: 28%;
+                left: 72%; /* 大雁右 */
             }
             
             .hotspot-3 {
@@ -255,13 +267,13 @@
             }
             
             #bird1 {
-                width: 140px;
-                left: 80%;
+                width: 65px;
+                left: 22%;
             }
             
             #bird2 {
-                width: 65px;
-                left: 22%;
+                width: 140px;
+                left: 80%;
             }
             
             #bird3 {
@@ -296,8 +308,8 @@
                 height: 70px;
             }
             
-            #bird1 { width: 120px; }
-            #bird2 { width: 55px; }
+            #bird1 { width: 55px; }
+            #bird2 { width: 120px; }
             #bird3 { width: 85px; }
         }
         
@@ -335,22 +347,22 @@
     <!-- 画卷 -->
     <div class="scroll-container" id="scrollContainer">
         <div class="painting">
-            <!-- 三个点击点 - 重新布局 -->
+            <!-- 三个点击点 - 喜鹊和大雁位置已互换 -->
             <div class="hotspot hotspot-1" id="hotspot1">
-                <i class="fas fa-dove"></i>
+                <i class="fas fa-feather-alt"></i> <!-- 喜鹊图标 -->
             </div>
             
             <div class="hotspot hotspot-2" id="hotspot2">
-                <i class="fas fa-feather-alt"></i>
+                <i class="fas fa-dove"></i> <!-- 大雁图标 -->
             </div>
             
             <div class="hotspot hotspot-3" id="hotspot3">
-                <i class="fas fa-kiwi-bird"></i>
+                <i class="fas fa-kiwi-bird"></i> <!-- 野鸡图标 -->
             </div>
             
-            <!-- 动物图片 -->
-            <img src="大雁.png" class="animal" id="bird1" alt="北飞的大雁">
-            <img src="喜鹊.png" class="animal" id="bird2" alt="筑巢的喜鹊">
+            <!-- 动物图片 - 位置已调整 -->
+            <img src="喜鹊.png" class="animal" id="bird1" alt="筑巢的喜鹊">
+            <img src="大雁.png" class="animal" id="bird2" alt="北飞的大雁">
             <img src="雏鸡.png" class="animal" id="bird3" alt="鸣叫的野鸡">
         </div>
     </div>
@@ -403,25 +415,25 @@
                 bgm: !!bgm
             });
             
-            // 知识数据
+            // 知识数据 - 更新顺序以匹配新的布局
             const knowledge = [
                 {
-                    title: '小寒一候：雁北乡',
-                    content: '此时阳气已动，大雁开始向北迁徙。古人认为候鸟是阴阳变化的先知，"乡"是趋向之意。大雁感知到春信，启程向北方的故乡飞回。这是小寒节气阳气萌动的最初征兆。',
-                    animalIndex: 0,
-                    animation: 'fly'
+                    title: '小寒一候：鹊始巢',
+                    content: '喜鹊感知到阳气回升，开始衔来树枝，精心修筑巢穴，为春天的繁衍做准备。鹊巢的搭建，是自然界阳气积聚的直观体现。喜鹊是勤劳的象征，它的筑巢行为预示着春天的临近。',
+                    animalIndex: 0, // 对应bird1（喜鹊）
+                    animation: 'jump'
                 },
                 {
-                    title: '小寒二候：鹊始巢',
-                    content: '喜鹊感知到阳气回升，开始衔来树枝，精心修筑巢穴，为春天的繁衍做准备。鹊巢的搭建，是自然界阳气积聚的直观体现。喜鹊是勤劳的象征，它的筑巢行为预示着春天的临近。',
-                    animalIndex: 1,
-                    animation: 'jump'
+                    title: '小寒二候：雁北乡',
+                    content: '此时阳气已动，大雁开始向北迁徙。古人认为候鸟是阴阳变化的先知，"乡"是趋向之意。大雁感知到春信，启程向北方的故乡飞回。这是小寒节气阳气萌动的最初征兆。',
+                    animalIndex: 1, // 对应bird2（大雁）
+                    animation: 'fly'
                 },
                 {
                     title: '小寒三候：雉始雊',
                     content: '"雊"是鸣叫的意思。羽毛鲜艳的野鸡（雉）在接近四九时，因感到阳气的生长而开始发出求偶的鸣叫。生命在严寒中已开始律动，这是大自然生机复苏的信号。',
-                    animalIndex: 2,
-                    animation: 'shake'
+                    animalIndex: 2, // 对应bird3（野鸡）
+                    animation: 'peck' // 使用新的啄食动画
                 }
             ];
             
@@ -457,7 +469,7 @@
                 // 点击事件
                 hotspot.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    console.log('点击热点:', index + 1);
+                    console.log('点击热点:', index + 1, knowledge[index].title);
                     showInfo(index);
                 });
                 
@@ -501,7 +513,7 @@
                 card.classList.add('show');
                 
                 // 处理动物显示
-                if (currentAnimal !== null) {
+                if (currentAnimal !== null && animals[currentAnimal]) {
                     // 隐藏之前的动物
                     animals[currentAnimal].style.opacity = '0';
                     animals[currentAnimal].className = 'animal';
@@ -511,16 +523,34 @@
                 const animal = animals[info.animalIndex];
                 if (animal) {
                     animal.style.opacity = '1';
-                    animal.classList.add(info.animation);
+                    
+                    // 先清除之前的动画类
+                    animal.className = 'animal';
+                    
+                    // 添加新动画（使用setTimeout确保动画触发）
+                    setTimeout(() => {
+                        animal.classList.add(info.animation);
+                    }, 10);
+                    
                     currentAnimal = info.animalIndex;
                     
-                    // 动画结束后保持显示
+                    // 动画结束后保持显示（除了飞行动画）
+                    const animationDuration = info.animation === 'fly' ? 3500 : 
+                                            info.animation === 'jump' ? 2400 : 
+                                            info.animation === 'peck' ? 3000 : 1800;
+                    
                     setTimeout(() => {
-                        if (currentAnimal === info.animalIndex) {
-                            animal.className = 'animal';
-                            animal.style.opacity = '1';
+                        if (currentAnimal === info.animalIndex && animal) {
+                            if (info.animation === 'fly') {
+                                // 飞行动画结束后隐藏
+                                animal.style.opacity = '0';
+                            } else {
+                                // 其他动画结束后保持显示
+                                animal.className = 'animal';
+                                animal.style.opacity = '1';
+                            }
                         }
-                    }, info.animation === 'fly' ? 3500 : 2000);
+                    }, animationDuration);
                 }
                 
                 // 自动滚动到热点位置（移动端优化）
