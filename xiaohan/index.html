@@ -18,38 +18,25 @@
             background-color: #0a1f3d;
             color: #f0f0f0;
             touch-action: pan-y;
+            height: 100vh;
         }
         
-        /* 主容器 */
-        #container {
-            position: relative;
-            width: 100vw;
+        /* 滑动容器 */
+        .swiper-container {
+            width: 100%;
             height: 100vh;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: relative;
         }
         
-        /* 背景图片 */
-        #background {
+        /* 滑动页面 */
+        .swiper-page {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            z-index: 1;
-        }
-        
-        /* 内容区域 */
-        .content-wrapper {
-            position: relative;
-            z-index: 3;
-            width: 90%;
-            max-width: 800px;
-            height: 90%;
+            transition: transform 0.5s ease;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -57,61 +44,42 @@
             padding: 20px;
         }
         
-        /* 标题样式 */
-        .title {
-            text-align: center;
-            margin-bottom: 30px;
-            z-index: 3;
-            position: relative;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
-        
-        .main-title {
-            font-size: 2.8rem;
-            color: #fff;
-            margin-bottom: 10px;
-            letter-spacing: 8px;
-            position: relative;
-        }
-        
-        .main-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #4dabf7, transparent);
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            color: #b3e0ff;
-            font-weight: normal;
-            letter-spacing: 3px;
-        }
-        
-        /* 鸟类容器 */
-        .birds-container {
+        /* 背景图片 */
+        .page-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 2;
+            object-fit: cover;
+            z-index: 1;
+            filter: brightness(0.8);
+        }
+        
+        /* 鸟类交互图标容器 */
+        .bird-icons-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
             pointer-events: none;
         }
         
-        /* 鸟类图标样式 */
+        /* 鸟类交互图标样式 */
         .bird-icon {
             position: absolute;
             width: 80px;
             height: 80px;
             cursor: pointer;
             pointer-events: auto;
-            transition: transform 0.3s;
             z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
         }
         
         .bird-icon:hover {
@@ -122,99 +90,117 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+        }
+        
+        .bird-label {
+            margin-top: 5px;
+            background-color: rgba(10, 31, 61, 0.7);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            color: white;
+            white-space: nowrap;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         /* 喜鹊位置和动画 */
-        #magpie {
+        #magpie-icon {
             top: 15%;
             right: 10%;
-            animation: flyUpDown 3s ease-in-out infinite alternate;
+            animation: floatUpDown 3s ease-in-out infinite alternate;
         }
         
         /* 大雁位置和动画 */
-        #wild-goose {
+        #wild-goose-icon {
             top: 20%;
-            left: 5%;
-            animation: flyLeft 12s linear infinite;
+            left: 10%;
+            animation: floatUpDown 4s ease-in-out infinite alternate-reverse;
         }
         
         /* 雏鸡位置和动画 */
-        #chick {
-            bottom: 20%;
-            right: 15%;
-            animation: walkSideways 4s ease-in-out infinite alternate;
-        }
-        
-        /* 介绍面板 */
-        .info-panel {
-            position: absolute;
-            bottom: 10%;
+        #chick-icon {
+            bottom: 25%;
             left: 50%;
             transform: translateX(-50%);
+            animation: callOut 2s ease-in-out infinite;
+        }
+        
+        /* 页面内容 */
+        .page-content {
+            position: relative;
+            z-index: 3;
             width: 90%;
             max-width: 600px;
-            background: rgba(10, 31, 61, 0.85);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            z-index: 10;
-            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(10, 31, 61, 0.7);
+            border-radius: 20px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
         }
         
-        .info-panel.active {
-            display: block;
-            animation: fadeInUp 0.5s ease-out;
-        }
-        
-        .panel-title {
-            font-size: 1.8rem;
-            color: #4dabf7;
+        /* 标题样式 */
+        .page-title {
+            font-size: 2.5rem;
+            color: #fff;
             margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            letter-spacing: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
         
-        .panel-content {
+        .page-subtitle {
+            font-size: 1.3rem;
+            color: #b3e0ff;
+            margin-bottom: 30px;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+        
+        .page-description {
             font-size: 1.1rem;
             line-height: 1.6;
             color: #e6f2ff;
+            margin-bottom: 30px;
+            text-align: left;
+            padding: 0 10px;
         }
         
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+        /* 页码指示器 */
+        .page-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s;
+            gap: 12px;
+            z-index: 10;
         }
         
-        .close-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .indicator-dot.active {
+            background-color: #4dabf7;
+            transform: scale(1.2);
         }
         
         /* 控制栏 */
         .controls {
-            position: absolute;
-            bottom: 20px;
+            position: fixed;
+            bottom: 30px;
             right: 20px;
             z-index: 10;
             display: flex;
+            flex-direction: column;
             gap: 15px;
         }
         
@@ -239,84 +225,108 @@
             transform: scale(1.1);
         }
         
-        /* 横屏提示 */
-        .landscape-notice {
+        /* 介绍面板 */
+        .info-panel {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0a1f3d;
-            z-index: 100;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            background: rgba(10, 31, 61, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            z-index: 20;
+            display: none;
+            overflow-y: auto;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-panel.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .panel-title {
+            font-size: 1.8rem;
+            color: #4dabf7;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .panel-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e6f2ff;
+            margin-bottom: 20px;
+        }
+        
+        .panel-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            text-align: center;
-            display: none;
+            transition: background-color 0.3s;
         }
         
-        .landscape-notice i {
-            font-size: 4rem;
-            color: #4dabf7;
-            margin-bottom: 30px;
-        }
-        
-        .landscape-notice h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-        
-        .landscape-notice p {
-            font-size: 1.2rem;
-            color: #b3e0ff;
-            max-width: 500px;
+        .close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
         
         /* 动画定义 */
-        @keyframes flyUpDown {
+        @keyframes floatUpDown {
             0% {
                 transform: translateY(0);
             }
             100% {
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
         }
         
-        @keyframes flyLeft {
-            0% {
-                transform: translateX(0) translateY(0);
-                opacity: 1;
+        @keyframes callOut {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
             }
-            70% {
-                transform: translateX(-100vw) translateY(20px);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateX(-100vw) translateY(-30px);
-                opacity: 0;
-            }
-        }
-        
-        @keyframes walkSideways {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(30px);
+            50% {
+                transform: translateX(-50%) scale(1.05);
+                filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9));
             }
         }
         
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
-                transform: translate(-50%, 20px);
+                transform: translate(-50%, 30px);
             }
             100% {
                 opacity: 1;
-                transform: translate(-50%, 0);
+                transform: translate(-50%, -50%);
             }
         }
         
@@ -327,24 +337,33 @@
                 height: 60px;
             }
             
-            .main-title {
-                font-size: 2.2rem;
+            .page-title {
+                font-size: 2rem;
             }
             
-            .subtitle {
-                font-size: 1rem;
+            .page-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .page-content {
+                padding: 15px;
+                margin-top: 10px;
             }
         }
         
         @media (max-width: 768px) {
-            .main-title {
+            .page-title {
                 font-size: 2rem;
-                letter-spacing: 5px;
+                letter-spacing: 3px;
             }
             
-            .subtitle {
+            .page-subtitle {
+                font-size: 1.1rem;
+                letter-spacing: 1px;
+            }
+            
+            .page-description {
                 font-size: 1rem;
-                letter-spacing: 2px;
             }
             
             .bird-icon {
@@ -352,24 +371,27 @@
                 height: 70px;
             }
             
-            #magpie {
-                top: 10%;
+            .bird-label {
+                font-size: 0.8rem;
+                padding: 3px 8px;
+            }
+            
+            #magpie-icon {
+                top: 12%;
                 right: 5%;
             }
             
-            #wild-goose {
+            #wild-goose-icon {
                 top: 15%;
-                left: 2%;
+                left: 5%;
             }
             
-            #chick {
-                bottom: 15%;
-                right: 10%;
+            #chick-icon {
+                bottom: 22%;
             }
             
             .info-panel {
                 padding: 20px;
-                bottom: 5%;
             }
             
             .panel-title {
@@ -381,90 +403,180 @@
             }
         }
         
-        @media (orientation: portrait) and (max-width: 768px) {
-            .landscape-notice {
-                display: flex;
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.6rem;
             }
             
-            #container {
-                display: none;
+            .page-subtitle {
+                font-size: 1rem;
+            }
+            
+            .bird-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .bird-label {
+                font-size: 0.7rem;
+            }
+            
+            .controls {
+                right: 10px;
+                bottom: 20px;
+            }
+            
+            .control-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
             }
         }
         
-        @media (orientation: landscape) and (max-height: 500px) {
-            .bird-icon {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .main-title {
-                font-size: 1.8rem;
-            }
-            
-            .info-panel {
-                padding: 15px;
-            }
-            
-            .panel-title {
-                font-size: 1.3rem;
-            }
-            
-            .panel-content {
-                font-size: 0.9rem;
-            }
+        /* 滑动提示 */
+        .swipe-hint {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInOut 3s infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        /* 遮罩层 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 15;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <!-- 横屏提示 -->
-    <div class="landscape-notice">
-        <i class="fas fa-mobile-alt"></i>
-        <h2>请横屏观看</h2>
-        <p>为了获得最佳体验，请将设备旋转至横屏模式，或使用电脑浏览器访问本页面。</p>
-    </div>
-    
-    <div id="container">
-        <!-- 背景图片 -->
-        <img id="background" src="background.png" alt="小寒背景">
-        
-        <!-- 鸟类容器 -->
-        <div class="birds-container">
-            <!-- 喜鹊 -->
-            <div class="bird-icon" id="magpie" data-bird="magpie">
-                <img src="喜鹊.png" alt="喜鹊">
-            </div>
+    <!-- 滑动容器 -->
+    <div class="swiper-container" id="swiperContainer">
+        <!-- 第一页：小寒介绍 -->
+        <div class="swiper-page" id="page1" data-page="1">
+            <img class="page-bg" src="background.png" alt="小寒背景">
             
-            <!-- 大雁 -->
-            <div class="bird-icon" id="wild-goose" data-bird="wild-goose">
+            <div class="page-content">
+                <h1 class="page-title">小 寒</h1>
+                <h2 class="page-subtitle">十二月节，月初寒尚小，故云</h2>
+                <div class="page-description">
+                    <p>小寒，是二十四节气中的第23个节气，冬季的第5个节气。冷气积久而寒，小寒是天气寒冷但还没有到极点的意思，它与大寒、小暑、大暑及处暑一样，都是表示气温冷暖变化的节气。</p>
+                    <br>
+                    <p>小寒节气的特点就是寒冷，但是却还没有冷到极致。冬至之后，冷空气频繁南下，气温持续降低，温度在小寒、大寒之际降到最低。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第二页：一候雁北乡 -->
+        <div class="swiper-page" id="page2" data-page="2">
+            <img class="page-bg" src="background.png" alt="小寒背景">
+            
+            <div class="page-content">
+                <h1 class="page-title">一候：雁北乡</h1>
+                <h2 class="page-subtitle">大雁开始向北迁徙</h2>
+                <div class="page-description">
+                    <p>"乡"是趋向之意。大雁是顺阴阳而迁徙的候鸟，小寒时节阳气已动，大雁开始向北迁徙。</p>
+                    <br>
+                    <p>虽然大雁还不是迁移到我国的最北方，但已离开了南方最热的地方。大雁的迁徙路线通常都非常固定，它们记忆力惊人，能够凭借地形、河流、山脉等作为导航标志。</p>
+                    <br>
+                    <p>古人观察到这一现象，认为这是阳气渐升的表现，预示着春天即将到来。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第三页：二候鹊始巢 -->
+        <div class="swiper-page" id="page3" data-page="3">
+            <img class="page-bg" src="background.png" alt="小寒背景">
+            
+            <div class="page-content">
+                <h1 class="page-title">二候：鹊始巢</h1>
+                <h2 class="page-subtitle">喜鹊开始筑巢</h2>
+                <div class="page-description">
+                    <p>喜鹊是适应能力比较强的鸟类，喜欢将巢筑在民宅旁的大树上，在居民点附近活动。</p>
+                    <br>
+                    <p>在小寒节气前后，喜鹊感受到阳气的生长，开始衔草筑巢，为春天的繁殖做准备。喜鹊的巢通常建在高大的树木上，结构精巧，入口在侧面，能够有效防风避雨。</p>
+                    <br>
+                    <p>喜鹊在中国是吉祥的象征，自古有画鹊兆喜的风俗。民间认为喜鹊的叫声能带来好运和喜事。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第四页：三候雉始雊 -->
+        <div class="swiper-page" id="page4" data-page="4">
+            <img class="page-bg" src="background.png" alt="小寒背景">
+            
+            <div class="page-content">
+                <h1 class="page-title">三候：雉始雊</h1>
+                <h2 class="page-subtitle">雉鸡开始鸣叫</h2>
+                <div class="page-description">
+                    <p>"雊"是鸣叫的意思。雉鸡也叫野鸡，是一种羽毛华丽的鸟类。</p>
+                    <br>
+                    <p>在小寒时节，雉鸡感受到阳气的生长而开始鸣叫求偶。雄性雉鸡的叫声洪亮而富有节奏，它们通过鸣叫来宣示领地、吸引雌性。</p>
+                    <br>
+                    <p>雉鸡的鸣叫声在古代常被文人墨客写入诗词中，成为冬季里的一抹生机。雉鸡的叫声标志着早春的气息即将到来。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 鸟类交互图标容器 -->
+        <div class="bird-icons-container">
+            <!-- 大雁图标 -->
+            <div class="bird-icon" id="wild-goose-icon" data-bird="wild-goose">
                 <img src="大雁.png" alt="大雁">
+                <div class="bird-label">大雁</div>
             </div>
             
-            <!-- 雏鸡 -->
-            <div class="bird-icon" id="chick" data-bird="chick">
+            <!-- 喜鹊图标 -->
+            <div class="bird-icon" id="magpie-icon" data-bird="magpie">
+                <img src="喜鹊.png" alt="喜鹊">
+                <div class="bird-label">喜鹊</div>
+            </div>
+            
+            <!-- 雏鸡图标 -->
+            <div class="bird-icon" id="chick-icon" data-bird="chick">
                 <img src="雏鸡.png" alt="雏鸡">
+                <div class="bird-label">雉鸡</div>
             </div>
         </div>
         
-        <!-- 主要内容 -->
-        <div class="content-wrapper">
-            <div class="title">
-                <h1 class="main-title">小寒三候</h1>
-                <h2 class="subtitle">一候雁北乡，二候鹊始巢，三候雉始雊</h2>
-            </div>
+        <!-- 滑动提示 -->
+        <div class="swipe-hint" id="swipeHint">
+            <i class="fas fa-arrows-alt-h"></i>
+            <span>左右滑动切换页面</span>
         </div>
         
-        <!-- 介绍面板 -->
-        <div class="info-panel" id="infoPanel">
-            <button class="close-btn" id="closeBtn">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 class="panel-title" id="panelTitle">
-                <i class="fas fa-dove"></i>
-                <span>喜鹊</span>
-            </h2>
-            <div class="panel-content" id="panelContent">
-                <!-- 内容将通过JavaScript动态填充 -->
-            </div>
+        <!-- 页码指示器 -->
+        <div class="page-indicator">
+            <div class="indicator-dot active" data-page="1"></div>
+            <div class="indicator-dot" data-page="2"></div>
+            <div class="indicator-dot" data-page="3"></div>
+            <div class="indicator-dot" data-page="4"></div>
         </div>
         
         <!-- 控制栏 -->
@@ -472,8 +584,8 @@
             <button class="control-btn" id="audioToggle">
                 <i class="fas fa-volume-up"></i>
             </button>
-            <button class="control-btn" id="refreshBtn">
-                <i class="fas fa-redo"></i>
+            <button class="control-btn" id="homeBtn">
+                <i class="fas fa-home"></i>
             </button>
         </div>
         
@@ -483,41 +595,120 @@
             您的浏览器不支持音频播放
         </audio>
     </div>
+    
+    <!-- 介绍面板遮罩 -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- 介绍面板 -->
+    <div class="info-panel" id="infoPanel">
+        <button class="close-btn" id="closeBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 class="panel-title" id="panelTitle">
+            <i class="fas fa-dove"></i>
+            <span>喜鹊</span>
+        </h2>
+        <img class="panel-image" id="panelImage" src="喜鹊.png" alt="鸟类图片">
+        <div class="panel-content" id="panelContent">
+            <!-- 内容将通过JavaScript动态填充 -->
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 获取DOM元素
-            const container = document.getElementById('container');
+            const swiperContainer = document.getElementById('swiperContainer');
+            const pages = document.querySelectorAll('.swiper-page');
+            const indicatorDots = document.querySelectorAll('.indicator-dot');
             const bgm = document.getElementById('bgm');
             const audioToggle = document.getElementById('audioToggle');
-            const refreshBtn = document.getElementById('refreshBtn');
+            const homeBtn = document.getElementById('homeBtn');
             const closeBtn = document.getElementById('closeBtn');
             const infoPanel = document.getElementById('infoPanel');
+            const overlay = document.getElementById('overlay');
             const panelTitle = document.getElementById('panelTitle');
+            const panelImage = document.getElementById('panelImage');
             const panelContent = document.getElementById('panelContent');
             const birdIcons = document.querySelectorAll('.bird-icon');
-            const landscapeNotice = document.querySelector('.landscape-notice');
+            const swipeHint = document.getElementById('swipeHint');
+            
+            // 当前页面索引
+            let currentPage = 0;
+            const totalPages = pages.length;
+            
+            // 触摸相关变量
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const swipeThreshold = 50; // 滑动阈值
             
             // 鸟类介绍数据
             const birdInfo = {
                 'magpie': {
                     title: '喜鹊',
                     icon: 'fas fa-dove',
-                    content: '小寒二候"鹊始巢"。喜鹊是适应能力比较强的鸟类，喜欢将巢筑在民宅旁的大树上，在居民点附近活动。喜鹊在中国是吉祥的象征，自古有画鹊兆喜的风俗。'
+                    image: '喜鹊.png',
+                    content: '小寒二候"鹊始巢"。喜鹊是适应能力比较强的鸟类，喜欢将巢筑在民宅旁的大树上，在居民点附近活动。在小寒节气前后，喜鹊感受到阳气的生长，开始衔草筑巢，为春天的繁殖做准备。<br><br>喜鹊的巢通常建在高大的树木上，结构精巧，入口在侧面，能够有效防风避雨。喜鹊在中国是吉祥的象征，自古有画鹊兆喜的风俗。民间认为喜鹊的叫声能带来好运和喜事。'
                 },
                 'wild-goose': {
                     title: '大雁',
                     icon: 'fas fa-feather-alt',
-                    content: '小寒一候"雁北乡"。大雁是出色的空中旅行家，每年秋冬之际，它们从老家西伯利亚一带，成群结队、浩浩荡荡地飞到我国的南方过冬。小寒时节，大雁开始北迁，虽然还不是迁移到我国的最北方，但已离开了南方最热的地方。'
+                    image: '大雁.png',
+                    content: '小寒一候"雁北乡"。"乡"是趋向之意。大雁是顺阴阳而迁徙的候鸟，小寒时节阳气已动，大雁开始向北迁徙。<br><br>虽然大雁还不是迁移到我国的最北方，但已离开了南方最热的地方。大雁的迁徙路线通常都非常固定，它们记忆力惊人，能够凭借地形、河流、山脉等作为导航标志。<br><br>古人观察到这一现象，认为这是阳气渐升的表现，预示着春天即将到来。'
                 },
                 'chick': {
                     title: '雉鸡',
                     icon: 'fas fa-kiwi-bird',
-                    content: '小寒三候"雉始雊"。雉鸡也叫野鸡，是一种羽毛华丽的鸟类。在小寒时节，雉鸡感受到阳气的生长而开始鸣叫求偶。雉鸡的叫声标志着早春的气息即将到来。'
+                    image: '雏鸡.png',
+                    content: '小寒三候"雉始雊"。"雊"是鸣叫的意思。雉鸡也叫野鸡，是一种羽毛华丽的鸟类。<br><br>在小寒时节，雉鸡感受到阳气的生长而开始鸣叫求偶。雄性雉鸡的叫声洪亮而富有节奏，它们通过鸣叫来宣示领地、吸引雌性。<br><br>雉鸡的鸣叫声在古代常被文人墨客写入诗词中，成为冬季里的一抹生机。雉鸡的叫声标志着早春的气息即将到来。'
                 }
             };
             
-            // 自动播放背景音乐（处理浏览器自动播放策略）
+            // 初始化页面位置
+            function initPages() {
+                pages.forEach((page, index) => {
+                    page.style.transform = `translateX(${index * 100}%)`;
+                });
+                
+                // 显示第一页
+                goToPage(0);
+                
+                // 5秒后隐藏滑动提示
+                setTimeout(() => {
+                    swipeHint.style.opacity = '0';
+                    setTimeout(() => {
+                        swipeHint.style.display = 'none';
+                    }, 500);
+                }, 5000);
+            }
+            
+            // 跳转到指定页面
+            function goToPage(pageIndex) {
+                if (pageIndex < 0 || pageIndex >= totalPages) return;
+                
+                // 更新页面位置
+                pages.forEach((page, index) => {
+                    page.style.transform = `translateX(${(index - pageIndex) * 100}%)`;
+                });
+                
+                // 更新当前页面索引
+                currentPage = pageIndex;
+                
+                // 更新指示器
+                updateIndicator();
+            }
+            
+            // 更新页面指示器
+            function updateIndicator() {
+                indicatorDots.forEach((dot, index) => {
+                    if (index === currentPage) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 自动播放背景音乐
             function playBGM() {
                 // 尝试播放音乐
                 const playPromise = bgm.play();
@@ -543,103 +734,121 @@
                 }
             }
             
-            // 初始化时尝试播放音乐
-            playBGM();
-            
-            // 音频切换按钮事件
-            audioToggle.addEventListener('click', function() {
-                if (bgm.paused) {
-                    bgm.play();
-                    this.innerHTML = '<i class="fas fa-volume-up"></i>';
-                } else {
-                    bgm.pause();
-                    this.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                }
-            });
-            
-            // 刷新按钮事件
-            refreshBtn.addEventListener('click', function() {
-                location.reload();
-            });
-            
-            // 关闭介绍面板
-            closeBtn.addEventListener('click', function() {
-                infoPanel.classList.remove('active');
-            });
-            
-            // 为每个鸟类图标添加点击事件
-            birdIcons.forEach(icon => {
-                icon.addEventListener('click', function() {
-                    const birdType = this.getAttribute('data-bird');
-                    const info = birdInfo[birdType];
-                    
-                    // 更新面板内容
-                    panelTitle.innerHTML = `<i class="${info.icon}"></i><span>${info.title}</span>`;
-                    panelContent.textContent = info.content;
-                    
-                    // 显示面板
-                    infoPanel.classList.add('active');
-                });
-            });
-            
-            // 检查屏幕方向
-            function checkOrientation() {
-                if (window.innerHeight > window.innerWidth) {
-                    // 竖屏
-                    if (window.innerWidth <= 768) {
-                        container.style.display = 'none';
-                        landscapeNotice.style.display = 'flex';
-                    } else {
-                        container.style.display = 'flex';
-                        landscapeNotice.style.display = 'none';
-                    }
-                } else {
-                    // 横屏
-                    container.style.display = 'flex';
-                    landscapeNotice.style.display = 'none';
-                }
+            // 显示鸟类介绍
+            function showBirdInfo(birdType) {
+                const info = birdInfo[birdType];
+                
+                if (!info) return;
+                
+                // 更新面板内容
+                panelTitle.innerHTML = `<i class="${info.icon}"></i><span>${info.title}</span>`;
+                panelImage.src = info.image;
+                panelContent.innerHTML = info.content;
+                
+                // 显示遮罩和面板
+                overlay.classList.add('active');
+                infoPanel.classList.add('active');
             }
             
-            // 初始检查屏幕方向
-            checkOrientation();
+            // 关闭介绍面板
+            function closeInfoPanel() {
+                overlay.classList.remove('active');
+                infoPanel.classList.remove('active');
+            }
             
-            // 监听屏幕方向变化
-            window.addEventListener('resize', checkOrientation);
-            window.addEventListener('orientationchange', checkOrientation);
-            
-            // 添加触摸滑动支持
-            let touchStartX = 0;
-            let touchStartY = 0;
-            
-            container.addEventListener('touchstart', function(e) {
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-            }, { passive: true });
-            
-            container.addEventListener('touchend', function(e) {
-                const touchEndX = e.changedTouches[0].clientX;
-                const touchEndY = e.changedTouches[0].clientY;
+            // 初始化
+            function init() {
+                initPages();
+                playBGM();
                 
-                const diffX = touchEndX - touchStartX;
-                const diffY = touchEndY - touchStartY;
+                // 添加触摸事件监听
+                swiperContainer.addEventListener('touchstart', function(e) {
+                    touchStartX = e.touches[0].clientX;
+                }, { passive: true });
                 
-                // 如果水平滑动距离大于垂直滑动距离，且大于50px，视为有效滑动
-                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-                    // 右滑关闭面板
-                    if (diffX > 0 && infoPanel.classList.contains('active')) {
-                        infoPanel.classList.remove('active');
+                swiperContainer.addEventListener('touchend', function(e) {
+                    touchEndX = e.changedTouches[0].clientX;
+                    handleSwipe();
+                }, { passive: true });
+                
+                // 添加鼠标事件监听（用于桌面测试）
+                swiperContainer.addEventListener('mousedown', function(e) {
+                    touchStartX = e.clientX;
+                });
+                
+                swiperContainer.addEventListener('mouseup', function(e) {
+                    touchEndX = e.clientX;
+                    handleSwipe();
+                });
+                
+                // 处理滑动
+                function handleSwipe() {
+                    const diffX = touchEndX - touchStartX;
+                    
+                    if (Math.abs(diffX) > swipeThreshold) {
+                        if (diffX > 0) {
+                            // 向右滑动，上一页
+                            goToPage(currentPage - 1);
+                        } else {
+                            // 向左滑动，下一页
+                            goToPage(currentPage + 1);
+                        }
                     }
                 }
-            }, { passive: true });
+                
+                // 音频切换按钮事件
+                audioToggle.addEventListener('click', function() {
+                    if (bgm.paused) {
+                        bgm.play();
+                        this.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    } else {
+                        bgm.pause();
+                        this.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    }
+                });
+                
+                // 首页按钮事件
+                homeBtn.addEventListener('click', function() {
+                    goToPage(0);
+                });
+                
+                // 关闭按钮事件
+                closeBtn.addEventListener('click', closeInfoPanel);
+                
+                // 遮罩点击事件
+                overlay.addEventListener('click', closeInfoPanel);
+                
+                // 为每个鸟类图标添加点击事件
+                birdIcons.forEach(icon => {
+                    icon.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const birdType = this.getAttribute('data-bird');
+                        showBirdInfo(birdType);
+                    });
+                });
+                
+                // 为指示器添加点击事件
+                indicatorDots.forEach(dot => {
+                    dot.addEventListener('click', function() {
+                        const pageIndex = parseInt(this.getAttribute('data-page')) - 1;
+                        goToPage(pageIndex);
+                    });
+                });
+                
+                // 添加键盘支持（左右箭头切换页面）
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowLeft') {
+                        goToPage(currentPage - 1);
+                    } else if (e.key === 'ArrowRight') {
+                        goToPage(currentPage + 1);
+                    } else if (e.key === 'Escape' && infoPanel.classList.contains('active')) {
+                        closeInfoPanel();
+                    }
+                });
+            }
             
-            // 点击背景关闭面板
-            container.addEventListener('click', function(e) {
-                if (infoPanel.classList.contains('active') && 
-                    !infoPanel.contains(e.target) && 
-                    !e.target.closest('.bird-icon')) {
-                    infoPanel.classList.remove('active');
-                }
-            });
+            // 启动初始化
+            init();
         });
     </script>
 </body>
