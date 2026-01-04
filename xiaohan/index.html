@@ -283,10 +283,35 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        .call-animation { 
-            animation: call 0.8s ease-in-out 3; 
-            filter: drop-shadow(0 0 5px rgba(255, 200, 0, 0.7));
-        }
+          .call-animation {
+        animation: call 0.8s ease-in-out 3;
+        filter: drop-shadow(0 0 5px rgba(255, 200, 0, 0.7));
+    }
     </style>
+
+<!-- 背景音乐 -->
+<audio id="bgMusic" loop>
+    <source src="Richard Clayderman - Chinese Garden.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// 背景音乐控制
+const bgMusic = document.getElementById('bgMusic');
+bgMusic.volume = 0.3;
+
+// 用户第一次与页面交互时开始播放
+document.addEventListener('click', function initAudio() {
+    bgMusic.play().catch(e => {
+        console.log('自动播放被阻止，用户需要手动允许');
+    });
+    document.removeEventListener('click', initAudio);
+}, { once: true });
+
+// 页面加载后尝试播放
+window.addEventListener('load', function() {
+    bgMusic.play().catch(e => {});
+});
+</script>
+
 </body>
 </html>
