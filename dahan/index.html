@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>大寒·冬藏春生 | 互动节气H5</title>
+    <title>大寒·岁末迎春 | 互动节气H5</title>
     
     <!-- 引入字体图标 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        /* 基础重置 */
         * {
             margin: 0;
             padding: 0;
@@ -15,364 +17,599 @@
         }
 
         :root {
-            --primary-color: #2c5282;
-            --secondary-color: #e53e3e;
-            --warm-color: #dd6b20;
-            --cold-color: #63b3ed;
-            --text-color: #2d3748;
-            --light-bg: #f7fafc;
+            --primary-blue: #2563eb;
+            --ice-blue: #60a5fa;
+            --snow-white: #f0f9ff;
+            --warm-red: #dc2626;
+            --warm-orange: #ea580c;
+            --dark-blue: #1e40af;
+            --light-blue: #dbeafe;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
         }
 
         body {
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #e6fffa 0%, #ebf8ff 100%);
-            color: var(--text-color);
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'STKaiti', serif;
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: white;
             overflow-x: hidden;
             min-height: 100vh;
             position: relative;
         }
 
-        /* 加载界面 */
-        .loading-screen {
+        /* 背景装饰元素 */
+        .bg-elements {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0c1b33 0%, #1a3a5f 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 0.5s ease;
-        }
-
-        .loader {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            border-top-color: #4fd1c7;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-
-        .loading-text {
-            color: white;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* 主容器 */
-        .main-container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        /* 节气主题头图 */
-        .header-section {
-            text-align: center;
-            padding: 30px 20px;
-            margin-bottom: 30px;
-            background: linear-gradient(135deg, rgba(44, 82, 130, 0.9) 0%, rgba(100, 179, 237, 0.9) 100%);
-            border-radius: 20px;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            position: relative;
+            pointer-events: none;
+            z-index: 0;
             overflow: hidden;
         }
 
-        .header-section::before {
-            content: '❄️';
+        .bg-element {
             position: absolute;
-            font-size: 200px;
             opacity: 0.1;
-            top: -40px;
-            right: -40px;
         }
 
-        .title {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        .bg-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 120px;
+            color: var(--ice-blue);
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
+        .bg-2 {
+            top: 30%;
+            right: 8%;
+            font-size: 80px;
+            color: var(--ice-blue);
+            transform: rotate(45deg);
         }
 
-        /* 互动卡片区域 */
-        .interaction-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
+        .bg-3 {
+            bottom: 20%;
+            left: 10%;
+            font-size: 100px;
+            color: var(--ice-blue);
         }
 
-        .interaction-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border: 1px solid #e2e8f0;
-            cursor: pointer;
-        }
-
-        .interaction-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--cold-color), var(--primary-color));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .card-content {
-            line-height: 1.6;
-            color: #4a5568;
-            margin-bottom: 20px;
-        }
-
-        /* 温度计互动 */
-        .thermometer {
-            width: 100%;
-            height: 200px;
-            position: relative;
-            background: #e2e8f0;
-            border-radius: 25px;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-
-        .temp-fill {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 0%;
-            background: linear-gradient(to top, #2b6cb0, #4299e1);
-            transition: height 1.5s ease;
-            border-radius: 25px;
-        }
-
-        .temp-marks {
-            position: absolute;
+        /* 雪花飘落效果 */
+        .snowflakes {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px 20px;
-            color: #4a5568;
-            font-weight: 500;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .temp-slider {
-            width: 100%;
-            margin-top: 15px;
-            -webkit-appearance: none;
-            height: 8px;
-            background: #cbd5e0;
-            border-radius: 4px;
-            outline: none;
-        }
-
-        .temp-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 25px;
-            height: 25px;
-            background: var(--secondary-color);
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        /* 梅花绘制板 */
-        .drawing-board {
-            width: 100%;
-            height: 200px;
+        .snowflake {
+            position: absolute;
             background: white;
-            border: 2px dashed #cbd5e0;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        /* 主容器 */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 头部区域 */
+        .hero-section {
+            text-align: center;
+            padding: 50px 20px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            background: linear-gradient(135deg, 
+                rgba(37, 99, 235, 0.9) 0%, 
+                rgba(96, 165, 250, 0.8) 50%, 
+                rgba(30, 64, 175, 0.9) 100%);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .title-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, #f0f9ff, #dbeafe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #fbbf24, transparent);
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 20px auto;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+
+        /* 卡片区域 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* 卡片基础样式 */
+        .card {
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--ice-blue), var(--primary-blue));
+            border-radius: 25px 25px 0 0;
+        }
+
+        /* 卡片标题区域 */
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .card-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--ice-blue));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .card-icon-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #f0f9ff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 卡片内容 */
+        .card-content {
+            color: #cbd5e1;
+            line-height: 1.7;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        /* 大寒寒冷现象样式 */
+        .cold-phenomena {
+            margin-top: 20px;
+        }
+
+        .phenomenon-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--ice-blue);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phenomenon-item:hover {
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateX(5px);
+        }
+
+        .phenomenon-item::before {
+            content: '❄️';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.2;
+            font-size: 24px;
+        }
+
+        .phenomenon-title {
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .phenomenon-desc {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* 习俗收集 */
+        .customs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .custom-item {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%, 
+                rgba(255, 255, 255, 0.04) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 15px;
-            margin-top: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .custom-item:hover {
+            border-color: var(--ice-blue);
+            transform: scale(1.05);
+        }
+
+        .custom-item.collected {
+            background: linear-gradient(135deg, 
+                rgba(37, 99, 235, 0.2) 0%, 
+                rgba(96, 165, 250, 0.15) 100%);
+            border-color: var(--ice-blue);
+        }
+
+        .custom-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--ice-blue);
+        }
+
+        .custom-name {
+            font-weight: 500;
+            color: #e2e8f0;
+        }
+
+        /* 诗词配对 */
+        .poem-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .poem-line {
+            background: rgba(255, 255, 255, 0.07);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-style: italic;
+            color: #cbd5e1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poem-line:hover {
+            border-color: var(--ice-blue);
+            transform: translateY(-3px);
+        }
+
+        .poem-line.selected {
+            background: rgba(37, 99, 235, 0.2);
+            border-color: var(--primary-blue);
+            color: #f0f9ff;
+        }
+
+        .poem-line.matched {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #4ade80;
+            cursor: default;
+        }
+
+        /* 绘图板样式 */
+        .drawing-area {
+            margin-top: 25px;
+        }
+
+        .drawing-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        #drawingBoard {
+            width: 100%;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: block;
             cursor: crosshair;
             touch-action: none;
         }
 
-        .draw-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .draw-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            background: var(--primary-color);
-            color: white;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-        }
-
-        .draw-btn:hover {
-            background: #2c5282;
-        }
-
-        /* 习俗收集 */
-        .customs-collection {
+        .drawing-controls {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
-            margin-top: 15px;
+            margin-top: 20px;
+            justify-content: center;
         }
 
-        .custom-item {
-            padding: 12px 20px;
-            background: #f7fafc;
-            border-radius: 10px;
-            border: 2px solid #e2e8f0;
+        .color-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.2);
             cursor: pointer;
             transition: all 0.3s;
-            text-align: center;
-            flex: 1;
-            min-width: 120px;
         }
 
-        .custom-item.collected {
-            background: linear-gradient(135deg, #c6f6d5, #9ae6b4);
-            border-color: #68d391;
-            transform: scale(1.05);
+        .color-option:hover {
+            transform: scale(1.1);
+            border-color: white;
         }
 
-        .custom-item:hover {
+        .color-option.active {
+            border-color: white;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .draw-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .draw-btn:hover {
             transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
         }
 
-        /* 诗词配对 */
-        .poem-matching {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 15px;
+        /* 进度和成就 */
+        .achievement-section {
+            margin-top: 50px;
+            padding: 40px;
+            background: linear-gradient(145deg, 
+                rgba(30, 64, 175, 0.3) 0%, 
+                rgba(37, 99, 235, 0.2) 100%);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .poem-line {
-            padding: 15px;
-            background: #f7fafc;
-            border-radius: 10px;
-            border: 2px solid #cbd5e0;
-            cursor: pointer;
+        .achievement-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
+        }
+
+        .section-title {
             text-align: center;
-            transition: all 0.3s;
-        }
-
-        .poem-line.selected {
-            background: #bee3f8;
-            border-color: #4299e1;
-        }
-
-        .poem-line.matched {
-            background: #c6f6d5;
-            border-color: #68d391;
-            cursor: default;
-        }
-
-        /* 进度系统 */
-        .progress-section {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 40px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-        }
-
-        .progress-title {
-            font-size: 1.3rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #f0f9ff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .progress-container {
             width: 100%;
-            height: 30px;
-            background: #e2e8f0;
-            border-radius: 15px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 15px;
+            margin-bottom: 30px;
+            position: relative;
         }
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #38b2ac, #4299e1);
+            background: linear-gradient(90deg, 
+                var(--ice-blue) 0%, 
+                var(--primary-blue) 50%, 
+                var(--dark-blue) 100%);
             width: 0%;
-            transition: width 0.8s ease;
-            border-radius: 15px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .achievement-badges {
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            animation: progressShine 2s infinite linear;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(200%); }
+        }
+
+        .badges-container {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 30px;
             flex-wrap: wrap;
-            margin-top: 25px;
+            margin-top: 40px;
         }
 
         .badge {
-            width: 70px;
-            height: 70px;
-            background: #e2e8f0;
-            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 25px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            transition: all 0.3s;
+            padding: 15px;
+            transition: all 0.4s;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .badge.unlocked {
-            background: linear-gradient(135deg, #f6e05e, #d69e2e);
+            background: linear-gradient(135deg, 
+                rgba(96, 165, 250, 0.3) 0%, 
+                rgba(37, 99, 235, 0.2) 100%);
+            border-color: var(--ice-blue);
             transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(214, 158, 46, 0.3);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        .badge-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+        }
+
+        .badge.unlocked .badge-icon {
+            color: var(--ice-blue);
+            animation: badgeGlow 2s infinite alternate;
+        }
+
+        @keyframes badgeGlow {
+            0% { filter: drop-shadow(0 0 5px var(--ice-blue)); }
+            100% { filter: drop-shadow(0 0 15px var(--ice-blue)); }
+        }
+
+        .badge-name {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .badge.unlocked .badge-name {
+            color: #e2e8f0;
+            font-weight: 500;
         }
 
         /* 音乐控制 */
@@ -380,39 +617,91 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .music-btn {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-color), var(--cold-color));
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
             border-radius: 50%;
             border: none;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .music-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
         }
 
         .music-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .music-btn:hover::before {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        /* 提示消息 */
+        .toast {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, 
+                rgba(30, 64, 175, 0.95) 0%, 
+                rgba(37, 99, 235, 0.9) 100%);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 5px solid var(--ice-blue);
+            max-width: 350px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
         }
 
         /* 响应式调整 */
         @media (max-width: 768px) {
-            .title {
-                font-size: 2rem;
+            .main-title {
+                font-size: 2.5rem;
             }
             
-            .interaction-grid {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .customs-grid,
+            .poem-grid {
                 grid-template-columns: 1fr;
             }
             
-            .poem-matching {
-                grid-template-columns: 1fr;
+            .badges-container {
+                gap: 20px;
+            }
+            
+            .badge {
+                width: 80px;
+                height: 80px;
             }
             
             .music-control {
@@ -421,177 +710,191 @@
             }
         }
 
-        /* 动画效果 */
+        /* 装饰性动画 */
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-20px); }
         }
 
         .floating {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        /* 提示信息 */
-        .toast {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            transform: translateX(150%);
-            transition: transform 0.5s ease;
-            border-left: 5px solid var(--secondary-color);
-        }
-
-        .toast.show {
-            transform: translateX(0);
+            animation: float 6s ease-in-out infinite;
         }
     </style>
 </head>
 <body>
-    <!-- 加载界面 -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader"></div>
-        <div class="loading-text">加载节气韵味...</div>
+    <!-- 背景装饰 -->
+    <div class="bg-elements">
+        <div class="bg-element bg-1">❄</div>
+        <div class="bg-element bg-2">⛄</div>
+        <div class="bg-element bg-3">🧊</div>
     </div>
 
-    <!-- 主内容区 -->
+    <!-- 雪花效果 -->
+    <div class="snowflakes" id="snowflakes"></div>
+
+    <!-- 主容器 -->
     <div class="main-container">
-        <!-- 节气头图 -->
-        <header class="header-section floating">
-            <h1 class="title">大寒·冬藏春生</h1>
-            <p class="subtitle">岁末最寒时，万物待新生。二十四节气之尾，冬的沉淀与春的萌动在此交汇</p>
-        </header>
+        <!-- 头部区域 -->
+        <section class="hero-section floating">
+            <div class="title-container">
+                <h1 class="main-title">大寒 · 岁末迎春</h1>
+                <p class="subtitle">
+                    二十四节气之终，冬的极致，春的前奏。<br>
+                    在这最寒冷的时节，万物积蓄力量，静待新生。
+                </p>
+            </div>
+        </section>
 
         <!-- 互动卡片网格 -->
-        <div class="interaction-grid">
-            <!-- 卡片1：温度感知 -->
-            <div class="interaction-card">
+        <div class="cards-grid">
+            <!-- 卡片1：大寒寒冷现象 -->
+            <div class="card">
                 <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-thermometer-half"></i>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-snowflake card-icon"></i>
                     </div>
-                    <h3 class="card-title">大寒温度感知</h3>
+                    <h2 class="card-title">大寒极寒现象</h2>
                 </div>
                 <div class="card-content">
-                    大寒是一年中最冷的时节。滑动调节温度计，感受从初冬到大寒的温度变化。
+                    大寒时节，寒冷到达极致，自然界呈现出独特的寒冷景象：
                 </div>
-                <div class="thermometer">
-                    <div class="temp-fill" id="tempFill"></div>
-                    <div class="temp-marks">
-                        <span>立冬</span>
-                        <span>小雪</span>
-                        <span>大雪</span>
-                        <span>冬至</span>
-                        <span>小寒</span>
-                        <span>大寒</span>
+                <div class="cold-phenomena">
+                    <div class="phenomenon-item">
+                        <div class="phenomenon-title">冰凌倒挂</div>
+                        <div class="phenomenon-desc">屋檐下形成长长的冰凌，阳光照射下晶莹剔透</div>
                     </div>
-                </div>
-                <input type="range" min="0" max="100" value="20" class="temp-slider" id="tempSlider">
-                <div style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: #718096;">
-                    当前温度：<span id="currentTemp">5</span>°C
+                    <div class="phenomenon-item">
+                        <div class="phenomenon-title">水面结厚冰</div>
+                        <div class="phenomenon-desc">湖泊池塘结出厚厚的冰层，可承载人的重量</div>
+                    </div>
+                    <div class="phenomenon-item">
+                        <div class="phenomenon-title">霜花满窗</div>
+                        <div class="phenomenon-desc">清晨玻璃窗上凝结出精美的霜花图案</div>
+                    </div>
+                    <div class="phenomenon-item">
+                        <div class="phenomenon-title">呼气成雾</div>
+                        <div class="phenomenon-desc">户外呼吸时形成长长的白色雾气</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 卡片2：习俗探索 -->
-            <div class="interaction-card">
+            <!-- 卡片2：习俗收集 -->
+            <div class="card">
                 <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-home"></i>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-home card-icon"></i>
                     </div>
-                    <h3 class="card-title">大寒习俗收集</h3>
+                    <h2 class="card-title">大寒传统习俗</h2>
                 </div>
                 <div class="card-content">
-                    点击收集大寒节气的传统习俗，集齐所有习俗解锁成就！
+                    点击收集大寒节气的传统习俗，感受岁末的温暖：
                 </div>
-                <div class="customs-collection">
-                    <div class="custom-item" data-custom="eat-rice">食糯米饭</div>
-                    <div class="custom-item" data-custom="drink-soup">喝鸡汤</div>
-                    <div class="custom-item" data-custom="clean-house">除尘布新</div>
-                    <div class="custom-item" data-custom="prepare-spring">备年货</div>
-                </div>
-                <div style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #718096;">
-                    已收集：<span id="collectedCount">0</span>/4 项习俗
+                <div class="customs-grid">
+                    <div class="custom-item" data-custom="eat-rice">
+                        <div class="custom-icon">🍚</div>
+                        <div class="custom-name">食糯米饭</div>
+                    </div>
+                    <div class="custom-item" data-custom="drink-soup">
+                        <div class="custom-icon">🍲</div>
+                        <div class="custom-name">喝鸡汤</div>
+                    </div>
+                    <div class="custom-item" data-custom="clean-house">
+                        <div class="custom-icon">🧹</div>
+                        <div class="custom-name">除尘布新</div>
+                    </div>
+                    <div class="custom-item" data-custom="prepare-spring">
+                        <div class="custom-icon">🎁</div>
+                        <div class="custom-name">备年货</div>
+                    </div>
                 </div>
             </div>
 
             <!-- 卡片3：诗词配对 -->
-            <div class="interaction-card">
+            <div class="card">
                 <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-book-open"></i>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-feather-alt card-icon"></i>
                     </div>
-                    <h3 class="card-title">大寒诗词配对</h3>
+                    <h2 class="card-title">大寒诗词对韵</h2>
                 </div>
                 <div class="card-content">
-                    点击选择上下句，配对完整的大寒诗词。
+                    品味古人笔下的大寒，配对完整的诗句：
                 </div>
-                <div class="poem-matching">
-                    <div class="poem-line" data-line="1">大寒宜近火</div>
-                    <div class="poem-line" data-line="2">小寒犹自薄</div>
-                    <div class="poem-line" data-line="3">无衣思南州</div>
-                    <div class="poem-line" data-line="4">大寒雪未消</div>
-                    <div class="poem-line" data-line="5">闭户不能出</div>
-                    <div class="poem-line" data-line="6">围炉话新年</div>
-                </div>
-                <div style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #718096;">
-                    已配对：<span id="matchedCount">0</span>/3 首诗
+                <div class="poem-grid">
+                    <div class="poem-line" data-line="1">大寒雪未消</div>
+                    <div class="poem-line" data-line="2">闭户不能出</div>
+                    <div class="poem-line" data-line="3">可怜切云冠</div>
+                    <div class="poem-line" data-line="4">局此容膝室</div>
+                    <div class="poem-line" data-line="5">腊酒自盈樽</div>
+                    <div class="poem-line" data-line="6">金炉兽炭温</div>
                 </div>
             </div>
 
-            <!-- 卡片4：梅花绘制 -->
-            <div class="interaction-card">
+            <!-- 卡片4：寒梅绘制 -->
+            <div class="card">
                 <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-paint-brush"></i>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-paint-brush card-icon"></i>
                     </div>
-                    <h3 class="card-title">绘制寒梅</h3>
+                    <h2 class="card-title">绘出冬日暖意</h2>
                 </div>
                 <div class="card-content">
-                    大寒时节，梅花独放。用手指或鼠标在画板上绘制属于你的寒梅。
+                    大寒时节，梅花傲雪。用画笔描绘你心中的冬日景象：
                 </div>
-                <canvas class="drawing-board" id="drawingBoard"></canvas>
-                <div class="draw-controls">
-                    <button class="draw-btn" id="clearCanvas">清空画板</button>
-                    <button class="draw-btn" id="saveDrawing">保存作品</button>
-                    <select class="draw-btn" id="colorPicker" style="background: white; color: var(--text-color);">
-                        <option value="#e53e3e">红色</option>
-                        <option value="#2b6cb0">蓝色</option>
-                        <option value="#38a169">绿色</option>
-                        <option value="#000000">黑色</option>
-                    </select>
+                <div class="drawing-area">
+                    <div class="drawing-container">
+                        <canvas id="drawingBoard"></canvas>
+                    </div>
+                    
+                    <div class="drawing-controls">
+                        <div class="color-options">
+                            <div class="color-option active" style="background: #dc2626;" data-color="#dc2626"></div>
+                            <div class="color-option" style="background: #2563eb;" data-color="#2563eb"></div>
+                            <div class="color-option" style="background: #059669;" data-color="#059669"></div>
+                            <div class="color-option" style="background: #d97706;" data-color="#d97706"></div>
+                            <div class="color-option" style="background: #7c3aed;" data-color="#7c3aed"></div>
+                            <div class="color-option" style="background: #000000;" data-color="#000000"></div>
+                            <div class="color-option" style="background: #ffffff;" data-color="#ffffff"></div>
+                        </div>
+                        
+                        <button class="draw-btn" id="clearCanvas">
+                            <i class="fas fa-trash-alt"></i>清空画板
+                        </button>
+                        <button class="draw-btn" id="saveDrawing">
+                            <i class="fas fa-download"></i>保存作品
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 进度系统 -->
-        <div class="progress-section">
-            <h3 class="progress-title">节气探索进度</h3>
+        <!-- 成就系统 -->
+        <section class="achievement-section">
+            <h2 class="section-title">节气成就</h2>
+            
             <div class="progress-container">
                 <div class="progress-bar" id="progressBar"></div>
             </div>
-            <div style="text-align: center; margin-top: 10px; color: #718096;">
-                完成所有互动以解锁节气成就
-            </div>
             
-            <div class="achievement-badges">
-                <div class="badge" id="badge1" title="温度感知">
-                    <i class="fas fa-thermometer-full"></i>
+            <div class="badges-container">
+                <div class="badge" id="badge1">
+                    <i class="fas fa-snowflake badge-icon"></i>
+                    <div class="badge-name">极寒感知者</div>
                 </div>
-                <div class="badge" id="badge2" title="习俗收集">
-                    <i class="fas fa-star"></i>
+                <div class="badge" id="badge2">
+                    <i class="fas fa-star badge-icon"></i>
+                    <div class="badge-name">习俗传承人</div>
                 </div>
-                <div class="badge" id="badge3" title="诗词达人">
-                    <i class="fas fa-feather-alt"></i>
+                <div class="badge" id="badge3">
+                    <i class="fas fa-feather-alt badge-icon"></i>
+                    <div class="badge-name">诗词鉴赏家</div>
                 </div>
-                <div class="badge" id="badge4" title="寒梅画家">
-                    <i class="fas fa-palette"></i>
+                <div class="badge" id="badge4">
+                    <i class="fas fa-palette badge-icon"></i>
+                    <div class="badge-name">冬日艺术家</div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <!-- 音乐控制 -->
@@ -606,19 +909,11 @@
 
     <!-- 音频 -->
     <audio id="bgm" loop preload="auto" crossorigin="anonymous">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-hazy-after-hours-132.mp3" type="audio/mpeg">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-winter-snow-125.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 隐藏加载界面
-            setTimeout(() => {
-                document.getElementById('loadingScreen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loadingScreen').style.display = 'none';
-                }, 500);
-            }, 1500);
-
             // 初始化变量
             let collectedCustoms = new Set();
             let matchedPoems = new Set();
@@ -629,9 +924,6 @@
 
             // 元素引用
             const elements = {
-                tempFill: document.getElementById('tempFill'),
-                tempSlider: document.getElementById('tempSlider'),
-                currentTemp: document.getElementById('currentTemp'),
                 collectedCount: document.getElementById('collectedCount'),
                 matchedCount: document.getElementById('matchedCount'),
                 progressBar: document.getElementById('progressBar'),
@@ -641,36 +933,54 @@
                 drawingBoard: document.getElementById('drawingBoard'),
                 clearCanvas: document.getElementById('clearCanvas'),
                 saveDrawing: document.getElementById('saveDrawing'),
-                colorPicker: document.getElementById('colorPicker')
+                colorOptions: document.querySelectorAll('.color-option')
             };
 
-            // 初始化Canvas
-            const ctx = elements.drawingBoard.getContext('2d');
-            elements.drawingBoard.width = elements.drawingBoard.offsetWidth;
-            elements.drawingBoard.height = elements.drawingBoard.offsetHeight;
-            
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.strokeStyle = elements.colorPicker.value;
-
-            // 1. 温度计互动
-            elements.tempSlider.addEventListener('input', function() {
-                const value = this.value;
-                const temp = Math.round((value / 100) * 20 - 10); // -10°C 到 10°C
+            // 1. 生成雪花效果
+            function createSnowflakes() {
+                const container = document.getElementById('snowflakes');
+                const snowflakeCount = 50;
                 
-                elements.tempFill.style.height = value + '%';
-                elements.currentTemp.textContent = temp;
-                
-                // 温度达到最低时显示提示
-                if (value > 90 && progress < 25) {
-                    updateProgress(25);
-                    showToast('感受到大寒的严寒了！');
-                    document.getElementById('badge1').classList.add('unlocked');
+                for (let i = 0; i < snowflakeCount; i++) {
+                    const snowflake = document.createElement('div');
+                    snowflake.classList.add('snowflake');
+                    
+                    // 随机大小
+                    const size = Math.random() * 4 + 2;
+                    snowflake.style.width = `${size}px`;
+                    snowflake.style.height = `${size}px`;
+                    
+                    // 随机位置
+                    snowflake.style.left = `${Math.random() * 100}%`;
+                    snowflake.style.top = `${Math.random() * 100}%`;
+                    
+                    // 随机透明度
+                    snowflake.style.opacity = Math.random() * 0.5 + 0.3;
+                    
+                    // 动画
+                    const duration = Math.random() * 10 + 10;
+                    const delay = Math.random() * 5;
+                    snowflake.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+                    
+                    // 添加CSS动画
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        @keyframes fall {
+                            0% {
+                                transform: translateY(-100px) rotate(0deg);
+                            }
+                            100% {
+                                transform: translateY(100vh) rotate(360deg);
+                            }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                    
+                    container.appendChild(snowflake);
                 }
-            });
+            }
 
-            // 2. 习俗收集
+            // 2. 习俗收集互动
             document.querySelectorAll('.custom-item').forEach(item => {
                 item.addEventListener('click', function() {
                     if (this.classList.contains('collected')) return;
@@ -679,14 +989,14 @@
                     collectedCustoms.add(custom);
                     this.classList.add('collected');
                     
-                    elements.collectedCount.textContent = collectedCustoms.size;
+                    showToast(`✨ 收集了习俗：${this.querySelector('.custom-name').textContent}`);
                     
-                    showToast(`收集了习俗：${this.textContent}`);
+                    // 更新进度
+                    updateProgress(progress + 10);
                     
-                    // 收集进度
-                    if (collectedCustoms.size === 4 && progress < 50) {
-                        updateProgress(50);
-                        showToast('恭喜！已收集所有大寒习俗！');
+                    // 检查是否全部收集
+                    if (collectedCustoms.size === 4) {
+                        showToast('🎉 恭喜！已收集所有大寒习俗！');
                         document.getElementById('badge2').classList.add('unlocked');
                     }
                 });
@@ -694,9 +1004,9 @@
 
             // 3. 诗词配对游戏
             const poemPairs = {
-                '1': '3', // 大寒宜近火 - 无衣思南州
-                '2': '6', // 小寒犹自薄 - 围炉话新年
-                '4': '5'  // 大寒雪未消 - 闭户不能出
+                '1': '2', // 大寒雪未消 - 闭户不能出
+                '3': '4', // 可怜切云冠 - 局此容膝室
+                '5': '6'  // 腊酒自盈樽 - 金炉兽炭温
             };
             
             let selectedLine = null;
@@ -723,20 +1033,19 @@
                             
                             const pairKey = poemPairs[firstId] ? firstId : secondId;
                             matchedPoems.add(pairKey);
-                            elements.matchedCount.textContent = matchedPoems.size;
                             
-                            showToast('诗词配对成功！');
+                            showToast('📚 诗词配对成功！');
+                            updateProgress(progress + 15);
                             
                             // 检查是否全部配对
-                            if (matchedPoems.size === 3 && progress < 75) {
-                                updateProgress(75);
-                                showToast('诗词达人成就解锁！');
+                            if (matchedPoems.size === 3) {
+                                showToast('🎓 诗词达人成就解锁！');
                                 document.getElementById('badge3').classList.add('unlocked');
                             }
                         } else {
                             // 配对失败
                             selectedLine.classList.remove('selected');
-                            showToast('配对不正确，再试试吧！');
+                            showToast('再试试吧！');
                         }
                         
                         selectedLine = null;
@@ -744,38 +1053,58 @@
                 });
             });
 
-            // 4. 绘制寒梅
-            elements.drawingBoard.addEventListener('mousedown', startDrawing);
-            elements.drawingBoard.addEventListener('mousemove', draw);
-            elements.drawingBoard.addEventListener('mouseup', stopDrawing);
-            elements.drawingBoard.addEventListener('mouseout', stopDrawing);
+            // 4. 绘画板系统
+            const canvas = elements.drawingBoard;
+            const ctx = canvas.getContext('2d');
             
-            // 触摸设备支持
-            elements.drawingBoard.addEventListener('touchstart', function(e) {
+            // 设置Canvas大小和样式
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // 设置初始画笔样式
+            let currentColor = '#dc2626';
+            ctx.lineWidth = 6; // 加粗笔触
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = currentColor;
+
+            // 鼠标事件
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // 触摸事件
+            canvas.addEventListener('touchstart', function(e) {
                 e.preventDefault();
                 const touch = e.touches[0];
                 startDrawing(touch);
             });
             
-            elements.drawingBoard.addEventListener('touchmove', function(e) {
+            canvas.addEventListener('touchmove', function(e) {
                 e.preventDefault();
                 const touch = e.touches[0];
                 draw(touch);
             });
             
-            elements.drawingBoard.addEventListener('touchend', stopDrawing);
+            canvas.addEventListener('touchend', stopDrawing);
 
             function startDrawing(e) {
                 isDrawing = true;
-                const rect = elements.drawingBoard.getBoundingClientRect();
+                const rect = canvas.getBoundingClientRect();
                 lastX = (e.clientX || e.pageX) - rect.left;
                 lastY = (e.clientY || e.pageY) - rect.top;
+                
+                // 开始绘画时更新进度
+                if (progress < 100) {
+                    updateProgress(progress + 0.5);
+                }
             }
 
             function draw(e) {
                 if (!isDrawing) return;
                 
-                const rect = elements.drawingBoard.getBoundingClientRect();
+                const rect = canvas.getBoundingClientRect();
                 const currentX = (e.clientX || e.pageX) - rect.left;
                 const currentY = (e.clientY || e.pageY) - rect.top;
                 
@@ -784,69 +1113,47 @@
                 ctx.lineTo(currentX, currentY);
                 ctx.stroke();
                 
-                // 绘制梅花花瓣（随机）
-                if (Math.random() > 0.7) {
-                    drawFlower(currentX, currentY);
-                }
-                
                 lastX = currentX;
                 lastY = currentY;
-                
-                // 检查绘制进度
-                if (progress < 100) {
-                    updateProgress(progress + 0.5);
-                }
-            }
-
-            function drawFlower(x, y) {
-                ctx.save();
-                ctx.fillStyle = elements.colorPicker.value;
-                
-                for (let i = 0; i < 5; i++) {
-                    const angle = (i * 72) * Math.PI / 180;
-                    const petalX = x + Math.cos(angle) * 5;
-                    const petalY = y + Math.sin(angle) * 5;
-                    
-                    ctx.beginPath();
-                    ctx.arc(petalX, petalY, 4, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                
-                // 花蕊
-                ctx.fillStyle = '#f6e05e';
-                ctx.beginPath();
-                ctx.arc(x, y, 3, 0, Math.PI * 2);
-                ctx.fill();
-                
-                ctx.restore();
             }
 
             function stopDrawing() {
                 isDrawing = false;
                 
-                // 绘制成就检查
-                if (progress >= 95 && !document.getElementById('badge4').classList.contains('unlocked')) {
+                // 检查绘画成就
+                if (progress >= 60 && !document.getElementById('badge4').classList.contains('unlocked')) {
                     document.getElementById('badge4').classList.add('unlocked');
-                    showToast('寒梅画家成就解锁！');
+                    showToast('🎨 冬日艺术家成就解锁！');
                 }
             }
 
-            elements.colorPicker.addEventListener('change', function() {
-                ctx.strokeStyle = this.value;
+            // 颜色选择
+            elements.colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // 移除所有active类
+                    elements.colorOptions.forEach(opt => opt.classList.remove('active'));
+                    // 添加当前active类
+                    this.classList.add('active');
+                    // 更新画笔颜色
+                    currentColor = this.dataset.color;
+                    ctx.strokeStyle = currentColor;
+                });
             });
 
+            // 清空画布
             elements.clearCanvas.addEventListener('click', function() {
-                ctx.clearRect(0, 0, elements.drawingBoard.width, elements.drawingBoard.height);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 showToast('画板已清空');
             });
 
+            // 保存作品
             elements.saveDrawing.addEventListener('click', function() {
-                const dataURL = elements.drawingBoard.toDataURL('image/png');
+                const dataURL = canvas.toDataURL('image/png');
                 const link = document.createElement('a');
-                link.download = '大寒寒梅.png';
+                link.download = '大寒绘画作品.png';
                 link.href = dataURL;
                 link.click();
-                showToast('作品已保存为图片！');
+                showToast('作品已保存！');
             });
 
             // 5. 音乐控制
@@ -866,19 +1173,25 @@
                         }, { once: true });
                     });
                     this.innerHTML = '<i class="fas fa-pause"></i>';
-                    showToast('节气音乐播放中');
+                    showToast('❄️ 节气音乐播放中');
                 }
                 isPlaying = !isPlaying;
             });
 
             // 6. 进度更新函数
             function updateProgress(value) {
-                progress = Math.max(progress, value);
+                progress = Math.min(100, Math.max(progress, value));
                 elements.progressBar.style.width = progress + '%';
+                
+                // 第一个成就解锁
+                if (progress >= 20 && !document.getElementById('badge1').classList.contains('unlocked')) {
+                    document.getElementById('badge1').classList.add('unlocked');
+                    showToast('❄️ 极寒感知者成就解锁！');
+                }
                 
                 // 全部完成
                 if (progress >= 100) {
-                    showToast('🎉 恭喜！大寒节气探索完成！');
+                    showToast('🎊 恭喜！大寒节气探索完成！');
                 }
             }
 
@@ -892,16 +1205,29 @@
                 }, 3000);
             }
 
-            // 8. 自适应Canvas大小
+            // 8. 窗口大小调整
             window.addEventListener('resize', function() {
-                const oldImage = ctx.getImageData(0, 0, elements.drawingBoard.width, elements.drawingBoard.height);
-                elements.drawingBoard.width = elements.drawingBoard.offsetWidth;
-                elements.drawingBoard.height = elements.drawingBoard.offsetHeight;
+                const oldImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
                 ctx.putImageData(oldImage, 0, 0);
+                ctx.lineWidth = 6;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.strokeStyle = currentColor;
             });
 
-            // 初始化进度
+            // 初始化
+            createSnowflakes();
             updateProgress(10);
+            
+            // 寒冷现象交互
+            document.querySelectorAll('.phenomenon-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const title = this.querySelector('.phenomenon-title').textContent;
+                    showToast(`❄️ ${title}`);
+                });
+            });
         });
     </script>
 </body>
