@@ -539,8 +539,8 @@
         <div class="page" id="page3">
             <div class="page-counter">3/6</div>
             <div class="card">
-                <h2 class="title">大寒暖心活动</h2>
-                <p class="desc">点击活动了解详情，感受岁末温暖：</p>
+                <h2 class="title">大寒还能做这些</h2>
+                <p class="desc">点击查看，感受冬日温暖：</p>
                 <div class="activities-grid">
                     <div class="activity-item" data-id="rice" data-title="煮糯米饭" data-icon="🍚">
                         <div class="activity-icon">🍚</div>
@@ -554,8 +554,8 @@
                         <div class="activity-icon">🧹</div>
                         <div style="font-weight: 500;">除尘迎新</div>
                     </div>
-                    <div class="activity-item" data-id="prepare" data-title="备年货" data-icon="🎁">
-                        <div class="activity-icon">🎁</div>
+                    <div class="activity-item" data-id="prepare" data-title="备年货" data-icon="🏮">
+                        <div class="activity-icon">🏮</div>
                         <div style="font-weight: 500;">备年货</div>
                     </div>
                 </div>
@@ -574,8 +574,8 @@
                 <div class="poem-grid">
                     <div class="poem-line" data-line="1">大寒雪未消</div>
                     <div class="poem-line" data-line="2">闭户不能出</div>
-                    <div class="poem-line" data-line="3">可怜切云冠</div>
-                    <div class="poem-line" data-line="4">局此容膝室</div>
+                    <div class="poem-line" data-line="3">局此容膝室</div>
+                    <div class="poem-line" data-line="4">可怜切云冠</div>
                 </div>
                 <button class="next-page-btn" id="nextPage4" disabled>
                     <i class="fas fa-lock"></i> 请先完成诗词配对
@@ -704,7 +704,7 @@
             },
             prepare: {
                 title: '备年货',
-                icon: '🎁',
+                icon: '🏮',
                 desc: '开始准备年货，挑选春联、食品、新衣等，感受渐浓的年味，期待团圆时刻。'
             }
         };
@@ -929,7 +929,7 @@
             });
             
             // 诗词配对
-            const poemPairs = { '1': '2', '3': '4' };
+            const poemPairs = { '1': '2', '4': '3' };
             let selectedPoem = null;
             
             document.querySelectorAll('.poem-line').forEach(poem => {
