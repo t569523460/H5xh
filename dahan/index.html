@@ -4,41 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>大寒·岁末迎春 | 互动节气H5</title>
-    
-    <!-- 引入字体图标 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        /* 基础重置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         :root {
-            --primary-blue: #2563eb;
-            --ice-blue: #60a5fa;
-            --snow-white: #f0f9ff;
-            --warm-red: #dc2626;
-            --warm-orange: #ea580c;
-            --dark-blue: #1e40af;
-            --light-blue: #dbeafe;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
+            --primary: #2563eb;
+            --ice: #60a5fa;
+            --warm: #dc2626;
+            --pink: #ec4899;
+            --text: #f8fafc;
+            --bg: #0f172a;
         }
-
+        
         body {
-            font-family: 'PingFang SC', 'Microsoft YaHei', 'STKaiti', serif;
-            background: linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-            color: white;
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
         }
-
-        /* 背景装饰元素 */
-        .bg-elements {
+        
+        /* 页面容器 */
+        .pages-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+        
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .page.next {
+            transform: translateY(100%);
+        }
+        
+        .page.prev {
+            transform: translateY(-100%);
+        }
+        
+        /* 雪花背景 */
+        .snow-bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -46,1387 +72,1132 @@
             height: 100%;
             pointer-events: none;
             z-index: 0;
-            overflow: hidden;
         }
-
-        .bg-element {
-            position: absolute;
-            opacity: 0.1;
-        }
-
-        .bg-1 {
-            top: 10%;
-            left: 5%;
-            font-size: 120px;
-            color: var(--ice-blue);
-        }
-
-        .bg-2 {
-            top: 30%;
-            right: 8%;
-            font-size: 80px;
-            color: var(--ice-blue);
-            transform: rotate(45deg);
-        }
-
-        .bg-3 {
-            bottom: 20%;
-            left: 10%;
-            font-size: 100px;
-            color: var(--ice-blue);
-        }
-
-        /* 雪花飘落效果 */
-        .snowflakes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .snowflake {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-        }
-
-        /* 主容器 */
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        
+        /* 通用卡片样式 */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 2;
-        }
-
-        /* 头部区域 */
-        .hero-section {
             text-align: center;
-            padding: 50px 20px;
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 30px;
-            background: linear-gradient(135deg, 
-                rgba(37, 99, 235, 0.9) 0%, 
-                rgba(96, 165, 250, 0.8) 50%, 
-                rgba(30, 64, 175, 0.9) 100%);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
-                        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 50%);
-            z-index: 1;
-        }
-
-        .title-container {
-            position: relative;
-            z-index: 2;
-        }
-
-        .main-title {
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(to right, #f0f9ff, #dbeafe);
+        
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--ice), var(--text));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            position: relative;
-            display: inline-block;
         }
-
-        .main-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 25%;
-            width: 50%;
-            height: 3px;
-            background: linear-gradient(to right, transparent, #fbbf24, transparent);
-        }
-
-        .subtitle {
-            font-size: 1.4rem;
-            opacity: 0.95;
-            max-width: 800px;
-            margin: 20px auto;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-
-        /* 卡片区域 */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        /* 卡片基础样式 */
-        .card {
-            background: linear-gradient(145deg, 
-                rgba(255, 255, 255, 0.1) 0%, 
-                rgba(255, 255, 255, 0.05) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 35px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(96, 165, 250, 0.3);
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(to right, var(--ice-blue), var(--primary-blue));
-            border-radius: 25px 25px 0 0;
-        }
-
-        /* 卡片标题区域 */
-        .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .card-icon-wrapper {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--ice-blue));
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 20px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
-        }
-
-        .card-icon-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite linear;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        .card-icon {
-            font-size: 2rem;
-            color: white;
-            position: relative;
-            z-index: 1;
-        }
-
-        .card-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #f0f9ff;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        /* 卡片内容 */
-        .card-content {
-            color: #cbd5e1;
-            line-height: 1.7;
+        
+        .desc {
             font-size: 1.1rem;
-            margin-bottom: 25px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.9;
         }
-
-        /* 大寒寒冷现象样式 */
-        .cold-phenomena {
-            margin-top: 20px;
-        }
-
-        .phenomenon-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--ice-blue);
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .phenomenon-item:hover {
-            background: rgba(96, 165, 250, 0.1);
-            transform: translateX(5px);
-        }
-
-        .phenomenon-item.clicked {
-            background: rgba(37, 99, 235, 0.15);
-            border-left-color: #fbbf24;
-        }
-
-        .phenomenon-item.clicked::after {
-            content: '✓';
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #4ade80;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .phenomenon-item::before {
-            content: '❄️';
-            position: absolute;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.2;
-            font-size: 24px;
-        }
-
-        .phenomenon-title {
-            font-weight: 600;
-            color: #e2e8f0;
-            margin-bottom: 5px;
-            font-size: 1.1rem;
-        }
-
-        .phenomenon-desc {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        /* 习俗收集 */
-        .customs-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+        
+        /* 寒冷现象页面 */
+        .phenomenon-list {
+            display: flex;
+            flex-direction: column;
             gap: 15px;
             margin-top: 20px;
         }
-
-        .custom-item {
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.08) 0%, 
-                rgba(255, 255, 255, 0.04) 100%);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+        
+        .phenomenon-item {
+            background: rgba(255, 255, 255, 0.08);
             padding: 20px;
-            text-align: center;
+            border-radius: 15px;
+            border-left: 4px solid var(--ice);
+            text-align: left;
             cursor: pointer;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
         }
-
-        .custom-item:hover {
-            border-color: var(--ice-blue);
+        
+        .phenomenon-item:hover {
+            background: rgba(96, 165, 250, 0.15);
+            transform: translateX(10px);
+        }
+        
+        .phenomenon-item.checked::after {
+            content: '✓';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4ade80;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        /* 活动页面 */
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .activity-item {
+            background: rgba(255, 255, 255, 0.07);
+            padding: 25px 15px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .activity-item:hover {
+            border-color: var(--ice);
             transform: scale(1.05);
         }
-
-        .custom-item.collected {
-            background: linear-gradient(135deg, 
-                rgba(37, 99, 235, 0.2) 0%, 
-                rgba(96, 165, 250, 0.15) 100%);
-            border-color: var(--ice-blue);
+        
+        .activity-item.collected {
+            background: rgba(37, 99, 235, 0.2);
+            border-color: var(--ice);
         }
-
-        .custom-icon {
-            font-size: 2rem;
+        
+        .activity-icon {
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            color: var(--ice-blue);
         }
-
-        .custom-name {
-            font-weight: 500;
-            color: #e2e8f0;
-        }
-
-        /* 诗词配对 */
+        
+        /* 诗词页面 */
         .poem-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
-
+        
         .poem-line {
             background: rgba(255, 255, 255, 0.07);
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            padding: 25px 15px;
             border-radius: 15px;
-            padding: 20px;
             text-align: center;
             cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s;
             font-style: italic;
-            color: #cbd5e1;
-            position: relative;
-            overflow: hidden;
         }
-
+        
         .poem-line:hover {
-            border-color: var(--ice-blue);
-            transform: translateY(-3px);
+            border-color: var(--ice);
         }
-
+        
         .poem-line.selected {
             background: rgba(37, 99, 235, 0.2);
-            border-color: var(--primary-blue);
-            color: #f0f9ff;
+            border-color: var(--primary);
         }
-
+        
         .poem-line.matched {
             background: rgba(34, 197, 94, 0.2);
             border-color: #4ade80;
             cursor: default;
         }
-
-        /* 绘图板样式 */
-        .drawing-area {
-            margin-top: 25px;
-        }
-
-        .drawing-container {
+        
+        /* 画板页面 */
+        .canvas-container {
+            width: 100%;
+            height: 250px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
+            margin: 25px 0;
+            overflow: hidden;
         }
-
-        #drawingBoard {
+        
+        #drawingCanvas {
             width: 100%;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            display: block;
+            height: 100%;
             cursor: crosshair;
-            touch-action: none;
+            display: block;
         }
-
-        .drawing-controls {
+        
+        .color-palette {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
             justify-content: center;
-        }
-
-        .color-options {
-            display: flex;
-            gap: 10px;
+            gap: 12px;
+            margin: 20px 0;
             flex-wrap: wrap;
-            justify-content: center;
         }
-
-        .color-option {
+        
+        .color-btn {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.3);
             cursor: pointer;
             transition: all 0.3s;
         }
-
-        .color-option:hover {
-            transform: scale(1.1);
-            border-color: white;
-        }
-
-        .color-option.active {
+        
+        .color-btn.active {
             border-color: white;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);
         }
-
-        .draw-btn {
+        
+        .tool-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
             padding: 12px 25px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            background: linear-gradient(135deg, var(--primary), #1e40af);
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             color: white;
             cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+            font-size: 1rem;
+            transition: transform 0.3s;
         }
-
-        .draw-btn:hover {
+        
+        .action-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
         }
-
-        /* 习俗详情弹窗 */
-        .custom-modal {
+        
+        /* 成就页面 */
+        .badges-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            width: 90px;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .badge.unlocked {
+            background: rgba(96, 165, 250, 0.2);
+            border-color: var(--ice);
+            transform: scale(1.1);
+        }
+        
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ice), var(--primary));
+            width: 0%;
+            transition: width 0.8s;
+            border-radius: 5px;
+        }
+        
+        /* 滑动提示 */
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+        
+        .scroll-hint i {
+            font-size: 1.5rem;
+        }
+        
+        /* 音乐控制 */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .music-btn {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 提示消息 */
+        .toast {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(30, 64, 175, 0.9));
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s;
+            border-left: 4px solid var(--ice);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        /* 下一页按钮 */
+        .next-page-btn {
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .next-page-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        }
+        
+        .next-page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* 页面计数 */
+        .page-counter {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 1rem;
+            opacity: 0.7;
+            z-index: 10;
+        }
+        
+        /* 活动详情弹窗 */
+        .activity-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
+            z-index: 1000;
         }
-
-        .custom-modal.active {
-            opacity: 1;
-            visibility: visible;
+        
+        .activity-modal.active {
+            display: flex;
         }
-
+        
         .modal-content {
-            background: linear-gradient(145deg, 
-                rgba(30, 64, 175, 0.95) 0%, 
-                rgba(37, 99, 235, 0.9) 100%);
-            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.95), rgba(37, 99, 235, 0.9));
             padding: 40px;
+            border-radius: 20px;
             max-width: 500px;
             width: 90%;
             position: relative;
-            transform: translateY(30px);
-            transition: transform 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
-
-        .custom-modal.active .modal-content {
-            transform: translateY(0);
-        }
-
+        
         .modal-close {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
         }
-
+        
         .modal-close:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: rotate(90deg);
         }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .modal-icon {
-            font-size: 3rem;
-            margin-right: 20px;
-        }
-
-        .modal-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #f0f9ff;
-        }
-
-        .modal-body {
-            line-height: 1.8;
-            color: #e2e8f0;
-            font-size: 1.1rem;
-        }
-
-        .modal-body p {
-            margin-bottom: 15px;
-        }
-
-        /* 进度和成就 */
-        .achievement-section {
-            margin-top: 50px;
-            padding: 40px;
-            background: linear-gradient(145deg, 
-                rgba(30, 64, 175, 0.3) 0%, 
-                rgba(37, 99, 235, 0.2) 100%);
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .achievement-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 30px;
-            color: #f0f9ff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, 
-                var(--ice-blue) 0%, 
-                var(--primary-blue) 50%, 
-                var(--dark-blue) 100%);
-            width: 0%;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent);
-            animation: progressShine 2s infinite linear;
-        }
-
-        @keyframes progressShine {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(200%); }
-        }
-
-        .badges-container {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-top: 40px;
-        }
-
-        .badge {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.1) 0%, 
-                rgba(255, 255, 255, 0.05) 100%);
-            border-radius: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            transition: all 0.4s;
-            position: relative;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .badge.unlocked {
-            background: linear-gradient(135deg, 
-                rgba(96, 165, 250, 0.3) 0%, 
-                rgba(37, 99, 235, 0.2) 100%);
-            border-color: var(--ice-blue);
-            transform: scale(1.1);
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.3);
-        }
-
-        .badge-icon {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-            color: #cbd5e1;
-        }
-
-        .badge.unlocked .badge-icon {
-            color: var(--ice-blue);
-            animation: badgeGlow 2s infinite alternate;
-        }
-
-        @keyframes badgeGlow {
-            0% { filter: drop-shadow(0 0 5px var(--ice-blue)); }
-            100% { filter: drop-shadow(0 0 15px var(--ice-blue)); }
-        }
-
-        .badge-name {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            text-align: center;
-        }
-
-        .badge.unlocked .badge-name {
-            color: #e2e8f0;
-            font-weight: 500;
-        }
-
-        /* 音乐控制 */
-        .music-control {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-        }
-
-        .music-btn {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
-            border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 1.8rem;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .music-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            transition: all 0.5s;
-        }
-
-        .music-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .music-btn:hover::before {
-            transform: rotate(45deg) translate(50%, 50%);
-        }
-
-        /* 提示消息 */
-        .toast {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, 
-                rgba(30, 64, 175, 0.95) 0%, 
-                rgba(37, 99, 235, 0.9) 100%);
-            backdrop-filter: blur(10px);
-            padding: 20px 30px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            transform: translateX(150%);
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 5px solid var(--ice-blue);
-            max-width: 350px;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        /* 响应式调整 */
+        
         @media (max-width: 768px) {
-            .main-title {
-                font-size: 2.5rem;
-            }
-            
-            .cards-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-            
-            .customs-grid,
-            .poem-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .badges-container {
-                gap: 20px;
-            }
-            
-            .badge {
-                width: 80px;
-                height: 80px;
-            }
-            
-            .music-control {
-                bottom: 20px;
-                right: 20px;
-            }
-            
-            .modal-content {
-                padding: 30px 20px;
-                width: 95%;
-            }
-        }
-
-        /* 装饰性动画 */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .floating {
-            animation: float 6s ease-in-out infinite;
+            .title { font-size: 2rem; }
+            .card { padding: 30px 20px; }
+            .activities-grid { grid-template-columns: 1fr; }
+            .poem-grid { grid-template-columns: 1fr; }
+            .scroll-hint { bottom: 20px; }
         }
     </style>
 </head>
 <body>
-    <!-- 背景装饰 -->
-    <div class="bg-elements">
-        <div class="bg-element bg-1">❄</div>
-        <div class="bg-element bg-2">⛄</div>
-        <div class="bg-element bg-3">🧊</div>
-    </div>
-
-    <!-- 雪花效果 -->
-    <div class="snowflakes" id="snowflakes"></div>
-
-    <!-- 习俗详情弹窗 -->
-    <div class="custom-modal" id="customModal">
+    <!-- 雪花背景 -->
+    <div class="snow-bg" id="snowBg"></div>
+    
+    <!-- 活动详情弹窗 -->
+    <div class="activity-modal" id="activityModal">
         <div class="modal-content">
-            <button class="modal-close" id="modalClose">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="modal-header">
-                <div class="modal-icon" id="modalIcon">🍚</div>
-                <h3 class="modal-title" id="modalTitle">食糯米饭</h3>
+            <button class="modal-close" id="modalClose">×</button>
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div id="modalIcon" style="font-size: 2.5rem;"></div>
+                <h3 id="modalTitle" style="font-size: 1.6rem;"></h3>
             </div>
-            <div class="modal-body" id="modalBody">
-                <p>大寒时节，天气寒冷，人们会食用糯米做的饭来驱寒保暖。</p>
-                <p>糯米饭含有丰富的碳水化合物，能快速补充能量。在寒冷的天气里，一碗热腾腾的糯米饭不仅暖身，更暖心。</p>
-            </div>
+            <div id="modalBody" style="line-height: 1.6;"></div>
         </div>
     </div>
-
-    <!-- 主容器 -->
-    <div class="main-container">
-        <!-- 头部区域 -->
-        <section class="hero-section floating">
-            <div class="title-container">
-                <h1 class="main-title">大寒 · 岁末迎春</h1>
-                <p class="subtitle">
-                    二十四节气之终，冬的极致，春的前奏。<br>
-                    在这最寒冷的时节，万物积蓄力量，静待新生。
-                </p>
-            </div>
-        </section>
-
-        <!-- 互动卡片网格 -->
-        <div class="cards-grid">
-            <!-- 卡片1：大寒寒冷现象 -->
+    
+    <!-- 页面容器 -->
+    <div class="pages-container" id="pagesContainer">
+        <!-- 第1页：封面 -->
+        <div class="page active" id="page1">
             <div class="card">
-                <div class="card-header">
-                    <div class="card-icon-wrapper">
-                        <i class="fas fa-snowflake card-icon"></i>
-                    </div>
-                    <h2 class="card-title">大寒极寒现象</h2>
-                </div>
-                <div class="card-content">
-                    点击了解大寒时节独特的寒冷景象：
-                </div>
-                <div class="cold-phenomena">
-                    <div class="phenomenon-item" data-phenomenon="icicle">
-                        <div class="phenomenon-title">冰凌倒挂</div>
-                        <div class="phenomenon-desc">屋檐下形成长长的冰凌，阳光照射下晶莹剔透</div>
-                    </div>
-                    <div class="phenomenon-item" data-phenomenon="ice">
-                        <div class="phenomenon-title">水面结厚冰</div>
-                        <div class="phenomenon-desc">湖泊池塘结出厚厚的冰层，可承载人的重量</div>
-                    </div>
-                    <div class="phenomenon-item" data-phenomenon="frost">
-                        <div class="phenomenon-title">霜花满窗</div>
-                        <div class="phenomenon-desc">清晨玻璃窗上凝结出精美的霜花图案</div>
-                    </div>
-                    <div class="phenomenon-item" data-phenomenon="breath">
-                        <div class="phenomenon-title">呼气成雾</div>
-                        <div class="phenomenon-desc">户外呼吸时形成长长的白色雾气</div>
-                    </div>
-                </div>
+                <h1 class="title">大寒·岁末迎春</h1>
+                <p class="desc">二十四节气之终，冬的极致，春的前奏</p>
+                <p class="desc" style="margin-top: 20px;">向下滑动，开始探索大寒节气</p>
             </div>
-
-            <!-- 卡片2：习俗收集 -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon-wrapper">
-                        <i class="fas fa-home card-icon"></i>
-                    </div>
-                    <h2 class="card-title">大寒传统习俗</h2>
-                </div>
-                <div class="card-content">
-                    点击习俗了解详情，感受岁末的温暖：
-                </div>
-                <div class="customs-grid">
-                    <div class="custom-item" data-custom="eat-rice" data-title="食糯米饭" data-icon="🍚">
-                        <div class="custom-icon">🍚</div>
-                        <div class="custom-name">食糯米饭</div>
-                    </div>
-                    <div class="custom-item" data-custom="drink-soup" data-title="喝鸡汤" data-icon="🍲">
-                        <div class="custom-icon">🍲</div>
-                        <div class="custom-name">喝鸡汤</div>
-                    </div>
-                    <div class="custom-item" data-custom="clean-house" data-title="除尘布新" data-icon="🧹">
-                        <div class="custom-icon">🧹</div>
-                        <div class="custom-name">除尘布新</div>
-                    </div>
-                    <div class="custom-item" data-custom="prepare-spring" data-title="备年货" data-icon="🎁">
-                        <div class="custom-icon">🎁</div>
-                        <div class="custom-name">备年货</div>
-                    </div>
-                </div>
+            <div class="scroll-hint">
+                <i class="fas fa-chevron-down"></i>
+                <span>向下滑动继续</span>
             </div>
-
-            <!-- 卡片3：诗词配对 -->
+        </div>
+        
+        <!-- 第2页：寒冷现象 -->
+        <div class="page" id="page2">
+            <div class="page-counter">2/6</div>
             <div class="card">
-                <div class="card-header">
-                    <div class="card-icon-wrapper">
-                        <i class="fas fa-feather-alt card-icon"></i>
+                <h2 class="title">大寒冷冽景象</h2>
+                <p class="desc">点击了解大寒时节的独特景象：</p>
+                <div class="phenomenon-list">
+                    <div class="phenomenon-item" data-id="icicle">
+                        <div style="font-weight: 600; margin-bottom: 5px;">❄️ 冰凌倒挂</div>
+                        <div style="font-size: 0.95rem; opacity: 0.9;">屋檐下形成晶莹剔透的冰凌</div>
                     </div>
-                    <h2 class="card-title">大寒诗词对韵</h2>
+                    <div class="phenomenon-item" data-id="ice">
+                        <div style="font-weight: 600; margin-bottom: 5px;">🧊 水面结厚冰</div>
+                        <div style="font-size: 0.95rem; opacity: 0.9;">湖泊池塘结出可承重的厚冰层</div>
+                    </div>
+                    <div class="phenomenon-item" data-id="frost">
+                        <div style="font-weight: 600; margin-bottom: 5px;">❄️ 霜花满窗</div>
+                        <div style="font-size: 0.95rem; opacity: 0.9;">清晨玻璃窗凝结精美霜花图案</div>
+                    </div>
                 </div>
-                <div class="card-content">
-                    品味古人笔下的大寒，配对完整的诗句：
+                <button class="next-page-btn" id="nextPage2" disabled>
+                    <i class="fas fa-lock"></i> 请先点击所有现象
+                </button>
+            </div>
+        </div>
+        
+        <!-- 第3页：大寒活动 -->
+        <div class="page" id="page3">
+            <div class="page-counter">3/6</div>
+            <div class="card">
+                <h2 class="title">大寒暖心活动</h2>
+                <p class="desc">点击活动了解详情，感受岁末温暖：</p>
+                <div class="activities-grid">
+                    <div class="activity-item" data-id="rice" data-title="煮糯米饭" data-icon="🍚">
+                        <div class="activity-icon">🍚</div>
+                        <div style="font-weight: 500;">煮糯米饭</div>
+                    </div>
+                    <div class="activity-item" data-id="soup" data-title="炖鸡汤" data-icon="🍲">
+                        <div class="activity-icon">🍲</div>
+                        <div style="font-weight: 500;">炖鸡汤</div>
+                    </div>
+                    <div class="activity-item" data-id="clean" data-title="除尘迎新" data-icon="🧹">
+                        <div class="activity-icon">🧹</div>
+                        <div style="font-weight: 500;">除尘迎新</div>
+                    </div>
+                    <div class="activity-item" data-id="prepare" data-title="备年货" data-icon="🎁">
+                        <div class="activity-icon">🎁</div>
+                        <div style="font-weight: 500;">备年货</div>
+                    </div>
                 </div>
+                <button class="next-page-btn" id="nextPage3" disabled>
+                    <i class="fas fa-lock"></i> 请先点击了解活动
+                </button>
+            </div>
+        </div>
+        
+        <!-- 第4页：诗词配对 -->
+        <div class="page" id="page4">
+            <div class="page-counter">4/6</div>
+            <div class="card">
+                <h2 class="title">大寒诗词对韵</h2>
+                <p class="desc">品味古人笔下的大寒，配对完整诗句：</p>
                 <div class="poem-grid">
                     <div class="poem-line" data-line="1">大寒雪未消</div>
                     <div class="poem-line" data-line="2">闭户不能出</div>
                     <div class="poem-line" data-line="3">可怜切云冠</div>
                     <div class="poem-line" data-line="4">局此容膝室</div>
-                    <div class="poem-line" data-line="5">腊酒自盈樽</div>
-                    <div class="poem-line" data-line="6">金炉兽炭温</div>
                 </div>
-            </div>
-
-            <!-- 卡片4：寒梅绘制 -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon-wrapper">
-                        <i class="fas fa-paint-brush card-icon"></i>
-                    </div>
-                    <h2 class="card-title">绘出冬日暖意</h2>
-                </div>
-                <div class="card-content">
-                    大寒时节，梅花傲雪。用画笔描绘你心中的冬日景象：
-                </div>
-                <div class="drawing-area">
-                    <div class="drawing-container">
-                        <canvas id="drawingBoard"></canvas>
-                    </div>
-                    
-                    <div class="drawing-controls">
-                        <div class="color-options">
-                            <div class="color-option active" style="background: #dc2626;" data-color="#dc2626"></div>
-                            <div class="color-option" style="background: #2563eb;" data-color="#2563eb"></div>
-                            <div class="color-option" style="background: #059669;" data-color="#059669"></div>
-                            <div class="color-option" style="background: #d97706;" data-color="#d97706"></div>
-                            <div class="color-option" style="background: #7c3aed;" data-color="#7c3aed"></div>
-                            <div class="color-option" style="background: #000000;" data-color="#000000"></div>
-                            <div class="color-option" style="background: #ffffff;" data-color="#ffffff"></div>
-                        </div>
-                        
-                        <button class="draw-btn" id="clearCanvas">
-                            <i class="fas fa-trash-alt"></i>清空画板
-                        </button>
-                        <button class="draw-btn" id="saveDrawing">
-                            <i class="fas fa-download"></i>保存作品
-                        </button>
-                    </div>
-                </div>
+                <button class="next-page-btn" id="nextPage4" disabled>
+                    <i class="fas fa-lock"></i> 请先完成诗词配对
+                </button>
             </div>
         </div>
-
-        <!-- 成就系统 -->
-        <section class="achievement-section">
-            <h2 class="section-title">节气成就</h2>
-            
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar"></div>
+        
+        <!-- 第5页：绘画 -->
+        <div class="page" id="page5">
+            <div class="page-counter">5/6</div>
+            <div class="card">
+                <h2 class="title">绘出冬日暖意</h2>
+                <p class="desc">用画笔描绘你心中的冬日景象：</p>
+                <div class="canvas-container">
+                    <canvas id="drawingCanvas"></canvas>
+                </div>
+                <div class="color-palette">
+                    <div class="color-btn active" style="background: #dc2626;" data-color="#dc2626"></div>
+                    <div class="color-btn" style="background: #ec4899;" data-color="#ec4899"></div>
+                    <div class="color-btn" style="background: #2563eb;" data-color="#2563eb"></div>
+                    <div class="color-btn" style="background: #059669;" data-color="#059669"></div>
+                    <div class="color-btn" style="background: #d97706;" data-color="#d97706"></div>
+                    <div class="color-btn" style="background: #000000;" data-color="#000000"></div>
+                </div>
+                <div class="tool-buttons">
+                    <button class="action-btn" id="clearCanvas">
+                        <i class="fas fa-trash-alt"></i> 清空
+                    </button>
+                    <button class="action-btn" id="saveDrawing">
+                        <i class="fas fa-download"></i> 保存
+                    </button>
+                </div>
+                <button class="next-page-btn" id="nextPage5" disabled>
+                    <i class="fas fa-lock"></i> 请先开始绘画
+                </button>
             </div>
-            
-            <div class="badges-container">
-                <div class="badge" id="badge1">
-                    <i class="fas fa-snowflake badge-icon"></i>
-                    <div class="badge-name">极寒感知者</div>
+        </div>
+        
+        <!-- 第6页：成就 -->
+        <div class="page" id="page6">
+            <div class="page-counter">6/6</div>
+            <div class="card">
+                <h2 class="title">节气成就</h2>
+                <p class="desc">完成所有互动，解锁节气成就：</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
                 </div>
-                <div class="badge" id="badge2">
-                    <i class="fas fa-star badge-icon"></i>
-                    <div class="badge-name">习俗传承人</div>
+                
+                <div class="badges-container">
+                    <div class="badge" id="badge1">
+                        <div class="badge-icon">❄️</div>
+                        <div style="font-size: 0.85rem;">寒冬观察者</div>
+                    </div>
+                    <div class="badge" id="badge2">
+                        <div class="badge-icon">⭐</div>
+                        <div style="font-size: 0.85rem;">暖心生活家</div>
+                    </div>
+                    <div class="badge" id="badge3">
+                        <div class="badge-icon">📚</div>
+                        <div style="font-size: 0.85rem;">诗词知音</div>
+                    </div>
+                    <div class="badge" id="badge4">
+                        <div class="badge-icon">🎨</div>
+                        <div style="font-size: 0.85rem;">冬日画家</div>
+                    </div>
                 </div>
-                <div class="badge" id="badge3">
-                    <i class="fas fa-feather-alt badge-icon"></i>
-                    <div class="badge-name">诗词鉴赏家</div>
-                </div>
-                <div class="badge" id="badge4">
-                    <i class="fas fa-palette badge-icon"></i>
-                    <div class="badge-name">冬日艺术家</div>
-                </div>
+                
+                <p class="desc" style="margin-top: 30px;">大寒已过，新春将至</p>
+                <button class="next-page-btn" id="restartBtn">
+                    <i class="fas fa-redo"></i> 重新开始
+                </button>
             </div>
-        </section>
+        </div>
     </div>
-
+    
     <!-- 音乐控制 -->
     <div class="music-control">
-        <button class="music-btn" id="musicToggle">
+        <button class="music-btn" id="musicBtn">
             <i class="fas fa-music"></i>
         </button>
     </div>
-
+    
     <!-- 提示消息 -->
     <div class="toast" id="toast"></div>
-
+    
     <!-- 音频 -->
-    <audio id="bgm" loop preload="auto" crossorigin="anonymous">
+    <audio id="bgm" loop preload="auto">
         <source src="https://assets.mixkit.co/music/preview/mixkit-winter-snow-125.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 初始化变量
-            let collectedCustoms = new Set();
-            let matchedPoems = new Set();
-            let clickedPhenomena = new Set();
-            let hasDrawn = false;
-            let progress = 10; // 初始进度设为10%
+        // 状态管理
+        const state = {
+            currentPage: 1,
+            totalPages: 6,
+            phenomena: new Set(),
+            activities: new Set(),
+            poems: new Set(),
+            hasDrawn: false,
+            achievements: {
+                cold: false,
+                activity: false,
+                poem: false,
+                paint: false
+            },
+            progress: 0
+        };
 
-            // 成就解锁状态
-            let achievements = {
-                coldPhenomenon: false,
-                customsCollection: false,
-                poemMatching: false,
-                winterArt: false
-            };
-
-            // 元素引用
-            const elements = {
-                progressBar: document.getElementById('progressBar'),
-                toast: document.getElementById('toast'),
-                musicToggle: document.getElementById('musicToggle'),
-                bgm: document.getElementById('bgm'),
-                drawingBoard: document.getElementById('drawingBoard'),
-                clearCanvas: document.getElementById('clearCanvas'),
-                saveDrawing: document.getElementById('saveDrawing'),
-                colorOptions: document.querySelectorAll('.color-option'),
-                customModal: document.getElementById('customModal'),
-                modalClose: document.getElementById('modalClose'),
-                modalIcon: document.getElementById('modalIcon'),
-                modalTitle: document.getElementById('modalTitle'),
-                modalBody: document.getElementById('modalBody')
-            };
-
-            // 习俗详情数据
-            const customDetails = {
-                'eat-rice': {
-                    title: '食糯米饭',
-                    icon: '🍚',
-                    description: '<p>大寒时节，天气寒冷，人们会食用糯米做的饭来驱寒保暖。</p><p>糯米饭含有丰富的碳水化合物，能快速补充能量。传统上还会在糯米饭中加入腊肉、花生、红枣等食材，既美味又营养。</p><p>在南方地区，大寒吃糯米饭是一种重要的节气习俗，寓意着温暖过冬，迎接新春。</p>'
-                },
-                'drink-soup': {
-                    title: '喝鸡汤',
-                    icon: '🍲',
-                    description: '<p>大寒喝鸡汤是传统的进补方式，特别是老母鸡汤，被认为有很好的滋补效果。</p><p>鸡汤能增强体力、提高免疫力，对抗寒冷天气。常会加入枸杞、红枣、当归等药材一起炖煮。</p><p>一家人围坐喝热鸡汤，不仅暖身，更象征着团圆和温暖。</p>'
-                },
-                'clean-house': {
-                    title: '除尘布新',
-                    icon: '🧹',
-                    description: '<p>大寒临近春节，家家户户都会进行大扫除，称为"除尘"。</p><p>这一习俗寓意着扫除旧年的晦气，迎接新年的好运。除了清洁房屋，还会清洗被褥、整理物品。</p><p>除尘布新不仅是卫生习惯，更体现了中国人辞旧迎新的美好愿望。</p>'
-                },
-                'prepare-spring': {
-                    title: '备年货',
-                    icon: '🎁',
-                    description: '<p>大寒过后就是春节，人们开始准备年货，为过年做准备。</p><p>传统年货包括食品、新衣、春联、鞭炮等。北方会准备饺子、年糕，南方则会准备腊味、糖果。</p><p>备年货的过程充满了年味，象征着对新年丰衣足食的美好期盼。</p>'
-                }
-            };
-
-            // 1. 生成雪花效果
-            function createSnowflakes() {
-                const container = document.getElementById('snowflakes');
-                const snowflakeCount = 50;
-                
-                for (let i = 0; i < snowflakeCount; i++) {
-                    const snowflake = document.createElement('div');
-                    snowflake.classList.add('snowflake');
-                    
-                    const size = Math.random() * 4 + 2;
-                    snowflake.style.width = `${size}px`;
-                    snowflake.style.height = `${size}px`;
-                    snowflake.style.left = `${Math.random() * 100}%`;
-                    snowflake.style.top = `${Math.random() * 100}%`;
-                    snowflake.style.opacity = Math.random() * 0.5 + 0.3;
-                    
-                    const duration = Math.random() * 10 + 10;
-                    const delay = Math.random() * 5;
-                    snowflake.style.animation = `fall ${duration}s linear ${delay}s infinite`;
-                    
-                    container.appendChild(snowflake);
-                }
+        // 活动详情数据
+        const activityDetails = {
+            rice: {
+                title: '煮糯米饭',
+                icon: '🍚',
+                desc: '大寒时节，煮一锅热腾腾的糯米饭，暖心又暖胃。可加入红枣、花生等食材，既美味又驱寒。'
+            },
+            soup: {
+                title: '炖鸡汤',
+                icon: '🍲',
+                desc: '炖一锅营养丰富的鸡汤，补充体力增强免疫力。可加入枸杞、当归等药材，全家共享温暖。'
+            },
+            clean: {
+                title: '除尘迎新',
+                icon: '🧹',
+                desc: '大扫除迎接新年，整理家居环境，扫除旧岁尘埃，以整洁面貌迎接新春到来。'
+            },
+            prepare: {
+                title: '备年货',
+                icon: '🎁',
+                desc: '开始准备年货，挑选春联、食品、新衣等，感受渐浓的年味，期待团圆时刻。'
             }
+        };
 
-            // 2. 大寒寒冷现象互动
-            document.querySelectorAll('.phenomenon-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const phenomenon = this.dataset.phenomenon;
-                    
-                    // 添加点击效果
-                    if (!this.classList.contains('clicked')) {
-                        this.classList.add('clicked');
-                        clickedPhenomena.add(phenomenon);
-                        
-                        const title = this.querySelector('.phenomenon-title').textContent;
-                        showToast(`❄️ ${title}`);
-                        
-                        // 更新进度和成就
-                        updateProgress(progress + 5);
-                        
-                        // 如果点击了任意寒冷现象，解锁第一个成就
-                        if (!achievements.coldPhenomenon && clickedPhenomena.size > 0) {
-                            achievements.coldPhenomenon = true;
-                            document.getElementById('badge1').classList.add('unlocked');
-                            showToast('❄️ 极寒感知者成就解锁！');
-                        }
-                    }
-                });
-            });
+        // 页面滚动控制
+        let isScrolling = false;
+        let startY = 0;
 
-            // 3. 习俗收集和详情弹窗
-            document.querySelectorAll('.custom-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const custom = this.dataset.custom;
-                    
-                    // 显示详情弹窗
-                    showCustomDetail(custom);
-                    
-                    // 收集习俗（如果是第一次点击）
-                    if (!collectedCustoms.has(custom)) {
-                        collectedCustoms.add(custom);
-                        this.classList.add('collected');
-                        
-                        // 更新进度
-                        updateProgress(progress + 8);
-                        
-                        // 检查是否全部收集
-                        if (collectedCustoms.size === 4 && !achievements.customsCollection) {
-                            achievements.customsCollection = true;
-                            document.getElementById('badge2').classList.add('unlocked');
-                            showToast('🎉 恭喜！已收集所有大寒习俗！');
-                        }
-                    }
-                });
-            });
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initSnow();
+            initCanvas();
+            setupInteractions();
+            initMusic();
+            updateProgress();
+            
+            // 触摸事件监听
+            document.addEventListener('touchstart', handleTouchStart);
+            document.addEventListener('touchend', handleTouchEnd);
+            document.addEventListener('wheel', handleWheel);
+            
+            // 键盘支持
+            document.addEventListener('keydown', handleKeydown);
+        });
 
-            // 显示习俗详情弹窗
-            function showCustomDetail(customId) {
-                const detail = customDetails[customId];
-                if (!detail) return;
-                
-                elements.modalIcon.textContent = detail.icon;
-                elements.modalTitle.textContent = detail.title;
-                elements.modalBody.innerHTML = detail.description;
-                
-                elements.customModal.classList.add('active');
+        // 创建雪花
+        function initSnow() {
+            const bg = document.getElementById('snowBg');
+            for (let i = 0; i < 50; i++) {
+                const flake = document.createElement('div');
+                flake.style.cssText = `
+                    position: absolute;
+                    background: white;
+                    border-radius: 50%;
+                    width: ${Math.random() * 4 + 2}px;
+                    height: ${Math.random() * 4 + 2}px;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.5 + 0.3};
+                    animation: fall ${Math.random() * 10 + 10}s linear infinite;
+                `;
+                bg.appendChild(flake);
             }
-
-            // 关闭弹窗
-            elements.modalClose.addEventListener('click', function() {
-                elements.customModal.classList.remove('active');
-            });
-
-            // 点击弹窗外关闭
-            elements.customModal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    elements.customModal.classList.remove('active');
+            
+            // 添加动画关键帧
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    0% { transform: translateY(-100px) rotate(0deg); }
+                    100% { transform: translateY(100vh) rotate(360deg); }
                 }
-            });
+            `;
+            document.head.appendChild(style);
+        }
 
-            // 4. 诗词配对游戏
-            const poemPairs = {
-                '1': '2', // 大寒雪未消 - 闭户不能出
-                '3': '4', // 可怜切云冠 - 局此容膝室
-                '5': '6'  // 腊酒自盈樽 - 金炉兽炭温
-            };
-            
-            let selectedLine = null;
-            
-            document.querySelectorAll('.poem-line').forEach(line => {
-                line.addEventListener('click', function() {
-                    if (this.classList.contains('matched')) return;
-                    
-                    if (!selectedLine) {
-                        // 选择第一句
-                        selectedLine = this;
-                        this.classList.add('selected');
-                        showToast('请选择对应的下句');
-                    } else {
-                        // 选择第二句
-                        const firstId = selectedLine.dataset.line;
-                        const secondId = this.dataset.line;
-                        
-                        if (poemPairs[firstId] === secondId || poemPairs[secondId] === firstId) {
-                            // 配对成功
-                            selectedLine.classList.remove('selected');
-                            selectedLine.classList.add('matched');
-                            this.classList.add('matched');
-                            
-                            const pairKey = poemPairs[firstId] ? firstId : secondId;
-                            matchedPoems.add(pairKey);
-                            
-                            showToast('📚 诗词配对成功！');
-                            updateProgress(progress + 10);
-                            
-                            // 检查是否全部配对
-                            if (matchedPoems.size === 3 && !achievements.poemMatching) {
-                                achievements.poemMatching = true;
-                                document.getElementById('badge3').classList.add('unlocked');
-                                showToast('🎓 诗词鉴赏家成就解锁！');
-                            }
-                        } else {
-                            // 配对失败
-                            selectedLine.classList.remove('selected');
-                            showToast('再试试吧！');
-                        }
-                        
-                        selectedLine = null;
-                    }
-                });
-            });
-
-            // 5. 绘画板系统
-            const canvas = elements.drawingBoard;
+        // 初始化画板
+        function initCanvas() {
+            const canvas = document.getElementById('drawingCanvas');
             const ctx = canvas.getContext('2d');
             
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
             
+            let drawing = false;
             let currentColor = '#dc2626';
-            ctx.lineWidth = 8; // 加粗笔触
+            
+            ctx.lineWidth = 8;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.strokeStyle = currentColor;
-
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseout', stopDrawing);
             
-            canvas.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                const touch = e.touches[0];
-                startDrawing(touch);
-            });
-            
-            canvas.addEventListener('touchmove', function(e) {
-                e.preventDefault();
-                const touch = e.touches[0];
-                draw(touch);
-            });
-            
-            canvas.addEventListener('touchend', stopDrawing);
-
-            function startDrawing(e) {
-                isDrawing = true;
-                hasDrawn = true;
-                const rect = canvas.getBoundingClientRect();
-                lastX = (e.clientX || e.pageX) - rect.left;
-                lastY = (e.clientY || e.pageY) - rect.top;
-                
-                // 开始绘画时检查成就
-                if (hasDrawn && !achievements.winterArt) {
-                    achievements.winterArt = true;
-                    document.getElementById('badge4').classList.add('unlocked');
-                    updateProgress(progress + 10);
-                    showToast('🎨 冬日艺术家成就解锁！');
-                }
-            }
-
-            function draw(e) {
-                if (!isDrawing) return;
-                
-                const rect = canvas.getBoundingClientRect();
-                const currentX = (e.clientX || e.pageX) - rect.left;
-                const currentY = (e.clientY || e.pageY) - rect.top;
-                
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(currentX, currentY);
-                ctx.stroke();
-                
-                lastX = currentX;
-                lastY = currentY;
-            }
-
-            function stopDrawing() {
-                isDrawing = false;
-            }
-
             // 颜色选择
-            elements.colorOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    elements.colorOptions.forEach(opt => opt.classList.remove('active'));
-                    this.classList.add('active');
-                    currentColor = this.dataset.color;
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentColor = btn.dataset.color;
                     ctx.strokeStyle = currentColor;
                 });
             });
-
+            
+            // 绘画事件
+            canvas.addEventListener('mousedown', (e) => {
+                drawing = true;
+                if (!state.hasDrawn) {
+                    state.hasDrawn = true;
+                    state.achievements.paint = true;
+                    updateProgress(20);
+                    unlockBadge('badge4');
+                    showToast('🎨 开始创作！');
+                    document.getElementById('nextPage5').innerHTML = '<i class="fas fa-arrow-right"></i> 继续探索';
+                    document.getElementById('nextPage5').disabled = false;
+                }
+                ctx.beginPath();
+                const rect = canvas.getBoundingClientRect();
+                ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            });
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (!drawing) return;
+                const rect = canvas.getBoundingClientRect();
+                ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+                ctx.stroke();
+            });
+            
+            canvas.addEventListener('mouseup', () => {
+                drawing = false;
+            });
+            
+            canvas.addEventListener('mouseout', () => {
+                drawing = false;
+            });
+            
+            // 触摸事件
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                drawing = true;
+                if (!state.hasDrawn) {
+                    state.hasDrawn = true;
+                    state.achievements.paint = true;
+                    updateProgress(20);
+                    unlockBadge('badge4');
+                    showToast('🎨 开始创作！');
+                    document.getElementById('nextPage5').innerHTML = '<i class="fas fa-arrow-right"></i> 继续探索';
+                    document.getElementById('nextPage5').disabled = false;
+                }
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                ctx.beginPath();
+                ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            });
+            
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (!drawing) return;
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                ctx.stroke();
+            });
+            
+            canvas.addEventListener('touchend', () => {
+                drawing = false;
+            });
+            
             // 清空画布
-            elements.clearCanvas.addEventListener('click', function() {
+            document.getElementById('clearCanvas').addEventListener('click', () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 showToast('画板已清空');
             });
-
+            
             // 保存作品
-            elements.saveDrawing.addEventListener('click', function() {
-                const dataURL = canvas.toDataURL('image/png');
+            document.getElementById('saveDrawing').addEventListener('click', () => {
                 const link = document.createElement('a');
-                link.download = '大寒绘画作品.png';
-                link.href = dataURL;
+                link.download = '大寒绘画.png';
+                link.href = canvas.toDataURL();
                 link.click();
                 showToast('作品已保存！');
             });
-
-            // 6. 音乐控制
-            let isPlaying = false;
             
-            elements.musicToggle.addEventListener('click', function() {
-                if (isPlaying) {
-                    elements.bgm.pause();
-                    this.innerHTML = '<i class="fas fa-music"></i>';
-                    showToast('音乐已暂停');
-                } else {
-                    elements.bgm.play().catch(e => {
-                        showToast('点击页面任意处启用音乐');
-                        document.body.addEventListener('click', function initMusic() {
-                            elements.bgm.play();
-                            document.body.removeEventListener('click', initMusic);
-                        }, { once: true });
-                    });
-                    this.innerHTML = '<i class="fas fa-pause"></i>';
-                    showToast('❄️ 节气音乐播放中');
-                }
-                isPlaying = !isPlaying;
-            });
-
-            // 7. 进度更新函数（修复版）
-            function updateProgress(value) {
-                // 确保进度不会超过100%
-                progress = Math.min(100, Math.max(progress, value));
-                
-                // 计算实际显示进度（确保完成所有互动能达到100%）
-                let displayProgress = progress;
-                
-                // 检查是否完成了所有主要互动
-                const allInteractionsComplete = 
-                    clickedPhenomena.size > 0 && 
-                    collectedCustoms.size === 4 && 
-                    matchedPoems.size === 3 && 
-                    hasDrawn;
-                
-                // 如果完成了所有互动，直接显示100%
-                if (allInteractionsComplete && displayProgress < 100) {
-                    displayProgress = 100;
-                }
-                
-                elements.progressBar.style.width = displayProgress + '%';
-                
-                // 全部完成时显示提示
-                if (displayProgress >= 100 && progress >= 100) {
-                    setTimeout(() => {
-                        showToast('🎊 恭喜！大寒节气探索完成！');
-                    }, 500);
-                }
-                
-                return displayProgress;
-            }
-
-            // 8. 提示消息函数
-            function showToast(message) {
-                elements.toast.textContent = message;
-                elements.toast.classList.add('show');
-                
-                setTimeout(() => {
-                    elements.toast.classList.remove('show');
-                }, 3000);
-            }
-
-            // 9. 窗口大小调整
-            window.addEventListener('resize', function() {
-                const oldImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            // 窗口大小调整
+            window.addEventListener('resize', () => {
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 canvas.width = canvas.offsetWidth;
                 canvas.height = canvas.offsetHeight;
-                ctx.putImageData(oldImage, 0, 0);
+                ctx.putImageData(imgData, 0, 0);
                 ctx.lineWidth = 8;
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
                 ctx.strokeStyle = currentColor;
             });
+        }
 
-            // 初始化
-            createSnowflakes();
-            updateProgress(10); // 初始化进度为10%
-        });
+        // 设置交互
+        function setupInteractions() {
+            // 寒冷现象点击
+            document.querySelectorAll('.phenomenon-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (!item.classList.contains('checked')) {
+                        item.classList.add('checked');
+                        state.phenomena.add(item.dataset.id);
+                        
+                        if (state.phenomena.size === 3) {
+                            state.achievements.cold = true;
+                            updateProgress(20);
+                            unlockBadge('badge1');
+                            showToast('❄️ 寒冬观察者成就解锁！');
+                            document.getElementById('nextPage2').innerHTML = '<i class="fas fa-arrow-right"></i> 继续探索';
+                            document.getElementById('nextPage2').disabled = false;
+                        }
+                    }
+                });
+            });
+            
+            // 活动点击
+            document.querySelectorAll('.activity-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const id = item.dataset.id;
+                    const detail = activityDetails[id];
+                    
+                    // 显示详情弹窗
+                    document.getElementById('modalIcon').textContent = detail.icon;
+                    document.getElementById('modalTitle').textContent = detail.title;
+                    document.getElementById('modalBody').textContent = detail.desc;
+                    document.getElementById('activityModal').classList.add('active');
+                    
+                    // 收集活动
+                    if (!item.classList.contains('collected')) {
+                        item.classList.add('collected');
+                        state.activities.add(id);
+                        
+                        if (state.activities.size === 4) {
+                            state.achievements.activity = true;
+                            updateProgress(20);
+                            unlockBadge('badge2');
+                            showToast('🌟 暖心生活家成就解锁！');
+                            document.getElementById('nextPage3').innerHTML = '<i class="fas fa-arrow-right"></i> 继续探索';
+                            document.getElementById('nextPage3').disabled = false;
+                        }
+                    }
+                });
+            });
+            
+            // 诗词配对
+            const poemPairs = { '1': '2', '3': '4' };
+            let selectedPoem = null;
+            
+            document.querySelectorAll('.poem-line').forEach(poem => {
+                poem.addEventListener('click', () => {
+                    if (poem.classList.contains('matched')) return;
+                    
+                    if (!selectedPoem) {
+                        selectedPoem = poem;
+                        poem.classList.add('selected');
+                    } else {
+                        const first = selectedPoem.dataset.line;
+                        const second = poem.dataset.line;
+                        
+                        if (poemPairs[first] === second || poemPairs[second] === first) {
+                            selectedPoem.classList.remove('selected');
+                            selectedPoem.classList.add('matched');
+                            poem.classList.add('matched');
+                            
+                            state.poems.add(first);
+                            
+                            if (state.poems.size === 2) {
+                                state.achievements.poem = true;
+                                updateProgress(20);
+                                unlockBadge('badge3');
+                                showToast('📚 诗词知音成就解锁！');
+                                document.getElementById('nextPage4').innerHTML = '<i class="fas fa-arrow-right"></i> 继续探索';
+                                document.getElementById('nextPage4').disabled = false;
+                            }
+                        } else {
+                            selectedPoem.classList.remove('selected');
+                            showToast('再试一次吧~');
+                        }
+                        selectedPoem = null;
+                    }
+                });
+            });
+            
+            // 弹窗关闭
+            document.getElementById('modalClose').addEventListener('click', () => {
+                document.getElementById('activityModal').classList.remove('active');
+            });
+            
+            document.getElementById('activityModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('activityModal')) {
+                    document.getElementById('activityModal').classList.remove('active');
+                }
+            });
+            
+            // 下一页按钮
+            for (let i = 2; i <= 5; i++) {
+                document.getElementById(`nextPage${i}`).addEventListener('click', () => {
+                    goToPage(state.currentPage + 1);
+                });
+            }
+            
+            // 重新开始按钮
+            document.getElementById('restartBtn').addEventListener('click', () => {
+                resetGame();
+            });
+        }
+
+        // 音乐控制
+        function initMusic() {
+            const musicBtn = document.getElementById('musicBtn');
+            const bgm = document.getElementById('bgm');
+            let playing = false;
+            
+            musicBtn.addEventListener('click', () => {
+                if (playing) {
+                    bgm.pause();
+                    musicBtn.innerHTML = '<i class="fas fa-music"></i>';
+                    showToast('音乐已暂停');
+                } else {
+                    bgm.play().catch(() => {
+                        showToast('点击页面任意处启用音乐');
+                        document.addEventListener('click', () => {
+                            bgm.play();
+                            musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                            playing = true;
+                        }, { once: true });
+                    });
+                    musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    showToast('❄️ 节气音乐播放中');
+                }
+                playing = !playing;
+            });
+            
+            // 自动播放尝试
+            setTimeout(() => {
+                bgm.play().catch(() => {
+                    // 自动播放被阻止，显示提示
+                    showToast('点击音乐按钮开启背景音乐');
+                });
+            }, 1000);
+        }
+
+        // 页面导航
+        function goToPage(pageNum) {
+            if (pageNum < 1 || pageNum > state.totalPages || isScrolling) return;
+            
+            isScrolling = true;
+            const currentPage = document.getElementById(`page${state.currentPage}`);
+            const nextPage = document.getElementById(`page${pageNum}`);
+            
+            // 更新当前页面状态
+            currentPage.classList.remove('active');
+            if (pageNum > state.currentPage) {
+                currentPage.classList.add('prev');
+            } else {
+                currentPage.classList.add('next');
+            }
+            
+            // 显示新页面
+            nextPage.classList.remove('prev', 'next');
+            nextPage.classList.add('active');
+            
+            state.currentPage = pageNum;
+            
+            // 重置滚动状态
+            setTimeout(() => {
+                isScrolling = false;
+            }, 800);
+        }
+
+        // 触摸事件处理
+        function handleTouchStart(e) {
+            startY = e.touches[0].clientY;
+        }
+
+        function handleTouchEnd(e) {
+            if (isScrolling) return;
+            
+            const endY = e.changedTouches[0].clientY;
+            const diff = startY - endY;
+            
+            // 滑动距离阈值
+            if (Math.abs(diff) < 50) return;
+            
+            if (diff > 0) {
+                // 向上滑动 - 下一页
+                goToPage(state.currentPage + 1);
+            } else {
+                // 向下滑动 - 上一页
+                goToPage(state.currentPage - 1);
+            }
+        }
+
+        // 滚轮事件处理
+        function handleWheel(e) {
+            if (isScrolling) return;
+            
+            e.preventDefault();
+            
+            if (e.deltaY > 0) {
+                // 向下滚动 - 下一页
+                goToPage(state.currentPage + 1);
+            } else {
+                // 向上滚动 - 上一页
+                goToPage(state.currentPage - 1);
+            }
+        }
+
+        // 键盘支持
+        function handleKeydown(e) {
+            if (isScrolling) return;
+            
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                goToPage(state.currentPage + 1);
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                goToPage(state.currentPage - 1);
+            }
+        }
+
+        // 更新进度
+        function updateProgress(add = 0) {
+            if (add) state.progress = Math.min(100, state.progress + add);
+            
+            // 检查所有成就
+            const allAchieved = 
+                state.achievements.cold &&
+                state.achievements.activity &&
+                state.achievements.poem &&
+                state.achievements.paint;
+            
+            if (allAchieved && state.progress < 100) {
+                state.progress = 100;
+            }
+            
+            document.getElementById('progressFill').style.width = state.progress + '%';
+            
+            if (state.progress >= 100 && state.currentPage === 6) {
+                showToast('🎉 大寒节气探索完成！');
+            }
+        }
+
+        // 解锁徽章
+        function unlockBadge(id) {
+            const badge = document.getElementById(id);
+            badge.classList.add('unlocked');
+        }
+
+        // 显示提示
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.textContent = text;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 重置游戏
+        function resetGame() {
+            // 重置状态
+            state.currentPage = 1;
+            state.phenomena.clear();
+            state.activities.clear();
+            state.poems.clear();
+            state.hasDrawn = false;
+            state.achievements = {
+                cold: false,
+                activity: false,
+                poem: false,
+                paint: false
+            };
+            state.progress = 0;
+            
+            // 重置UI
+            document.querySelectorAll('.phenomenon-item').forEach(item => {
+                item.classList.remove('checked');
+            });
+            
+            document.querySelectorAll('.activity-item').forEach(item => {
+                item.classList.remove('collected');
+            });
+            
+            document.querySelectorAll('.poem-line').forEach(poem => {
+                poem.classList.remove('selected', 'matched');
+            });
+            
+            document.querySelectorAll('.badge').forEach(badge => {
+                badge.classList.remove('unlocked');
+            });
+            
+            // 重置画布
+            const canvas = document.getElementById('drawingCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 重置按钮
+            for (let i = 2; i <= 5; i++) {
+                const btn = document.getElementById(`nextPage${i}`);
+                btn.innerHTML = '<i class="fas fa-lock"></i> 请先完成互动';
+                btn.disabled = true;
+            }
+            
+            // 返回第一页
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active', 'prev', 'next');
+            });
+            document.getElementById('page1').classList.add('active');
+            
+            // 重置进度
+            document.getElementById('progressFill').style.width = '0%';
+            
+            showToast('✨ 重新开始探索大寒节气');
+        }
     </script>
 </body>
 </html>
