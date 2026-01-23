@@ -15,12 +15,25 @@
 
         body {
             font-family: 'Microsoft YaHei', sans-serif;
-            background-color: #f8f1e4;
-            color: #5c3d2e;
+            background-color: #5a3921;
+            color: #fff;
             overflow: hidden;
             width: 100vw;
             height: 100vh;
             position: relative;
+        }
+
+        /* 灶台背景 */
+        .kitchen-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('kitchen_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
         }
 
         .container {
@@ -54,8 +67,8 @@
             text-align: center;
             font-size: 28px;
             margin-bottom: 20px;
-            color: #d2691e;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             padding-top: 10px;
         }
 
@@ -72,7 +85,7 @@
 
         /* 下一步按钮 */
         .next-btn {
-            background-color: #d2691e;
+            background-color: #ff9900;
             color: white;
             border: none;
             border-radius: 50px;
@@ -82,92 +95,88 @@
             cursor: pointer;
             margin: 20px auto;
             display: block;
-            box-shadow: 0 5px 15px rgba(210, 105, 30, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
 
         .next-btn:hover {
-            background-color: #b3591a;
+            background-color: #e68a00;
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(210, 105, 30, 0.4);
         }
 
         .next-btn:active {
             transform: translateY(1px);
         }
 
-        /* 欢迎步骤 */
-        .welcome-content {
-            text-align: center;
-            max-width: 90%;
-        }
-
-        .welcome-icon {
-            font-size: 80px;
-            color: #d2691e;
-            margin-bottom: 20px;
-        }
-
-        .welcome-text {
-            font-size: 22px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 食材选择步骤 */
-        .ingredients-container {
+        /* 第一步：清洗食材 */
+        .washing-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            max-width: 100%;
-            margin-top: 20px;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .washing-text {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 90%;
+            margin-bottom: 30px;
         }
 
         .ingredient-item {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
             position: relative;
-            cursor: pointer;
-            transition: transform 0.3s ease;
+            animation: glow-border 2s infinite alternate;
         }
 
-        .ingredient-item.selected {
-            animation: glow 1.5s infinite alternate;
-            transform: scale(1.1);
-        }
-
-        @keyframes glow {
-            from {
-                box-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700;
+        @keyframes glow-border {
+            0% {
+                box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ffcc00;
             }
-            to {
-                box-shadow: 0 0 15px #ffd700, 0 0 25px #ffd700, 0 0 35px #ffd700;
+            100% {
+                box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ffcc00;
             }
         }
 
-        .ingredient-icon {
-            font-size: 30px;
-            margin-bottom: 5px;
+        .ingredient-image {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
         }
 
         .ingredient-name {
             font-size: 12px;
             text-align: center;
+            color: #333;
+            margin-top: 5px;
         }
 
-        /* 拖放步骤 */
+        .washing-icon {
+            font-size: 80px;
+            color: #4da6ff;
+            margin-bottom: 20px;
+            animation: bubble 2s infinite ease-in-out;
+        }
+
+        /* 第二步：拖放食材 */
         .drag-container {
             display: flex;
             flex-direction: column;
@@ -183,11 +192,13 @@
             gap: 15px;
             margin-bottom: 30px;
             width: 100%;
+            max-width: 90%;
         }
 
         .draggable {
             cursor: grab;
             transition: all 0.3s ease;
+            animation: glow-border 2s infinite alternate;
         }
 
         .draggable:active {
@@ -227,8 +238,8 @@
         }
 
         .ingredient-in-pot {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             margin: 3px;
             display: flex;
             align-items: center;
@@ -239,14 +250,20 @@
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* 熬煮步骤 */
+        .ingredient-in-pot img {
+            width: 25px;
+            height: 25px;
+            object-fit: contain;
+        }
+
+        /* 第三步：熬煮过程 */
         .cooking-container {
             text-align: center;
         }
 
         .cooking-icon {
             font-size: 100px;
-            color: #d2691e;
+            color: #ff9900;
             margin-bottom: 20px;
             animation: bubble 2s infinite ease-in-out;
         }
@@ -269,18 +286,18 @@
         .timer {
             font-size: 36px;
             font-weight: bold;
-            color: #d2691e;
+            color: #ff9900;
             margin: 20px 0;
         }
 
-        /* 完成步骤 */
+        /* 第四步：成品展示 */
         .finished-container {
             text-align: center;
         }
 
         .finished-bowl {
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
             margin: 0 auto 30px;
             position: relative;
             display: flex;
@@ -298,8 +315,9 @@
 
         .congrats-text {
             font-size: 28px;
-            color: #d2691e;
+            color: #ffcc00;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .restart-btn {
@@ -313,7 +331,7 @@
             cursor: pointer;
             margin: 20px auto;
             display: block;
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
 
@@ -337,18 +355,19 @@
         }
 
         .modal-content {
-            background-color: white;
+            background-color: rgba(90, 57, 33, 0.95);
             border-radius: 20px;
             padding: 30px;
             max-width: 90%;
             width: 500px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffcc00;
         }
 
         .modal-title {
             font-size: 28px;
-            color: #d2691e;
+            color: #ffcc00;
             margin-bottom: 20px;
         }
 
@@ -360,7 +379,7 @@
         }
 
         .modal-close {
-            background-color: #d2691e;
+            background-color: #ff9900;
             color: white;
             border: none;
             border-radius: 50px;
@@ -371,7 +390,7 @@
         }
 
         .modal-close:hover {
-            background-color: #b3591a;
+            background-color: #e68a00;
         }
 
         /* 音乐控制 */
@@ -414,7 +433,7 @@
         }
 
         .progress-step.active {
-            background-color: #d2691e;
+            background-color: #ff9900;
         }
 
         .progress-step::after {
@@ -433,7 +452,7 @@
         }
 
         .progress-step.active::after {
-            background-color: #d2691e;
+            background-color: #ff9900;
         }
 
         /* 响应式调整 */
@@ -443,12 +462,13 @@
             }
             
             .ingredient-item {
-                width: 70px;
-                height: 70px;
+                width: 60px;
+                height: 60px;
             }
             
-            .ingredient-icon {
-                font-size: 25px;
+            .ingredient-image {
+                width: 40px;
+                height: 40px;
             }
             
             .pot-container {
@@ -457,13 +477,40 @@
             }
             
             .finished-bowl {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .ingredients-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+        }
+        
+        @media (max-height: 700px) {
+            .step-title {
+                margin-bottom: 10px;
+                padding-top: 5px;
+            }
+            
+            .pot-container {
                 width: 180px;
                 height: 180px;
+                margin-top: 10px;
+            }
+            
+            .finished-bowl {
+                width: 180px;
+                height: 180px;
+                margin-bottom: 15px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- 灶台背景 -->
+    <div class="kitchen-bg"></div>
+    
     <!-- 音乐控制 -->
     <div class="music-control" id="musicControl">
         <i class="fas fa-volume-up"></i>
@@ -475,28 +522,35 @@
             <h2 class="modal-title">腊八粥制作小游戏</h2>
             <div class="modal-text">
                 <p><strong>游戏玩法：</strong></p>
-                <p>1. 首先选择腊八粥的食材</p>
-                <p>2. 然后将食材拖入锅中</p>
-                <p>3. 等待熬煮完成</p>
-                <p>4. 欣赏美味的腊八粥成品</p>
+                <p>1. 第一步：清洗腊八粥食材</p>
+                <p>2. 第二步：将食材放入锅中</p>
+                <p>3. 第三步：熬煮腊八粥</p>
+                <p>4. 第四步：欣赏成品腊八粥</p>
                 <p>游戏过程中请确保手机音量合适，享受背景音乐！</p>
             </div>
-            <button class="modal-close" id="closeModal">开始游戏</button>
+            <button class="modal-close" id="closeModal">开始制作</button>
         </div>
     </div>
 
     <!-- 游戏主容器 -->
     <div class="container">
-        <!-- 步骤1：选择食材 -->
+        <!-- 步骤1：清洗食材 -->
         <div class="step active" id="step1">
-            <h2 class="step-title">第一步：选择腊八粥食材</h2>
+            <h2 class="step-title">第一步：清洗腊八粥食材</h2>
             <div class="step-content">
-                <p style="font-size: 18px; margin-bottom: 20px; text-align: center;">点击选择以下食材（至少选择3种）</p>
-                <div class="ingredients-container" id="ingredientsList">
-                    <!-- 食材将通过JavaScript动态生成 -->
+                <div class="washing-container">
+                    <div class="washing-icon">
+                        <i class="fas fa-hand-sparkles"></i>
+                    </div>
+                    <div class="washing-text">
+                        腊八粥食材已准备好，请仔细清洗每种食材
+                    </div>
+                    <div class="ingredients-grid" id="ingredientsGrid">
+                        <!-- 食材将通过JavaScript动态生成 -->
+                    </div>
                 </div>
             </div>
-            <button class="next-btn" id="nextStep1" disabled>选好了，下一步</button>
+            <button class="next-btn" id="nextStep1">清洗完成，下一步</button>
             <div class="progress-container">
                 <div class="progress-step active"></div>
                 <div class="progress-step"></div>
@@ -511,15 +565,15 @@
             <div class="step-content">
                 <div class="drag-container">
                     <div class="ingredients-to-drag" id="dragIngredients">
-                        <!-- 已选食材将通过JavaScript动态生成 -->
+                        <!-- 食材将通过JavaScript动态生成 -->
                     </div>
                     <div class="pot-container">
-                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="锅" class="pot">
+                        <img src="pot.png" alt="锅" class="pot">
                         <div class="pot-content" id="pot">
                             <p style="color: #888; font-size: 16px;">将食材拖放到这里</p>
                         </div>
                     </div>
-                    <p style="margin-top: 20px; font-size: 16px;">已放入: <span id="ingredientCount">0</span>/<span id="totalIngredients">0</span> 种食材</p>
+                    <p style="margin-top: 20px; font-size: 16px;">已放入: <span id="ingredientCount">0</span>/8 种食材</p>
                 </div>
             </div>
             <button class="next-btn" id="nextStep2" disabled>食材放好了，开始熬煮</button>
@@ -542,10 +596,10 @@
                     <div class="cooking-text">
                         腊八粥正在熬煮中，请耐心等待...
                     </div>
-                    <div class="timer" id="timer">00:30</div>
+                    <div class="timer" id="timer">00:08</div>
                     <div class="cooking-progress">
                         <div style="width: 80%; height: 20px; background-color: #ddd; border-radius: 10px; margin: 0 auto; overflow: hidden;">
-                            <div id="cookingProgress" style="width: 0%; height: 100%; background-color: #d2691e; transition: width 1s linear;"></div>
+                            <div id="cookingProgress" style="width: 0%; height: 100%; background-color: #ff9900; transition: width 1s linear;"></div>
                         </div>
                     </div>
                 </div>
@@ -565,12 +619,12 @@
             <div class="step-content">
                 <div class="finished-container">
                     <div class="finished-bowl">
-                        <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="腊八粥" class="bowl">
+                        <img src="bowl.png" alt="腊八粥" class="bowl">
                     </div>
                     <div class="congrats-text">
                         恭喜！腊八粥制作完成！
                     </div>
-                    <p style="font-size: 18px; margin-bottom: 30px; line-height: 1.5;">
+                    <p style="font-size: 18px; margin-bottom: 30px; line-height: 1.5; text-align: center; background-color: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px;">
                         腊八粥，又称"七宝五味粥"，是一种在腊八节用多种食材熬制的粥。<br>
                         传统上，腊八粥由至少八种食材制成，象征着吉祥和丰收。
                     </p>
@@ -588,7 +642,6 @@
 
     <!-- 背景音乐 -->
     <audio id="bgMusic" loop>
-        <!-- 这里需要替换为您上传的lababgm.mp3文件 -->
         <source src="lababgm.mp3" type="audio/mpeg">
         您的浏览器不支持音频元素。
     </audio>
@@ -597,25 +650,21 @@
         // 游戏状态和数据
         const gameState = {
             currentStep: 1,
-            selectedIngredients: [],
             draggedIngredients: [],
-            totalIngredients: 0,
             isMusicPlaying: false,
             cookingInterval: null
         };
 
-        // 腊八粥食材数据
+        // 固定的腊八粥食材数据（8种常见食材）
         const ingredients = [
-            { id: 1, name: '大米', icon: 'fa-seedling', color: '#f5f5f5' },
-            { id: 2, name: '小米', icon: 'fa-wheat-awn', color: '#ffd700' },
-            { id: 3, name: '红豆', icon: 'fa-seedling', color: '#dc143c' },
-            { id: 4, name: '绿豆', icon: 'fa-seedling', color: '#32cd32' },
-            { id: 5, name: '花生', icon: 'fa-peanut', color: '#d2b48c' },
-            { id: 6, name: '红枣', icon: 'fa-apple-alt', color: '#8b0000' },
-            { id: 7, name: '莲子', icon: 'fa-seedling', color: '#fffacd' },
-            { id: 8, name: '桂圆', icon: 'fa-apple-alt', color: '#8b4513' },
-            { id: 9, name: '核桃', icon: 'fa-nut', color: '#8b4513' },
-            { id: 10, name: '薏米', icon: 'fa-seedling', color: '#f0e68c' }
+            { id: 1, name: '大米', image: 'rice.png', color: '#f5f5f5' },
+            { id: 2, name: '红豆', image: 'red_bean.png', color: '#dc143c' },
+            { id: 3, name: '绿豆', image: 'green_bean.png', color: '#32cd32' },
+            { id: 4, name: '花生', image: 'peanut.png', color: '#d2b48c' },
+            { id: 5, name: '红枣', image: 'red_date.png', color: '#8b0000' },
+            { id: 6, name: '莲子', image: 'lotus_seed.png', color: '#fffacd' },
+            { id: 7, name: '桂圆', image: 'longan.png', color: '#8b4513' },
+            { id: 8, name: '核桃', image: 'walnut.png', color: '#8b4513' }
         ];
 
         // DOM元素
@@ -628,31 +677,25 @@
         const nextStep2Btn = document.getElementById('nextStep2');
         const nextStep3Btn = document.getElementById('nextStep3');
         const restartBtn = document.getElementById('restartBtn');
-        const ingredientsList = document.getElementById('ingredientsList');
+        const ingredientsGrid = document.getElementById('ingredientsGrid');
         const dragIngredients = document.getElementById('dragIngredients');
         const pot = document.getElementById('pot');
         const ingredientCount = document.getElementById('ingredientCount');
-        const totalIngredients = document.getElementById('totalIngredients');
         const timer = document.getElementById('timer');
         const cookingProgress = document.getElementById('cookingProgress');
 
         // 初始化游戏
         function initGame() {
-            // 生成食材选择列表
+            // 生成食材显示网格（第一步）
             ingredients.forEach(ingredient => {
                 const ingredientItem = document.createElement('div');
                 ingredientItem.className = 'ingredient-item';
                 ingredientItem.dataset.id = ingredient.id;
                 ingredientItem.innerHTML = `
-                    <i class="fas ${ingredient.icon} ingredient-icon" style="color: ${ingredient.color};"></i>
+                    <img src="${ingredient.image}" alt="${ingredient.name}" class="ingredient-image">
                     <span class="ingredient-name">${ingredient.name}</span>
                 `;
-                
-                ingredientItem.addEventListener('click', () => {
-                    toggleIngredientSelection(ingredient.id, ingredientItem);
-                });
-                
-                ingredientsList.appendChild(ingredientItem);
+                ingredientsGrid.appendChild(ingredientItem);
             });
 
             // 初始化事件监听
@@ -670,7 +713,6 @@
                         gameState.isMusicPlaying = true;
                         musicControl.innerHTML = '<i class="fas fa-volume-up"></i>';
                     }).catch(() => {
-                        // 自动播放被阻止，等待用户交互
                         console.log('音乐自动播放被阻止，等待用户交互');
                     });
                 }
@@ -702,24 +744,6 @@
             gameState.isMusicPlaying = !gameState.isMusicPlaying;
         }
 
-        // 切换食材选择状态
-        function toggleIngredientSelection(id, element) {
-            const index = gameState.selectedIngredients.indexOf(id);
-            
-            if (index === -1) {
-                // 选择食材
-                gameState.selectedIngredients.push(id);
-                element.classList.add('selected');
-            } else {
-                // 取消选择食材
-                gameState.selectedIngredients.splice(index, 1);
-                element.classList.remove('selected');
-            }
-            
-            // 更新下一步按钮状态（至少选择3种食材）
-            nextStep1Btn.disabled = gameState.selectedIngredients.length < 3;
-        }
-
         // 转到指定步骤
         function goToStep(stepNumber) {
             // 更新当前步骤
@@ -738,8 +762,6 @@
                 setupDragStep();
             } else if (stepNumber === 3) {
                 startCooking();
-            } else if (stepNumber === 4) {
-                // 步骤4无需特殊处理
             }
             
             // 更新进度指示器
@@ -753,31 +775,28 @@
             pot.innerHTML = '<p style="color: #888; font-size: 16px;">将食材拖放到这里</p>';
             gameState.draggedIngredients = [];
             
-            // 创建可拖放的食材元素
-            gameState.selectedIngredients.forEach(id => {
-                const ingredient = ingredients.find(item => item.id === id);
-                if (ingredient) {
-                    const dragItem = document.createElement('div');
-                    dragItem.className = 'ingredient-item draggable';
-                    dragItem.draggable = true;
-                    dragItem.dataset.id = ingredient.id;
-                    dragItem.innerHTML = `
-                        <i class="fas ${ingredient.icon} ingredient-icon" style="color: ${ingredient.color};"></i>
-                        <span class="ingredient-name">${ingredient.name}</span>
-                    `;
-                    
-                    // 添加拖放事件
-                    dragItem.addEventListener('dragstart', (e) => {
-                        e.dataTransfer.setData('text/plain', ingredient.id);
-                        dragItem.style.opacity = '0.5';
-                    });
-                    
-                    dragItem.addEventListener('dragend', () => {
-                        dragItem.style.opacity = '1';
-                    });
-                    
-                    dragIngredients.appendChild(dragItem);
-                }
+            // 创建可拖放的食材元素（所有8种食材）
+            ingredients.forEach(ingredient => {
+                const dragItem = document.createElement('div');
+                dragItem.className = 'ingredient-item draggable';
+                dragItem.draggable = true;
+                dragItem.dataset.id = ingredient.id;
+                dragItem.innerHTML = `
+                    <img src="${ingredient.image}" alt="${ingredient.name}" class="ingredient-image">
+                    <span class="ingredient-name">${ingredient.name}</span>
+                `;
+                
+                // 添加拖放事件
+                dragItem.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', ingredient.id);
+                    dragItem.style.opacity = '0.5';
+                });
+                
+                dragItem.addEventListener('dragend', () => {
+                    dragItem.style.opacity = '1';
+                });
+                
+                dragIngredients.appendChild(dragItem);
             });
             
             // 设置锅的拖放事件
@@ -802,14 +821,13 @@
                     
                     // 更新计数
                     ingredientCount.textContent = gameState.draggedIngredients.length;
-                    totalIngredients.textContent = gameState.selectedIngredients.length;
                     
                     // 在锅中显示食材
                     const ingredient = ingredients.find(item => item.id === ingredientId);
                     if (ingredient) {
                         const ingredientInPot = document.createElement('div');
                         ingredientInPot.className = 'ingredient-in-pot';
-                        ingredientInPot.innerHTML = `<i class="fas ${ingredient.icon}" style="color: ${ingredient.color};"></i>`;
+                        ingredientInPot.innerHTML = `<img src="${ingredient.image}" alt="${ingredient.name}">`;
                         pot.appendChild(ingredientInPot);
                     }
                     
@@ -819,21 +837,20 @@
                         dragItem.style.display = 'none';
                     }
                     
-                    // 更新下一步按钮状态
-                    nextStep2Btn.disabled = gameState.draggedIngredients.length < gameState.selectedIngredients.length;
+                    // 更新下一步按钮状态（所有8种食材都放入）
+                    nextStep2Btn.disabled = gameState.draggedIngredients.length < 8;
                 }
             });
             
             // 初始化计数显示
             ingredientCount.textContent = '0';
-            totalIngredients.textContent = gameState.selectedIngredients.length;
             nextStep2Btn.disabled = true;
         }
 
-        // 开始熬煮
+        // 开始熬煮（8秒倒计时）
         function startCooking() {
-            let timeLeft = 30; // 30秒倒计时
-            timer.textContent = `00:${timeLeft < 10 ? '0' : ''}${timeLeft}`;
+            let timeLeft = 8; // 8秒倒计时
+            timer.textContent = `00:0${timeLeft}`;
             nextStep3Btn.disabled = true;
             
             // 清除之前的定时器
@@ -848,10 +865,10 @@
             // 开始倒计时
             gameState.cookingInterval = setInterval(() => {
                 timeLeft--;
-                timer.textContent = `00:${timeLeft < 10 ? '0' : ''}${timeLeft}`;
+                timer.textContent = `00:0${timeLeft}`;
                 
                 // 更新进度条
-                progress = 100 - (timeLeft / 30 * 100);
+                progress = 100 - (timeLeft / 8 * 100);
                 cookingProgress.style.width = `${progress}%`;
                 
                 // 时间到
@@ -880,7 +897,6 @@
         function restartGame() {
             // 重置游戏状态
             gameState.currentStep = 1;
-            gameState.selectedIngredients = [];
             gameState.draggedIngredients = [];
             
             // 清除熬煮定时器
@@ -888,15 +904,11 @@
                 clearInterval(gameState.cookingInterval);
             }
             
-            // 重置UI
-            document.querySelectorAll('.ingredient-item.selected').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            nextStep1Btn.disabled = true;
-            
             // 回到第一步
             goToStep(1);
+            
+            // 重置按钮状态
+            nextStep2Btn.disabled = true;
         }
 
         // 页面加载完成后初始化游戏
