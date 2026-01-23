@@ -44,6 +44,36 @@
             overflow: hidden;
         }
 
+        /* 返回按钮 */
+        .back-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 150;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-btn i {
+            font-size: 24px;
+            color: #d2691e;
+        }
+
         /* 所有步骤共用样式 */
         .step {
             position: absolute;
@@ -82,6 +112,7 @@
             justify-content: center;
             width: 100%;
             overflow: hidden;
+            position: relative;
         }
 
         /* 下一步按钮 */
@@ -249,6 +280,7 @@
             align-items: center;
             width: 100%;
             height: 100%;
+            position: relative;
         }
 
         .ingredients-to-drag {
@@ -256,9 +288,10 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             width: 100%;
             max-width: 90%;
+            min-height: 120px; /* 确保有足够高度，防止锅移动 */
         }
 
         .draggable {
@@ -271,13 +304,15 @@
             position: relative;
             cursor: pointer;
             animation: glow-ingredient 2s infinite alternate;
+            transition: opacity 0.3s ease;
         }
 
         .pot-container {
             position: relative;
             width: 250px;
             height: 250px;
-            margin-top: 20px;
+            margin-top: 0; /* 移除上边距，通过容器居中 */
+            flex-shrink: 0; /* 防止锅容器收缩 */
         }
 
         .pot {
@@ -286,6 +321,7 @@
             position: absolute;
             top: 0;
             left: 0;
+            z-index: 10;
         }
 
         .pot-content {
@@ -301,32 +337,40 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            padding: 10px;
-            overflow: hidden;
+            padding: 5px;
+            overflow: visible; /* 改为visible防止裁切 */
+            z-index: 5;
         }
 
         .pot-placeholder {
-            color: #ffffff; /* 改为白色 */
+            color: #ffffff;
             font-size: 18px;
             text-align: center;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            z-index: 6;
         }
 
         .ingredient-in-pot {
-            width: 35px;
-            height: 35px;
-            margin: 3px;
+            position: absolute; /* 改为绝对定位，允许重叠 */
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            border-radius: 50%;
-            animation: glow-ingredient 2s infinite alternate;
+            opacity: 0.7; /* 降低透明度，模拟在水里效果 */
+            filter: none; /* 移除发光效果 */
+            z-index: 7;
+            transition: all 0.3s ease;
         }
 
         .ingredient-in-pot img {
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             object-fit: contain;
         }
 
@@ -551,13 +595,13 @@
             }
             
             .pot-container {
-                width: 200px;
-                height: 200px;
+                width: 220px;
+                height: 220px;
             }
             
             .finished-bowl {
-                width: 200px;
-                height: 200px;
+                width: 220px;
+                height: 220px;
             }
             
             .ingredients-grid {
@@ -573,15 +617,18 @@
             }
             
             .pot-container {
-                width: 180px;
-                height: 180px;
-                margin-top: 10px;
+                width: 200px;
+                height: 200px;
             }
             
             .finished-bowl {
-                width: 180px;
-                height: 180px;
+                width: 200px;
+                height: 200px;
                 margin-bottom: 15px;
+            }
+            
+            .ingredients-to-drag {
+                min-height: 100px;
             }
         }
     </style>
@@ -589,6 +636,11 @@
 <body>
     <!-- 灶台背景 -->
     <div class="kitchen-bg"></div>
+    
+    <!-- 返回按钮 -->
+    <div class="back-btn" id="backBtn">
+        <i class="fas fa-arrow-left"></i>
+    </div>
     
     <!-- 音乐控制 -->
     <div class="music-control" id="musicControl">
@@ -742,8 +794,9 @@
             draggedIngredients: [],
             isMusicPlaying: false,
             cookingInterval: null,
-            touchActive: false, // 触摸状态
-            touchElement: null // 当前触摸的元素
+            touchActive: false,
+            touchElement: null,
+            potIngredientsPositions: [] // 记录锅中食材的位置
         };
 
         // 固定的腊八粥食材数据（8种常见食材）
@@ -814,6 +867,7 @@
         const modalIngredientImg = document.getElementById('modalIngredientImg');
         const modalIngredientName = document.getElementById('modalIngredientName');
         const modalIngredientDesc = document.getElementById('modalIngredientDesc');
+        const backBtn = document.getElementById('backBtn');
         const musicControl = document.getElementById('musicControl');
         const bgMusic = document.getElementById('bgMusic');
         const steps = document.querySelectorAll('.step');
@@ -854,6 +908,7 @@
             closeIngredientModal.addEventListener('click', () => {
                 ingredientModal.classList.remove('active');
             });
+            backBtn.addEventListener('click', goBack);
             musicControl.addEventListener('click', toggleMusic);
             nextStep1Btn.addEventListener('click', () => goToStep(2));
             nextStep2Btn.addEventListener('click', () => goToStep(3));
@@ -866,6 +921,9 @@
                     ingredientModal.classList.remove('active');
                 }
             });
+
+            // 初始化返回按钮状态
+            updateBackButton();
 
             // 尝试自动播放背景音乐
             setTimeout(() => {
@@ -914,6 +972,22 @@
             gameState.isMusicPlaying = !gameState.isMusicPlaying;
         }
 
+        // 返回上一步
+        function goBack() {
+            if (gameState.currentStep > 1) {
+                goToStep(gameState.currentStep - 1);
+            }
+        }
+
+        // 更新返回按钮显示状态
+        function updateBackButton() {
+            if (gameState.currentStep > 1) {
+                backBtn.classList.add('visible');
+            } else {
+                backBtn.classList.remove('visible');
+            }
+        }
+
         // 转到指定步骤
         function goToStep(stepNumber) {
             // 更新当前步骤
@@ -936,6 +1010,30 @@
             
             // 更新进度指示器
             updateProgressIndicator();
+            
+            // 更新返回按钮
+            updateBackButton();
+        }
+
+        // 获取随机位置（用于锅中食材布局）
+        function getRandomPositionInPot() {
+            // 锅的半径（假设是圆形区域）
+            const radius = 80; // 减小的半径，让食材更密集
+            const centerX = 0;
+            const centerY = 0;
+            
+            // 生成随机角度和距离
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * radius * 0.7; // 减小距离，让食材更靠近中心
+            
+            // 计算坐标
+            const x = centerX + Math.cos(angle) * distance;
+            const y = centerY + Math.sin(angle) * distance;
+            
+            // 添加随机旋转
+            const rotation = Math.random() * 30 - 15; // -15到15度
+            
+            return { x, y, rotation };
         }
 
         // 设置拖放步骤
@@ -949,6 +1047,7 @@
             pot.appendChild(potPlaceholder);
             
             gameState.draggedIngredients = [];
+            gameState.potIngredientsPositions = [];
             
             // 创建可拖放的食材元素（所有8种食材）
             ingredients.forEach(ingredient => {
@@ -1047,9 +1146,20 @@
                             potPlaceholder.style.display = 'none';
                         }
                         
+                        // 生成随机位置
+                        const position = getRandomPositionInPot();
+                        gameState.potIngredientsPositions.push({
+                            id: ingredientId,
+                            x: position.x,
+                            y: position.y,
+                            rotation: position.rotation
+                        });
+                        
                         // 在锅中显示食材
                         const ingredientInPot = document.createElement('div');
                         ingredientInPot.className = 'ingredient-in-pot';
+                        ingredientInPot.dataset.id = ingredientId;
+                        ingredientInPot.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${position.rotation}deg)`;
                         ingredientInPot.innerHTML = `<img src="${ingredient.image}" alt="${ingredient.name}">`;
                         pot.appendChild(ingredientInPot);
                         
@@ -1126,9 +1236,20 @@
                             potPlaceholder.style.display = 'none';
                         }
                         
+                        // 生成随机位置
+                        const position = getRandomPositionInPot();
+                        gameState.potIngredientsPositions.push({
+                            id: ingredientId,
+                            x: position.x,
+                            y: position.y,
+                            rotation: position.rotation
+                        });
+                        
                         // 在锅中显示食材
                         const ingredientInPot = document.createElement('div');
                         ingredientInPot.className = 'ingredient-in-pot';
+                        ingredientInPot.dataset.id = ingredientId;
+                        ingredientInPot.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${position.rotation}deg)`;
                         ingredientInPot.innerHTML = `<img src="${ingredient.image}" alt="${ingredient.name}">`;
                         pot.appendChild(ingredientInPot);
                         
@@ -1199,6 +1320,7 @@
             // 重置游戏状态
             gameState.currentStep = 1;
             gameState.draggedIngredients = [];
+            gameState.potIngredientsPositions = [];
             
             // 清除熬煮定时器
             if (gameState.cookingInterval) {
@@ -1215,6 +1337,14 @@
             document.querySelectorAll('.ingredient-item img').forEach(img => {
                 img.style.display = 'block';
             });
+            
+            // 重新显示拖放区域中的食材
+            if (dragIngredients) {
+                const draggableItems = dragIngredients.querySelectorAll('.draggable');
+                draggableItems.forEach(item => {
+                    item.style.display = 'flex';
+                });
+            }
         }
 
         // 页面加载完成后初始化游戏
