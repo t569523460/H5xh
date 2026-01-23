@@ -21,6 +21,7 @@
             width: 100vw;
             height: 100vh;
             position: relative;
+            touch-action: none; /* 防止页面缩放和滚动 */
         }
 
         /* 灶台背景 */
@@ -108,8 +109,8 @@
             transform: translateY(1px);
         }
 
-        /* 第一步：清洗食材 */
-        .washing-container {
+        /* 第一步：查看食材 */
+        .view-container {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -117,7 +118,7 @@
             height: 100%;
         }
 
-        .washing-text {
+        .view-text {
             font-size: 24px;
             text-align: center;
             margin-bottom: 30px;
@@ -142,38 +143,103 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: rgba(255, 255, 255, 0.9);
             position: relative;
-            animation: glow-border 2s infinite alternate;
-        }
-
-        @keyframes glow-border {
-            0% {
-                box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ffcc00;
-            }
-            100% {
-                box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ffcc00;
-            }
+            cursor: pointer;
         }
 
         .ingredient-image {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             object-fit: contain;
+            border-radius: 10px;
+            animation: glow-ingredient 2s infinite alternate;
+        }
+
+        @keyframes glow-ingredient {
+            0% {
+                filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+            }
+            100% {
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1));
+            }
         }
 
         .ingredient-name {
             font-size: 12px;
             text-align: center;
-            color: #333;
+            color: #fff;
             margin-top: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
-        .washing-icon {
+        .view-icon {
             font-size: 80px;
             color: #4da6ff;
             margin-bottom: 20px;
             animation: bubble 2s infinite ease-in-out;
+        }
+
+        /* 食材介绍弹窗 */
+        .ingredient-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .ingredient-modal.active {
+            display: flex;
+        }
+
+        .ingredient-modal-content {
+            background-color: rgba(90, 57, 33, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 80%;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffcc00;
+            position: relative;
+        }
+
+        .ingredient-modal-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto 20px;
+            border-radius: 10px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        }
+
+        .ingredient-modal-name {
+            font-size: 24px;
+            color: #ffcc00;
+            margin-bottom: 15px;
+        }
+
+        .ingredient-modal-desc {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .ingredient-modal-close {
+            background-color: #ff9900;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         /* 第二步：拖放食材 */
@@ -196,13 +262,15 @@
         }
 
         .draggable {
-            cursor: grab;
-            transition: all 0.3s ease;
-            animation: glow-border 2s infinite alternate;
-        }
-
-        .draggable:active {
-            cursor: grabbing;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            animation: glow-ingredient 2s infinite alternate;
         }
 
         .pot-container {
@@ -228,13 +296,20 @@
             width: 70%;
             height: 70%;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             padding: 10px;
             overflow: hidden;
+        }
+
+        .pot-placeholder {
+            color: #ffffff; /* 改为白色 */
+            font-size: 18px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
         .ingredient-in-pot {
@@ -245,14 +320,13 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            background-color: white;
             border-radius: 50%;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            animation: glow-ingredient 2s infinite alternate;
         }
 
         .ingredient-in-pot img {
-            width: 25px;
-            height: 25px;
+            width: 30px;
+            height: 30px;
             object-fit: contain;
         }
 
@@ -467,8 +541,13 @@
             }
             
             .ingredient-image {
-                width: 40px;
-                height: 40px;
+                width: 50px;
+                height: 50px;
+            }
+            
+            .draggable {
+                width: 60px;
+                height: 60px;
             }
             
             .pot-container {
@@ -522,7 +601,7 @@
             <h2 class="modal-title">腊八粥制作小游戏</h2>
             <div class="modal-text">
                 <p><strong>游戏玩法：</strong></p>
-                <p>1. 第一步：清洗腊八粥食材</p>
+                <p>1. 第一步：查看腊八粥所需食材</p>
                 <p>2. 第二步：将食材放入锅中</p>
                 <p>3. 第三步：熬煮腊八粥</p>
                 <p>4. 第四步：欣赏成品腊八粥</p>
@@ -532,25 +611,35 @@
         </div>
     </div>
 
+    <!-- 食材介绍弹窗 -->
+    <div class="ingredient-modal" id="ingredientModal">
+        <div class="ingredient-modal-content">
+            <img id="modalIngredientImg" src="" alt="" class="ingredient-modal-img">
+            <h2 id="modalIngredientName" class="ingredient-modal-name"></h2>
+            <p id="modalIngredientDesc" class="ingredient-modal-desc"></p>
+            <button class="ingredient-modal-close" id="closeIngredientModal">关闭</button>
+        </div>
+    </div>
+
     <!-- 游戏主容器 -->
     <div class="container">
-        <!-- 步骤1：清洗食材 -->
+        <!-- 步骤1：查看食材 -->
         <div class="step active" id="step1">
-            <h2 class="step-title">第一步：清洗腊八粥食材</h2>
+            <h2 class="step-title">第一步：查看腊八粥食材</h2>
             <div class="step-content">
-                <div class="washing-container">
-                    <div class="washing-icon">
-                        <i class="fas fa-hand-sparkles"></i>
+                <div class="view-container">
+                    <div class="view-icon">
+                        <i class="fas fa-search"></i>
                     </div>
-                    <div class="washing-text">
-                        腊八粥食材已准备好，请仔细清洗每种食材
+                    <div class="view-text">
+                        点击食材查看详细介绍，了解腊八粥的原料
                     </div>
                     <div class="ingredients-grid" id="ingredientsGrid">
                         <!-- 食材将通过JavaScript动态生成 -->
                     </div>
                 </div>
             </div>
-            <button class="next-btn" id="nextStep1">清洗完成，下一步</button>
+            <button class="next-btn" id="nextStep1">了解食材，下一步</button>
             <div class="progress-container">
                 <div class="progress-step active"></div>
                 <div class="progress-step"></div>
@@ -570,7 +659,7 @@
                     <div class="pot-container">
                         <img src="pot.png" alt="锅" class="pot">
                         <div class="pot-content" id="pot">
-                            <p style="color: #888; font-size: 16px;">将食材拖放到这里</p>
+                            <p class="pot-placeholder">将食材拖放到这里</p>
                         </div>
                     </div>
                     <p style="margin-top: 20px; font-size: 16px;">已放入: <span id="ingredientCount">0</span>/8 种食材</p>
@@ -652,24 +741,79 @@
             currentStep: 1,
             draggedIngredients: [],
             isMusicPlaying: false,
-            cookingInterval: null
+            cookingInterval: null,
+            touchActive: false, // 触摸状态
+            touchElement: null // 当前触摸的元素
         };
 
         // 固定的腊八粥食材数据（8种常见食材）
         const ingredients = [
-            { id: 1, name: '大米', image: 'rice.png', color: '#f5f5f5' },
-            { id: 2, name: '红豆', image: 'red_bean.png', color: '#dc143c' },
-            { id: 3, name: '绿豆', image: 'green_bean.png', color: '#32cd32' },
-            { id: 4, name: '花生', image: 'peanut.png', color: '#d2b48c' },
-            { id: 5, name: '红枣', image: 'red_date.png', color: '#8b0000' },
-            { id: 6, name: '莲子', image: 'lotus_seed.png', color: '#fffacd' },
-            { id: 7, name: '桂圆', image: 'longan.png', color: '#8b4513' },
-            { id: 8, name: '核桃', image: 'walnut.png', color: '#8b4513' }
+            { 
+                id: 1, 
+                name: '大米', 
+                image: 'rice.png', 
+                color: '#f5f5f5',
+                description: '大米是腊八粥的主要食材，提供丰富的碳水化合物和能量，使粥体浓稠。'
+            },
+            { 
+                id: 2, 
+                name: '红豆', 
+                image: 'red_bean.png', 
+                color: '#dc143c',
+                description: '红豆有补血养颜的功效，在腊八粥中增添甜味和喜庆的红色。'
+            },
+            { 
+                id: 3, 
+                name: '绿豆', 
+                image: 'green_bean.png', 
+                color: '#32cd32',
+                description: '绿豆清热解毒，与红豆搭配，形成腊八粥中红绿相间的美丽色彩。'
+            },
+            { 
+                id: 4, 
+                name: '花生', 
+                image: 'peanut.png', 
+                color: '#d2b48c',
+                description: '花生象征长寿，富含蛋白质和健康脂肪，为腊八粥增添坚果香气。'
+            },
+            { 
+                id: 5, 
+                name: '红枣', 
+                image: 'red_date.png', 
+                color: '#8b0000',
+                description: '红枣补血益气，寓意红红火火，是腊八粥中重要的甜味来源。'
+            },
+            { 
+                id: 6, 
+                name: '莲子', 
+                image: 'lotus_seed.png', 
+                color: '#fffacd',
+                description: '莲子清心去火，象征连年有余，使腊八粥口感更加丰富。'
+            },
+            { 
+                id: 7, 
+                name: '桂圆', 
+                image: 'longan.png', 
+                color: '#8b4513',
+                description: '桂圆补心安神，增添天然甜味，寓意团圆美满。'
+            },
+            { 
+                id: 8, 
+                name: '核桃', 
+                image: 'walnut.png', 
+                color: '#8b4513',
+                description: '核桃益智健脑，提供丰富的不饱和脂肪酸，增加腊八粥的营养价值。'
+            }
         ];
 
         // DOM元素
         const welcomeModal = document.getElementById('welcomeModal');
         const closeModalBtn = document.getElementById('closeModal');
+        const ingredientModal = document.getElementById('ingredientModal');
+        const closeIngredientModal = document.getElementById('closeIngredientModal');
+        const modalIngredientImg = document.getElementById('modalIngredientImg');
+        const modalIngredientName = document.getElementById('modalIngredientName');
+        const modalIngredientDesc = document.getElementById('modalIngredientDesc');
         const musicControl = document.getElementById('musicControl');
         const bgMusic = document.getElementById('bgMusic');
         const steps = document.querySelectorAll('.step');
@@ -680,6 +824,7 @@
         const ingredientsGrid = document.getElementById('ingredientsGrid');
         const dragIngredients = document.getElementById('dragIngredients');
         const pot = document.getElementById('pot');
+        const potPlaceholder = pot.querySelector('.pot-placeholder');
         const ingredientCount = document.getElementById('ingredientCount');
         const timer = document.getElementById('timer');
         const cookingProgress = document.getElementById('cookingProgress');
@@ -695,16 +840,32 @@
                     <img src="${ingredient.image}" alt="${ingredient.name}" class="ingredient-image">
                     <span class="ingredient-name">${ingredient.name}</span>
                 `;
+                
+                // 添加点击事件，显示食材介绍
+                ingredientItem.addEventListener('click', () => {
+                    showIngredientModal(ingredient);
+                });
+                
                 ingredientsGrid.appendChild(ingredientItem);
             });
 
             // 初始化事件监听
             closeModalBtn.addEventListener('click', closeWelcomeModal);
+            closeIngredientModal.addEventListener('click', () => {
+                ingredientModal.classList.remove('active');
+            });
             musicControl.addEventListener('click', toggleMusic);
             nextStep1Btn.addEventListener('click', () => goToStep(2));
             nextStep2Btn.addEventListener('click', () => goToStep(3));
             nextStep3Btn.addEventListener('click', () => goToStep(4));
             restartBtn.addEventListener('click', restartGame);
+
+            // 点击弹窗外部关闭
+            ingredientModal.addEventListener('click', (e) => {
+                if (e.target === ingredientModal) {
+                    ingredientModal.classList.remove('active');
+                }
+            });
 
             // 尝试自动播放背景音乐
             setTimeout(() => {
@@ -717,6 +878,15 @@
                     });
                 }
             }, 1000);
+        }
+
+        // 显示食材介绍弹窗
+        function showIngredientModal(ingredient) {
+            modalIngredientImg.src = ingredient.image;
+            modalIngredientImg.alt = ingredient.name;
+            modalIngredientName.textContent = ingredient.name;
+            modalIngredientDesc.textContent = ingredient.description;
+            ingredientModal.classList.add('active');
         }
 
         // 关闭欢迎弹窗
@@ -772,79 +942,210 @@
         function setupDragStep() {
             // 清空之前的拖放区域
             dragIngredients.innerHTML = '';
-            pot.innerHTML = '<p style="color: #888; font-size: 16px;">将食材拖放到这里</p>';
+            
+            // 隐藏锅里的提示文字
+            potPlaceholder.style.display = 'block';
+            pot.innerHTML = '';
+            pot.appendChild(potPlaceholder);
+            
             gameState.draggedIngredients = [];
             
             // 创建可拖放的食材元素（所有8种食材）
             ingredients.forEach(ingredient => {
                 const dragItem = document.createElement('div');
-                dragItem.className = 'ingredient-item draggable';
-                dragItem.draggable = true;
+                dragItem.className = 'draggable';
                 dragItem.dataset.id = ingredient.id;
                 dragItem.innerHTML = `
                     <img src="${ingredient.image}" alt="${ingredient.name}" class="ingredient-image">
                     <span class="ingredient-name">${ingredient.name}</span>
                 `;
                 
-                // 添加拖放事件
-                dragItem.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.setData('text/plain', ingredient.id);
-                    dragItem.style.opacity = '0.5';
-                });
+                // 添加触摸事件支持（移动端）
+                setupTouchEvents(dragItem, ingredient);
                 
-                dragItem.addEventListener('dragend', () => {
-                    dragItem.style.opacity = '1';
-                });
+                // 添加鼠标事件支持（桌面端）
+                setupMouseEvents(dragItem, ingredient);
                 
                 dragIngredients.appendChild(dragItem);
-            });
-            
-            // 设置锅的拖放事件
-            pot.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                pot.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
-            });
-            
-            pot.addEventListener('dragleave', () => {
-                pot.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-            });
-            
-            pot.addEventListener('drop', (e) => {
-                e.preventDefault();
-                pot.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                
-                const ingredientId = parseInt(e.dataTransfer.getData('text/plain'));
-                
-                // 如果食材尚未放入锅中
-                if (!gameState.draggedIngredients.includes(ingredientId)) {
-                    gameState.draggedIngredients.push(ingredientId);
-                    
-                    // 更新计数
-                    ingredientCount.textContent = gameState.draggedIngredients.length;
-                    
-                    // 在锅中显示食材
-                    const ingredient = ingredients.find(item => item.id === ingredientId);
-                    if (ingredient) {
-                        const ingredientInPot = document.createElement('div');
-                        ingredientInPot.className = 'ingredient-in-pot';
-                        ingredientInPot.innerHTML = `<img src="${ingredient.image}" alt="${ingredient.name}">`;
-                        pot.appendChild(ingredientInPot);
-                    }
-                    
-                    // 移除拖放区域中的食材
-                    const dragItem = document.querySelector(`.draggable[data-id="${ingredientId}"]`);
-                    if (dragItem) {
-                        dragItem.style.display = 'none';
-                    }
-                    
-                    // 更新下一步按钮状态（所有8种食材都放入）
-                    nextStep2Btn.disabled = gameState.draggedIngredients.length < 8;
-                }
             });
             
             // 初始化计数显示
             ingredientCount.textContent = '0';
             nextStep2Btn.disabled = true;
+        }
+
+        // 设置触摸事件（移动端）
+        function setupTouchEvents(element, ingredient) {
+            let touchStartX, touchStartY;
+            let elementClone = null;
+            
+            element.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                gameState.touchActive = true;
+                gameState.touchElement = this;
+                
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                
+                // 创建元素副本用于拖拽
+                elementClone = element.cloneNode(true);
+                elementClone.style.position = 'fixed';
+                elementClone.style.zIndex = '1000';
+                elementClone.style.opacity = '0.8';
+                elementClone.style.pointerEvents = 'none';
+                elementClone.style.left = (touchStartX - 35) + 'px';
+                elementClone.style.top = (touchStartY - 35) + 'px';
+                document.body.appendChild(elementClone);
+                
+                // 阻止默认行为，防止页面滚动
+                return false;
+            }, {passive: false});
+            
+            element.addEventListener('touchmove', function(e) {
+                if (!gameState.touchActive || !elementClone) return;
+                
+                e.preventDefault();
+                const touch = e.touches[0];
+                const x = touch.clientX - 35;
+                const y = touch.clientY - 35;
+                
+                elementClone.style.left = x + 'px';
+                elementClone.style.top = y + 'px';
+                
+                return false;
+            }, {passive: false});
+            
+            element.addEventListener('touchend', function(e) {
+                if (!gameState.touchActive || !elementClone) return;
+                
+                gameState.touchActive = false;
+                
+                // 获取触摸结束位置
+                const touch = e.changedTouches[0];
+                const endX = touch.clientX;
+                const endY = touch.clientY;
+                
+                // 获取锅的位置和大小
+                const potRect = pot.getBoundingClientRect();
+                
+                // 检查是否放入了锅中
+                if (endX >= potRect.left && endX <= potRect.right &&
+                    endY >= potRect.top && endY <= potRect.bottom) {
+                    
+                    const ingredientId = parseInt(this.dataset.id);
+                    
+                    // 如果食材尚未放入锅中
+                    if (!gameState.draggedIngredients.includes(ingredientId)) {
+                        gameState.draggedIngredients.push(ingredientId);
+                        
+                        // 更新计数
+                        ingredientCount.textContent = gameState.draggedIngredients.length;
+                        
+                        // 隐藏锅里的提示文字
+                        if (potPlaceholder.style.display !== 'none') {
+                            potPlaceholder.style.display = 'none';
+                        }
+                        
+                        // 在锅中显示食材
+                        const ingredientInPot = document.createElement('div');
+                        ingredientInPot.className = 'ingredient-in-pot';
+                        ingredientInPot.innerHTML = `<img src="${ingredient.image}" alt="${ingredient.name}">`;
+                        pot.appendChild(ingredientInPot);
+                        
+                        // 移除拖放区域中的食材
+                        this.style.display = 'none';
+                        
+                        // 更新下一步按钮状态（所有8种食材都放入）
+                        nextStep2Btn.disabled = gameState.draggedIngredients.length < 8;
+                    }
+                }
+                
+                // 移除元素副本
+                if (elementClone) {
+                    document.body.removeChild(elementClone);
+                    elementClone = null;
+                }
+                
+                gameState.touchElement = null;
+            }, {passive: false});
+        }
+
+        // 设置鼠标事件（桌面端）
+        function setupMouseEvents(element, ingredient) {
+            let isDragging = false;
+            let elementClone = null;
+            
+            element.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                
+                // 创建元素副本用于拖拽
+                elementClone = element.cloneNode(true);
+                elementClone.style.position = 'fixed';
+                elementClone.style.zIndex = '1000';
+                elementClone.style.opacity = '0.8';
+                elementClone.style.pointerEvents = 'none';
+                elementClone.style.left = (e.clientX - 35) + 'px';
+                elementClone.style.top = (e.clientY - 35) + 'px';
+                document.body.appendChild(elementClone);
+                
+                // 阻止默认行为
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging || !elementClone) return;
+                
+                elementClone.style.left = (e.clientX - 35) + 'px';
+                elementClone.style.top = (e.clientY - 35) + 'px';
+            });
+            
+            document.addEventListener('mouseup', function(e) {
+                if (!isDragging || !elementClone) return;
+                
+                isDragging = false;
+                
+                // 获取锅的位置和大小
+                const potRect = pot.getBoundingClientRect();
+                
+                // 检查是否放入了锅中
+                if (e.clientX >= potRect.left && e.clientX <= potRect.right &&
+                    e.clientY >= potRect.top && e.clientY <= potRect.bottom) {
+                    
+                    const ingredientId = parseInt(element.dataset.id);
+                    
+                    // 如果食材尚未放入锅中
+                    if (!gameState.draggedIngredients.includes(ingredientId)) {
+                        gameState.draggedIngredients.push(ingredientId);
+                        
+                        // 更新计数
+                        ingredientCount.textContent = gameState.draggedIngredients.length;
+                        
+                        // 隐藏锅里的提示文字
+                        if (potPlaceholder.style.display !== 'none') {
+                            potPlaceholder.style.display = 'none';
+                        }
+                        
+                        // 在锅中显示食材
+                        const ingredientInPot = document.createElement('div');
+                        ingredientInPot.className = 'ingredient-in-pot';
+                        ingredientInPot.innerHTML = `<img src="${ingredient.image}" alt="${ingredient.name}">`;
+                        pot.appendChild(ingredientInPot);
+                        
+                        // 移除拖放区域中的食材
+                        element.style.display = 'none';
+                        
+                        // 更新下一步按钮状态（所有8种食材都放入）
+                        nextStep2Btn.disabled = gameState.draggedIngredients.length < 8;
+                    }
+                }
+                
+                // 移除元素副本
+                if (elementClone) {
+                    document.body.removeChild(elementClone);
+                    elementClone = null;
+                }
+            });
         }
 
         // 开始熬煮（8秒倒计时）
@@ -909,10 +1210,22 @@
             
             // 重置按钮状态
             nextStep2Btn.disabled = true;
+            
+            // 重新显示第一步中的所有食材
+            document.querySelectorAll('.ingredient-item img').forEach(img => {
+                img.style.display = 'block';
+            });
         }
 
         // 页面加载完成后初始化游戏
         document.addEventListener('DOMContentLoaded', initGame);
+        
+        // 防止页面滚动
+        document.addEventListener('touchmove', function(e) {
+            if (gameState.touchActive) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
