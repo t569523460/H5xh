@@ -356,7 +356,7 @@
             width: 100%;
         }
 
-        /* 锅内的食材 - 更密集的布局，允许重叠 */
+        /* 锅内的食材 - 更密集的布局，允许重叠，移除发光效果 */
         .ingredient-in-pot {
             position: absolute !important; /* 使用绝对定位 */
             width: 40px;
@@ -365,7 +365,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            animation: glow-ingredient 2s infinite alternate;
+            /* 移除发光动画 */
             transition: all 0.5s ease;
         }
 
@@ -375,15 +375,15 @@
             object-fit: contain;
         }
 
-        /* 食材在锅内的随机位置 - 8个位置 */
-        .ingredient-in-pot.pos-1 { top: 15%; left: 20%; }
-        .ingredient-in-pot.pos-2 { top: 15%; left: 60%; }
-        .ingredient-in-pot.pos-3 { top: 30%; left: 10%; }
-        .ingredient-in-pot.pos-4 { top: 30%; left: 70%; }
-        .ingredient-in-pot.pos-5 { top: 50%; left: 20%; }
-        .ingredient-in-pot.pos-6 { top: 50%; left: 60%; }
-        .ingredient-in-pot.pos-7 { top: 70%; left: 40%; }
-        .ingredient-in-pot.pos-8 { top: 70%; left: 70%; }
+        /* 食材在锅内的随机位置 - 8个位置，调整最后一个位置到左上 */
+        .ingredient-in-pot.pos-1 { top: 20%; left: 25%; }
+        .ingredient-in-pot.pos-2 { top: 20%; left: 60%; }
+        .ingredient-in-pot.pos-3 { top: 35%; left: 15%; }
+        .ingredient-in-pot.pos-4 { top: 35%; left: 70%; }
+        .ingredient-in-pot.pos-5 { top: 55%; left: 25%; }
+        .ingredient-in-pot.pos-6 { top: 55%; left: 60%; }
+        .ingredient-in-pot.pos-7 { top: 75%; left: 45%; }
+        .ingredient-in-pot.pos-8 { top: 10%; left: 15%; } /* 最后一个食材位置调整到左上 */
 
         /* 食材计数 */
         .ingredient-counter {
@@ -1093,7 +1093,7 @@
             nextStep2Btn.disabled = true;
         }
 
-        // 设置触摸事件（移动端）
+        // 设置触摸事件（移动端） - 修改了拖放锚点
         function setupTouchEvents(element, ingredient) {
             let touchStartX, touchStartY;
             let elementClone = null;
@@ -1110,14 +1110,19 @@
                 // 添加拖拽样式
                 this.classList.add('dragging');
                 
-                // 创建元素副本用于拖拽
+                // 获取元素尺寸，用于计算中心点
+                const rect = this.getBoundingClientRect();
+                const offsetX = rect.width / 2;
+                const offsetY = rect.height / 2;
+                
+                // 创建元素副本用于拖拽 - 手指点在元素中心
                 elementClone = element.cloneNode(true);
                 elementClone.style.position = 'fixed';
                 elementClone.style.zIndex = '1000';
                 elementClone.style.opacity = '0.8';
                 elementClone.style.pointerEvents = 'none';
-                elementClone.style.left = (touchStartX - 35) + 'px';
-                elementClone.style.top = (touchStartY - 35) + 'px';
+                elementClone.style.left = (touchStartX - offsetX) + 'px'; // 中心点对齐
+                elementClone.style.top = (touchStartY - offsetY) + 'px';  // 中心点对齐
                 elementClone.classList.add('dragging');
                 document.body.appendChild(elementClone);
                 
@@ -1129,8 +1134,14 @@
                 
                 e.preventDefault();
                 const touch = e.touches[0];
-                const x = touch.clientX - 35;
-                const y = touch.clientY - 35;
+                
+                // 获取元素尺寸，用于计算中心点
+                const rect = element.getBoundingClientRect();
+                const offsetX = rect.width / 2;
+                const offsetY = rect.height / 2;
+                
+                const x = touch.clientX - offsetX; // 中心点对齐
+                const y = touch.clientY - offsetY; // 中心点对齐
                 
                 elementClone.style.left = x + 'px';
                 elementClone.style.top = y + 'px';
@@ -1170,7 +1181,7 @@
                             potPlaceholder.style.display = 'none';
                         }
                         
-                        // 在锅中显示食材
+                        // 在锅中显示食材 - 移除发光效果
                         const ingredientInPot = document.createElement('div');
                         ingredientInPot.className = `ingredient-in-pot pos-${gameState.draggedIngredients.length}`;
                         ingredientInPot.innerHTML = `<img src="${ingredient.image}" alt="${ingredient.name}">`;
@@ -1194,7 +1205,7 @@
             }, {passive: false});
         }
 
-        // 设置鼠标事件（桌面端）
+        // 设置鼠标事件（桌面端） - 修改了拖放锚点
         function setupMouseEvents(element, ingredient) {
             let isDragging = false;
             let elementClone = null;
@@ -1203,14 +1214,19 @@
                 isDragging = true;
                 this.classList.add('dragging');
                 
-                // 创建元素副本用于拖拽
+                // 获取元素尺寸，用于计算中心点
+                const rect = this.getBoundingClientRect();
+                const offsetX = rect.width / 2;
+                const offsetY = rect.height / 2;
+                
+                // 创建元素副本用于拖拽 - 鼠标点在元素中心
                 elementClone = element.cloneNode(true);
                 elementClone.style.position = 'fixed';
                 elementClone.style.zIndex = '1000';
                 elementClone.style.opacity = '0.8';
                 elementClone.style.pointerEvents = 'none';
-                elementClone.style.left = (e.clientX - 35) + 'px';
-                elementClone.style.top = (e.clientY - 35) + 'px';
+                elementClone.style.left = (e.clientX - offsetX) + 'px'; // 中心点对齐
+                elementClone.style.top = (e.clientY - offsetY) + 'px';  // 中心点对齐
                 elementClone.classList.add('dragging');
                 document.body.appendChild(elementClone);
                 
@@ -1221,8 +1237,13 @@
             document.addEventListener('mousemove', function(e) {
                 if (!isDragging || !elementClone) return;
                 
-                elementClone.style.left = (e.clientX - 35) + 'px';
-                elementClone.style.top = (e.clientY - 35) + 'px';
+                // 获取元素尺寸，用于计算中心点
+                const rect = element.getBoundingClientRect();
+                const offsetX = rect.width / 2;
+                const offsetY = rect.height / 2;
+                
+                elementClone.style.left = (e.clientX - offsetX) + 'px'; // 中心点对齐
+                elementClone.style.top = (e.clientY - offsetY) + 'px';  // 中心点对齐
             });
             
             document.addEventListener('mouseup', function(e) {
@@ -1252,7 +1273,7 @@
                             potPlaceholder.style.display = 'none';
                         }
                         
-                        // 在锅中显示食材
+                        // 在锅中显示食材 - 移除发光效果
                         const ingredientInPot = document.createElement('div');
                         ingredientInPot.className = `ingredient-in-pot pos-${gameState.draggedIngredients.length}`;
                         ingredientInPot.innerHTML = `<img src="${ingredient.image}" alt="${ingredient.name}">`;
