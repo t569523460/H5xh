@@ -1,1 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>立春 - 万物复苏，春回大地</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            color: #333;
+            background-color: #fefefe;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+        
+        /* 音乐播放器 */
+        #music-player {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        
+        #music-player i {
+            font-size: 24px;
+            color: #5a7c5a;
+        }
+        
+        /* 页面容器 */
+        .page-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 页面通用样式 */
+        .page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 0.8s ease;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        /* 隐藏其他页面 */
+        .page.hidden {
+            transform: translateX(100%);
+        }
+        
+        /* 返回箭头 */
+        .back-arrow {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #5a7c5a;
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .back-arrow.show {
+            opacity: 1;
+        }
+        
+        /* 进度指示器 */
+        .progress-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            margin: 0 8px;
+            transition: all 0.3s;
+        }
+        
+        .progress-dot.active {
+            background-color: #fff;
+            transform: scale(1.2);
+        }
+        
+        /* 页面1 - 封面 */
+        .page-1 {
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            color: #2d5016;
+        }
+        
+        .title-container {
+            margin-top: -50px;
+        }
+        
+        .title {
+            font-size: 3.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 8px;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #5a7c5a;
+        }
+        
+        .start-btn {
+            margin-top: 40px;
+            padding: 16px 40px;
+            background-color: #8cc084;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(140, 192, 132, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(140, 192, 132, 0.5);
+        }
+        
+        .spring-icon {
+            font-size: 5rem;
+            color: #8cc084;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* 页面2 - 立春介绍 */
+        .page-2 {
+            background: linear-gradient(135deg, #ffd3b6 0%, #ffaaa5 100%);
+            color: #5a3e36;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #8b4513;
+        }
+        
+        .page-content {
+            max-width: 90%;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .decoration-img {
+            max-width: 200px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 页面3 - 习俗 */
+        .page-3 {
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            color: #2d5016;
+        }
+        
+        .customs-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            max-width: 95%;
+        }
+        
+        .custom-item {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            width: 45%;
+            min-width: 140px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .custom-icon {
+            font-size: 2.5rem;
+            color: #8cc084;
+            margin-bottom: 15px;
+        }
+        
+        .custom-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #5a7c5a;
+        }
+        
+        /* 页面4 - 诗词 */
+        .page-4 {
+            background: linear-gradient(135deg, #ffd3b6 0%, #ffaaa5 100%);
+            color: #5a3e36;
+        }
+        
+        .poem-container {
+            max-width: 90%;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .poem-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #8b4513;
+        }
+        
+        .poem-content {
+            font-size: 1.3rem;
+            line-height: 2.2;
+            margin-bottom: 20px;
+            font-family: "SimSun", "STSong", serif;
+        }
+        
+        .poem-author {
+            font-size: 1.1rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* 页面5 - 结束页 */
+        .page-5 {
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            color: #2d5016;
+        }
+        
+        .end-message {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            max-width: 90%;
+            line-height: 1.6;
+        }
+        
+        .restart-btn {
+            margin-top: 30px;
+            padding: 16px 40px;
+            background-color: #8cc084;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(140, 192, 132, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(140, 192, 132, 0.5);
+        }
+        
+        /* 动画效果 */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .page-content {
+                font-size: 1.1rem;
+                padding: 15px;
+            }
+            
+            .custom-item {
+                width: 90%;
+            }
+            
+            .poem-content {
+                font-size: 1.1rem;
+                line-height: 1.8;
+            }
+        }
+        
+        /* 加载动画 */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fefefe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #8cc084;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载动画 -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+    
+    <!-- 音乐播放器 -->
+    <div id="music-player">
+        <i class="fas fa-volume-up"></i>
+    </div>
+    
+    <!-- 返回箭头 -->
+    <a href="#" class="back-arrow" id="back-arrow">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    
+    <!-- 进度指示器 -->
+    <div class="progress-indicator" id="progress-indicator">
+        <div class="progress-dot active" data-page="1"></div>
+        <div class="progress-dot" data-page="2"></div>
+        <div class="progress-dot" data-page="3"></div>
+        <div class="progress-dot" data-page="4"></div>
+        <div class="progress-dot" data-page="5"></div>
+    </div>
+    
+    <!-- 页面容器 -->
+    <div class="page-container">
+        <!-- 页面1: 封面 -->
+        <div class="page page-1" id="page-1">
+            <div class="title-container animate-in">
+                <div class="spring-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h1 class="title">立春</h1>
+                <p class="subtitle">万物复苏，春回大地</p>
+                <button class="start-btn" id="start-btn">开启春日之旅</button>
+            </div>
+        </div>
+        
+        <!-- 页面2: 立春介绍 -->
+        <div class="page page-2 hidden" id="page-2">
+            <h2 class="page-title animate-in">立春 · 简介</h2>
+            <div class="page-content animate-in" style="animation-delay: 0.2s;">
+                <p>立春，为二十四节气之首，标志着万物闭藏的冬季已过去，开始进入风和日暖、万物生长的春季。</p>
+                <p>立春通常在每年公历2月3日至5日之间，此时太阳到达黄经315°。</p>
+                <p>立春是汉族民间重要的传统节日之一，自秦代以来，中国就一直以立春作为春季的开始。</p>
+            </div>
+            <!-- 装饰图片占位 -->
+            <div class="decoration-img animate-in" style="animation-delay: 0.4s;">
+                <i class="fas fa-leaf" style="font-size: 120px; color: #8cc084;"></i>
+            </div>
+        </div>
+        
+        <!-- 页面3: 立春习俗 -->
+        <div class="page page-3 hidden" id="page-3">
+            <h2 class="page-title animate-in">立春 · 习俗</h2>
+            <div class="customs-container">
+                <div class="custom-item animate-in" style="animation-delay: 0.2s;">
+                    <div class="custom-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3 class="custom-title">咬春</h3>
+                    <p>立春时要吃春饼、春卷等食物，称为"咬春"，寓意迎接新春。</p>
+                </div>
+                
+                <div class="custom-item animate-in" style="animation-delay: 0.4s;">
+                    <div class="custom-icon">
+                        <i class="fas fa-cow"></i>
+                    </div>
+                    <h3 class="custom-title">打春牛</h3>
+                    <p>用泥土塑成春牛，立春日鞭打，寓意催耕迎新，祈求丰收。</p>
+                </div>
+                
+                <div class="custom-item animate-in" style="animation-delay: 0.6s;">
+                    <div class="custom-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h3 class="custom-title">踏春</h3>
+                    <p>立春后，人们喜欢结伴到郊外游览，欣赏春光，称为踏春。</p>
+                </div>
+                
+                <div class="custom-item animate-in" style="animation-delay: 0.8s;">
+                    <div class="custom-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="custom-title">贴春字</h3>
+                    <p>立春日，在门上贴上"春"字，寓意迎接春天的到来。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 页面4: 立春诗词 -->
+        <div class="page page-4 hidden" id="page-4">
+            <h2 class="page-title animate-in">立春 · 诗词</h2>
+            <div class="poem-container animate-in" style="animation-delay: 0.2s;">
+                <h3 class="poem-title">《立春》</h3>
+                <div class="poem-content">
+                    玉润窗前竹，花繁院里梅。<br>
+                    东郊斋祭所，应见五神来。<br>
+                    春日春盘细生菜，忽忆两京梅发时。<br>
+                    盘出高门行白玉，菜传纤手送青丝。
+                </div>
+                <p class="poem-author">—— 唐·杜甫</p>
+            </div>
+        </div>
+        
+        <!-- 页面5: 结束页 -->
+        <div class="page page-5 hidden" id="page-5">
+            <div class="spring-icon animate-in">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h2 class="page-title animate-in" style="animation-delay: 0.2s;">春回大地</h2>
+            <div class="end-message animate-in" style="animation-delay: 0.4s;">
+                <p>立春已至，万物复苏，生机盎然。</p>
+                <p>愿您在这美好的春日里，</p>
+                <p>拥有崭新的开始和无限的希望。</p>
+            </div>
+            <button class="restart-btn animate-in" id="restart-btn" style="animation-delay: 0.6s;">重新开始</button>
+        </div>
+    </div>
 
+    <!-- 音频元素 -->
+    <audio id="bg-music" loop>
+        <source src="lichunbgm.mp3" type="audio/mpeg">
+        您的浏览器不支持音频元素。
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面元素
+            const pages = document.querySelectorAll('.page');
+            const backArrow = document.getElementById('back-arrow');
+            const startBtn = document.getElementById('start-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            const progressDots = document.querySelectorAll('.progress-dot');
+            const musicPlayer = document.getElementById('music-player');
+            const bgMusic = document.getElementById('bg-music');
+            const loader = document.getElementById('loader');
+            
+            let currentPage = 1;
+            const totalPages = 5;
+            
+            // 初始化页面
+            function init() {
+                // 隐藏加载动画
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 800);
+                
+                // 尝试自动播放音乐
+                setTimeout(() => {
+                    playMusic();
+                }, 1000);
+                
+                // 显示第一页
+                showPage(1);
+                
+                // 事件监听
+                startBtn.addEventListener('click', () => {
+                    showPage(2);
+                });
+                
+                restartBtn.addEventListener('click', () => {
+                    showPage(1);
+                });
+                
+                backArrow.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) {
+                        showPage(currentPage - 1);
+                    }
+                });
+                
+                // 音乐播放器控制
+                musicPlayer.addEventListener('click', toggleMusic);
+                
+                // 进度指示器点击事件
+                progressDots.forEach(dot => {
+                    dot.addEventListener('click', function() {
+                        const pageNum = parseInt(this.getAttribute('data-page'));
+                        if (pageNum !== currentPage) {
+                            showPage(pageNum);
+                        }
+                    });
+                });
+                
+                // 添加键盘支持
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowRight' || e.key === ' ') {
+                        // 右箭头或空格键 - 下一页
+                        if (currentPage < totalPages) {
+                            showPage(currentPage + 1);
+                        }
+                    } else if (e.key === 'ArrowLeft') {
+                        // 左箭头 - 上一页
+                        if (currentPage > 1) {
+                            showPage(currentPage - 1);
+                        }
+                    }
+                });
+            }
+            
+            // 显示指定页面
+            function showPage(pageNum) {
+                // 隐藏当前页面
+                pages[currentPage - 1].classList.add('hidden');
+                
+                // 移除当前页面的动画类
+                const currentPageElements = pages[currentPage - 1].querySelectorAll('.animate-in');
+                currentPageElements.forEach(el => {
+                    el.classList.remove('animate-in');
+                });
+                
+                // 显示新页面
+                pages[pageNum - 1].classList.remove('hidden');
+                
+                // 为新页面元素添加动画
+                setTimeout(() => {
+                    const newPageElements = pages[pageNum - 1].querySelectorAll('.animate-in');
+                    newPageElements.forEach((el, index) => {
+                        // 重置动画
+                        el.style.animation = 'none';
+                        setTimeout(() => {
+                            el.style.animation = '';
+                        }, 10);
+                    });
+                }, 50);
+                
+                // 更新当前页面
+                currentPage = pageNum;
+                
+                // 更新返回箭头显示
+                if (currentPage === 1) {
+                    backArrow.classList.remove('show');
+                } else {
+                    backArrow.classList.add('show');
+                }
+                
+                // 更新进度指示器
+                updateProgressIndicator(pageNum);
+            }
+            
+            // 更新进度指示器
+            function updateProgressIndicator(pageNum) {
+                progressDots.forEach(dot => {
+                    const dotPage = parseInt(dot.getAttribute('data-page'));
+                    if (dotPage === pageNum) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 播放音乐
+            function playMusic() {
+                bgMusic.volume = 0.5;
+                const playPromise = bgMusic.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("自动播放被阻止，需要用户交互");
+                        musicPlayer.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                        musicPlayer.title = "点击播放音乐";
+                    });
+                }
+            }
+            
+            // 切换音乐播放状态
+            function toggleMusic() {
+                if (bgMusic.paused) {
+                    bgMusic.play();
+                    musicPlayer.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    musicPlayer.title = "点击暂停音乐";
+                } else {
+                    bgMusic.pause();
+                    musicPlayer.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    musicPlayer.title = "点击播放音乐";
+                }
+            }
+            
+            // 初始化应用
+            init();
+        });
+    </script>
+</body>
+</html>
