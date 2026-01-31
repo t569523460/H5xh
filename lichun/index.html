@@ -87,6 +87,10 @@
             width: 100%;
             height: 100%;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
         }
         
         /* 页面通用样式 */
@@ -114,7 +118,7 @@
             z-index: 10;
         }
         
-        /* 页面内容容器 - 调整位置使其下移 */
+        /* 页面内容容器 */
         .page-content-container {
             width: 92%;
             max-width: 750px;
@@ -126,10 +130,10 @@
             overflow: hidden;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            margin-top: 60px; /* 增加上边距，使文本框下移 */
+            margin-top: 20px;
             display: flex;
             flex-direction: column;
-            max-height: 80vh; /* 限制最大高度 */
+            max-height: 70vh;
         }
         
         /* 可滚动内容区域 */
@@ -137,7 +141,7 @@
             flex: 1;
             overflow-y: auto;
             padding-right: 5px;
-            max-height: calc(80vh - 150px);
+            max-height: calc(70vh - 180px);
         }
         
         /* 自定义滚动条样式 */
@@ -192,12 +196,12 @@
             letter-spacing: 1px;
         }
         
-        /* 内容样式 */
+        /* 内容样式 - 首字下沉效果 */
         .page-content {
             font-size: 1.1rem;
             line-height: 1.8;
             color: #333;
-            text-align: center;
+            text-align: justify;
             padding: 15px 10px;
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.7);
@@ -205,23 +209,46 @@
             position: relative;
         }
         
-        /* 滑动提示 */
-        .swipe-hint {
+        /* 首字下沉效果 */
+        .page-content p:first-of-type::first-letter {
+            font-size: 3.5rem;
+            float: left;
+            line-height: 1;
+            margin: 0 8px 0 0;
+            color: #8bc34a;
+            font-weight: bold;
+            font-family: 'STKaiti', serif;
+            padding: 5px;
+            background: rgba(139, 195, 74, 0.1);
+            border-radius: 5px;
+        }
+        
+        /* 滑动提示区域 - 用于翻页 */
+        .swipe-area {
             position: absolute;
-            bottom: 40px;
+            bottom: 20px;
             left: 0;
             width: 100%;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            cursor: pointer;
+        }
+        
+        .swipe-hint {
             display: flex;
             flex-direction: column;
             align-items: center;
             color: rgba(45, 90, 61, 0.9);
             font-size: 0.9rem;
-            z-index: 100;
             animation: float 2s infinite ease-in-out;
         }
         
         .swipe-hint i {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             margin-bottom: 8px;
             color: #2d5a3d;
         }
@@ -278,83 +305,6 @@
             right: 10%;
             width: 20px;
             height: 20px;
-        }
-        
-        .branch {
-            width: 60px;
-            height: 3px;
-            background: #8b7355;
-            position: relative;
-            opacity: 0.4;
-        }
-        
-        .branch:before, .branch:after {
-            content: '';
-            position: absolute;
-            width: 40px;
-            height: 3px;
-            background: #8b7355;
-        }
-        
-        .branch:before {
-            top: -15px;
-            left: 10px;
-            transform: rotate(30deg);
-        }
-        
-        .branch:after {
-            bottom: -15px;
-            left: 10px;
-            transform: rotate(-30deg);
-        }
-        
-        .branch-1 {
-            top: 12%;
-            left: 5%;
-            transform: rotate(15deg);
-        }
-        
-        /* 页面加载动画 */
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0a3d2f 0%, #1e5c47 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            transition: opacity 0.5s, visibility 0.5s;
-        }
-        
-        .loading.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-        
-        .loading-text {
-            color: white;
-            font-size: 1.6rem;
-            margin-top: 20px;
-            letter-spacing: 3px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-        
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-top: 4px solid #8bc34a;
-            border-radius: 50%;
-            animation: spin 1.2s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         
         /* 页面编号 */
@@ -432,12 +382,115 @@
             z-index: 1;
         }
         
+        /* 查看场景图按钮 */
+        .scene-btn {
+            display: block;
+            margin: 15px auto 0;
+            padding: 10px 25px;
+            background: linear-gradient(to right, #2d5a3d, #4a7c5c);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(45, 90, 61, 0.3);
+        }
+        
+        .scene-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(45, 90, 61, 0.4);
+            background: linear-gradient(to right, #1e3d2d, #2d5a3d);
+        }
+        
+        .scene-btn i {
+            margin-right: 8px;
+        }
+        
+        /* 场景图模态框 */
+        .scene-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .scene-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.4s;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .scene-img {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            display: block;
+        }
+        
+        .modal-title {
+            padding: 15px 20px;
+            background: #2d5a3d;
+            color: white;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
         /* 响应式调整 */
         @media (max-width: 768px) {
             .page-content-container {
                 width: 95%;
                 padding: 22px;
-                margin-top: 50px; /* 在小屏幕上也保持下移 */
+                max-height: 65vh;
             }
             
             .page-title {
@@ -454,14 +507,19 @@
             }
             
             .scrollable-content {
-                max-height: calc(75vh - 150px);
+                max-height: calc(65vh - 180px);
+            }
+            
+            /* 首字下沉效果在移动端调整 */
+            .page-content p:first-of-type::first-letter {
+                font-size: 2.8rem;
             }
         }
         
         @media (max-width: 480px) {
             .page-content-container {
                 padding: 18px;
-                margin-top: 45px; /* 在小屏幕上也保持下移 */
+                max-height: 60vh;
                 width: 96%;
             }
             
@@ -487,11 +545,15 @@
             }
             
             .scrollable-content {
-                max-height: calc(70vh - 150px);
+                max-height: calc(60vh - 180px);
+            }
+            
+            .swipe-area {
+                bottom: 15px;
+                height: 100px;
             }
             
             .swipe-hint {
-                bottom: 30px;
                 font-size: 0.8rem;
             }
             
@@ -505,15 +567,30 @@
                 font-size: 1rem;
             }
             
-            .leaf-1, .leaf-2, .blossom-1, .blossom-2, .branch-1 {
-                display: none; /* 在小屏幕上隐藏装饰元素以节省空间 */
+            .leaf-1, .leaf-2, .blossom-1, .blossom-2 {
+                display: none;
+            }
+            
+            /* 移动端首字下沉效果调整 */
+            .page-content p:first-of-type::first-letter {
+                font-size: 2.2rem;
+            }
+            
+            .scene-btn {
+                padding: 8px 20px;
+                font-size: 0.95rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                max-height: 85vh;
             }
         }
         
         @media (max-height: 700px) {
             .page-content-container {
                 padding: 15px;
-                margin-top: 40px; /* 在矮屏幕上调整位置 */
+                max-height: 55vh;
             }
             
             .page-title {
@@ -533,67 +610,12 @@
             }
             
             .scrollable-content {
-                max-height: calc(75vh - 140px);
+                max-height: calc(55vh - 150px);
             }
             
-            .swipe-hint {
-                bottom: 25px;
-            }
-        }
-        
-        /* 内容滚动提示 */
-        .scroll-hint {
-            display: none;
-            text-align: center;
-            color: #4a7c5c;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            padding: 5px;
-            background: rgba(141, 195, 74, 0.1);
-            border-radius: 5px;
-        }
-        
-        /* 仅在内容溢出时显示滚动提示 */
-        .scrollable-content.scrollable > .scroll-hint {
-            display: block;
-        }
-        
-        /* 页面切换箭头 */
-        .page-nav-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
-            color: rgba(45, 90, 61, 0.5);
-            z-index: 20;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: rgba(255, 255, 255, 0.8);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .page-nav-arrow:hover {
-            color: #2d5a3d;
-            background: rgba(255, 255, 255, 0.95);
-        }
-        
-        .prev-page {
-            left: 10px;
-        }
-        
-        .next-page {
-            right: 10px;
-        }
-        
-        @media (max-width: 768px) {
-            .page-nav-arrow {
-                display: none; /* 在移动设备上隐藏箭头 */
+            .swipe-area {
+                bottom: 10px;
+                height: 90px;
             }
         }
     </style>
@@ -613,17 +635,19 @@
     <div class="css-decoration leaf leaf-2"></div>
     <div class="css-decoration blossom blossom-1"></div>
     <div class="css-decoration blossom blossom-2"></div>
-    <div class="css-decoration branch branch-1"></div>
     
     <!-- 音乐控制 -->
     <div class="music-control" id="musicBtn">
         <i class="fas fa-music"></i>
     </div>
     
-    <!-- 加载动画 -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div class="loading-text">立春 · 加载中</div>
+    <!-- 场景图模态框 -->
+    <div class="scene-modal" id="sceneModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">立春 · 咬春</div>
+            <button class="close-modal" id="closeModal"><i class="fas fa-times"></i></button>
+            <img class="scene-img" id="sceneImage" src="" alt="场景图">
+        </div>
     </div>
     
     <!-- 页面容器 -->
@@ -633,13 +657,6 @@
             <div class="page-number">一</div>
             <div class="page-decoration" style="top: 15%; right: 10%;"><i class="fas fa-utensils"></i></div>
             
-            <div class="page-nav-arrow prev-page" id="prevBtn">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <div class="page-nav-arrow next-page" id="nextBtn">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 咬春</h1>
                 <h2 class="page-subtitle theme-color-2">一口嚼碎残冬，吞下春光</h2>
@@ -647,13 +664,21 @@
                 <div class="scrollable-content" id="scrollable1">
                     <div class="page-content">
                         <p>立春，为廿四节气之首，乃万物起始、一切更生之义也。此时阳气上升，万物更生，新岁开启。</p>
-                        <p>立春之日，民间有<span class="highlight">"咬春"</span>的习俗。人们会吃春饼、春卷或萝卜，称为"咬春"，寓意迎新纳吉，祈福来年风调雨顺、万物丰收。</p>
-                        <p>这一口咬下去，仿佛将残冬嚼碎，吞下满口的春光与希望。春饼薄如蝉翼，包裹着春天的新鲜蔬菜，象征着将春天的生机与活力吃进身体里。</p>
+                        <p>立春之日，民间有<span class="highlight">"咬春"</span>的习俗。人们会吃春饼、春卷或萝卜，称为"咬春"，寓意迎新纳吉，祈福来年风调雨顺、万物丰收。这一口咬下去，仿佛将残冬嚼碎，吞下满口的春光与希望。春饼薄如蝉翼，包裹着春天的新鲜蔬菜，象征着将春天的生机与活力吃进身体里。</p>
                         <p>古时咬春，除了吃春饼，还会吃生萝卜，称为"咬春萝卜"，认为这样可以解春困，让一年都精神抖擞。清代《燕京岁时记》记载："是日，富家多食春饼，妇女等多买萝卜而食之，曰'咬春'。谓可以却春困也。"</p>
                         <p>如今，咬春习俗已演变为各种春季美食的品尝，但那份对春天的期盼与迎接新生的喜悦，依旧在每个立春日温暖着人们的心田。</p>
                     </div>
-                    
-                    <div class="scroll-hint">内容可上下滚动</div>
+                </div>
+                
+                <button class="scene-btn" data-scene="yaochun">
+                    <i class="fas fa-image"></i>查看咬春场景图
+                </button>
+            </div>
+            
+            <div class="swipe-area" id="swipeArea1">
+                <div class="swipe-hint">
+                    <i class="fas fa-chevron-up"></i>
+                    <span>向上滑动进入下一页</span>
                 </div>
             </div>
         </div>
@@ -663,27 +688,29 @@
             <div class="page-number">二</div>
             <div class="page-decoration" style="top: 20%; left: 10%;"><i class="fas fa-pagelines"></i></div>
             
-            <div class="page-nav-arrow prev-page">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <div class="page-nav-arrow next-page">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 打春</h1>
                 <h2 class="page-subtitle theme-color-2">一头耕牛，敲醒一年的生机</h2>
                 
                 <div class="scrollable-content" id="scrollable2">
                     <div class="page-content">
-                        <p><span class="highlight">"打春"</span>又称"鞭春"，是立春时节的传统活动。地方官员会率百姓用彩鞭抽打土制的春牛，寓意鞭策耕牛、劝农春耕。</p>
-                        <p>这一仪式象征着唤醒大地，催促春耕的开始，敲醒一年的生机与活力。春牛通常用泥土塑成，内藏五谷，打碎后人们争抢土块，带回家中视为吉祥，预示五谷丰登。</p>
+                        <p><span class="highlight">"打春"</span>又称"鞭春"，是立春时节的传统活动。地方官员会率百姓用彩鞭抽打土制的春牛，寓意鞭策耕牛、劝农春耕。这一仪式象征着唤醒大地，催促春耕的开始，敲醒一年的生机与活力。春牛通常用泥土塑成，内藏五谷，打碎后人们争抢土块，带回家中视为吉祥，预示五谷丰登。</p>
                         <p>打春习俗体现了古代中国农耕社会对春季农耕的重视，以及对丰收的美好祈愿。春牛的颜色、尺寸都有严格的规定，体现了古人对自然的敬畏与顺应。</p>
-                        <p>据《礼记·月令》记载，周代就有迎春仪式。到了唐代，打春牛成为官方活动，各州县都要在立春前制作春牛，立春日由地方长官主持鞭打仪式，祈求风调雨顺、五谷丰登。</p>
-                        <p>打碎的春牛土块被百姓带回家，撒在农田里，或放在灶台上，认为可以驱邪避灾，保佑家宅平安。这一习俗一直延续到明清时期，成为立春的重要活动。</p>
+                        <p>据《礼记·月令》记载，周代就有迎春仪式。到了唐代，打春牛成为官方活动，各州县都要在立春前制作春牛，立春日由地方长官主持鞭打仪式，祈求风调雨顺、五谷丰登。打碎的春牛土块被百姓带回家，撒在农田里，或放在灶台上，认为可以驱邪避灾，保佑家宅平安。这一习俗一直延续到明清时期，成为立春的重要活动。</p>
                     </div>
-                    
-                    <div class="scroll-hint">内容可上下滚动</div>
+                </div>
+                
+                <button class="scene-btn" data-scene="dachun">
+                    <i class="fas fa-image"></i>查看打春场景图
+                </button>
+            </div>
+            
+            <div class="swipe-area" id="swipeArea2">
+                <div class="swipe-hint">
+                    <i class="fas fa-chevron-up"></i>
+                    <span>向上滑动进入下一页</span>
+                    <i class="fas fa-chevron-down" style="margin-top: 10px;"></i>
+                    <span style="margin-top: 5px;">向下滑动返回上一页</span>
                 </div>
             </div>
         </div>
@@ -693,27 +720,29 @@
             <div class="page-number">三</div>
             <div class="page-decoration" style="bottom: 25%; right: 15%;"><i class="fas fa-flag"></i></div>
             
-            <div class="page-nav-arrow prev-page">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <div class="page-nav-arrow next-page">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 春幡</h1>
                 <h2 class="page-subtitle theme-color-2">一缕轻红，挂起满城春意</h2>
                 
                 <div class="scrollable-content" id="scrollable3">
                     <div class="page-content">
-                        <p>立春日，古代女子会用彩绸剪成燕、蝶等形状，或小幡形，戴在头上或系在花枝上，称为<span class="highlight">"春幡"</span>。</p>
-                        <p>这一缕缕轻红翠绿，随风摇曳，为初春增添了一抹亮色，挂起了满城的春意。春幡不仅是一种装饰，更是迎春的象征，表达人们对春天来临的喜悦和对美好生活的向往。</p>
+                        <p>立春日，古代女子会用彩绸剪成燕、蝶等形状，或小幡形，戴在头上或系在花枝上，称为<span class="highlight">"春幡"</span>。这一缕缕轻红翠绿，随风摇曳，为初春增添了一抹亮色，挂起了满城的春意。春幡不仅是一种装饰，更是迎春的象征，表达人们对春天来临的喜悦和对美好生活的向往。</p>
                         <p>不同颜色的春幡有不同的寓意：青色象征万物生长，红色象征吉祥喜庆，黄色象征五谷丰登。女子头戴春幡，男子则佩戴春胜，共同迎接春天的到来。</p>
-                        <p>据《岁时风土记》记载："立春之日，士大夫之家，剪彩为小幡，谓之春幡。或悬于家人之头，或缀于花枝之下。"春幡的样式多样，有燕子形、蝴蝶形、花形等，精巧别致。</p>
-                        <p>春幡习俗始于汉代，盛于唐宋。唐代诗人韦庄在《立春》诗中写道："青旗春幡剪春胜，彩燕双飞暖玉钗。"描绘了当时女子头戴春幡彩燕的动人景象。</p>
+                        <p>据《岁时风土记》记载："立春之日，士大夫之家，剪彩为小幡，谓之春幡。或悬于家人之头，或缀于花枝之下。"春幡的样式多样，有燕子形、蝴蝶形、花形等，精巧别致。春幡习俗始于汉代，盛于唐宋。唐代诗人韦庄在《立春》诗中写道："青旗春幡剪春胜，彩燕双飞暖玉钗。"描绘了当时女子头戴春幡彩燕的动人景象。</p>
                     </div>
-                    
-                    <div class="scroll-hint">内容可上下滚动</div>
+                </div>
+                
+                <button class="scene-btn" data-scene="chunfan">
+                    <i class="fas fa-image"></i>查看春幡场景图
+                </button>
+            </div>
+            
+            <div class="swipe-area" id="swipeArea3">
+                <div class="swipe-hint">
+                    <i class="fas fa-chevron-up"></i>
+                    <span>向上滑动进入下一页</span>
+                    <i class="fas fa-chevron-down" style="margin-top: 10px;"></i>
+                    <span style="margin-top: 5px;">向下滑动返回上一页</span>
                 </div>
             </div>
         </div>
@@ -723,27 +752,29 @@
             <div class="page-number">四</div>
             <div class="page-decoration" style="top: 30%; left: 12%;"><i class="fas fa-seedling"></i></div>
             
-            <div class="page-nav-arrow prev-page">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <div class="page-nav-arrow next-page">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 芽尖</h1>
                 <h2 class="page-subtitle theme-color-2">一点新绿，藏着自然的答案</h2>
                 
                 <div class="scrollable-content" id="scrollable4">
                     <div class="page-content">
-                        <p>立春之后，大地回温，草木萌动。枝头的<span class="highlight">芽尖</span>悄悄探出头来，那一点新绿虽微小，却蕴藏着整个春天的力量与自然的答案。</p>
-                        <p>这些嫩芽是生命的信使，宣告着严寒的退却和温暖的回归。它们默默积蓄力量，等待时机绽放，向我们展示生命不屈的韧性与自然循环的奥秘。</p>
-                        <p>从芽尖到枝叶，从花苞到果实，自然用最简洁的方式告诉我们：生命的力量在于积蓄与等待，在于顺应时节而生长。</p>
-                        <p>立春三候生动描绘了春天的萌发过程："一候东风解冻，二候蜇虫始振，三候鱼陟负冰。"从东风送暖、冰雪消融，到冬眠的虫子开始苏醒，再到鱼儿游到水面，碎冰如同被鱼背负着一般，春天的生机一步步展开。</p>
+                        <p>立春之后，大地回温，草木萌动。枝头的<span class="highlight">芽尖</span>悄悄探出头来，那一点新绿虽微小，却蕴藏着整个春天的力量与自然的答案。这些嫩芽是生命的信使，宣告着严寒的退却和温暖的回归。它们默默积蓄力量，等待时机绽放，向我们展示生命不屈的韧性与自然循环的奥秘。</p>
+                        <p>从芽尖到枝叶，从花苞到果实，自然用最简洁的方式告诉我们：生命的力量在于积蓄与等待，在于顺应时节而生长。立春三候生动描绘了春天的萌发过程："一候东风解冻，二候蜇虫始振，三候鱼陟负冰。"从东风送暖、冰雪消融，到冬眠的虫子开始苏醒，再到鱼儿游到水面，碎冰如同被鱼背负着一般，春天的生机一步步展开。</p>
                         <p>观察芽尖的变化，是古人了解物候、安排农事的重要方式。柳树发芽、杏树开花、燕子归来，这些自然现象构成了二十四节气的物候体系，指导着农业生产与生活。</p>
                     </div>
-                    
-                    <div class="scroll-hint">内容可上下滚动</div>
+                </div>
+                
+                <button class="scene-btn" data-scene="yajian">
+                    <i class="fas fa-image"></i>查看芽尖场景图
+                </button>
+            </div>
+            
+            <div class="swipe-area" id="swipeArea4">
+                <div class="swipe-hint">
+                    <i class="fas fa-chevron-up"></i>
+                    <span>向上滑动进入下一页</span>
+                    <i class="fas fa-chevron-down" style="margin-top: 10px;"></i>
+                    <span style="margin-top: 5px;">向下滑动返回上一页</span>
                 </div>
             </div>
         </div>
@@ -753,20 +784,14 @@
             <div class="page-number">五</div>
             <div class="page-decoration" style="bottom: 20%; right: 10%;"><i class="fas fa-heart"></i></div>
             
-            <div class="page-nav-arrow prev-page">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 盼春</h1>
                 <h2 class="page-subtitle theme-color-2">一份藏在寒天里的温柔期许</h2>
                 
                 <div class="scrollable-content" id="scrollable5">
                     <div class="page-content">
-                        <p>在寒冬尚未完全退去的日子里，人们心中已悄悄种下对春天的<span class="highlight">期盼</span>。这份期盼如同埋在冻土下的种子，虽不见天日，却已悄然萌动。</p>
-                        <p>立春不仅是一个节气，更是一种心境。它代表着希望与新生，提醒我们无论经历怎样的严寒，温暖与生机终将回归。</p>
-                        <p>这份藏在寒天里的温柔期许，正是人类与自然和谐共生的永恒主题。当我们学会像自然一样，在冬天积蓄力量，在春天奋力生长，生命的每个季节都将充满意义。</p>
-                        <p>古人对春天的期盼，不仅体现在习俗仪式上，也融入了诗词歌赋。唐代诗人白居易在《立春后五日》中写道："立春后五日，春态纷婀娜。白日斜渐长，碧云低欲堕。"描绘了立春后春意渐浓的美丽景象。</p>
+                        <p>在寒冬尚未完全退去的日子里，人们心中已悄悄种下对春天的<span class="highlight">期盼</span>。这份期盼如同埋在冻土下的种子，虽不见天日，却已悄然萌动。立春不仅是一个节气，更是一种心境。它代表着希望与新生，提醒我们无论经历怎样的严寒，温暖与生机终将回归。</p>
+                        <p>这份藏在寒天里的温柔期许，正是人类与自然和谐共生的永恒主题。当我们学会像自然一样，在冬天积蓄力量，在春天奋力生长，生命的每个季节都将充满意义。古人对春天的期盼，不仅体现在习俗仪式上，也融入了诗词歌赋。唐代诗人白居易在《立春后五日》中写道："立春后五日，春态纷婀娜。白日斜渐长，碧云低欲堕。"描绘了立春后春意渐浓的美丽景象。</p>
                         <p>立春时节，北方虽然仍是冰天雪地，但南方已春意萌动。这种地理差异，更增添了人们对春天的共同期盼。无论身在何处，春天的希望都同样在心中生长。</p>
                         
                         <div style="margin-top: 25px; padding: 15px; background: rgba(141, 195, 74, 0.15); border-radius: 10px; border-left: 4px solid #8bc34a;">
@@ -775,16 +800,19 @@
                             <p style="margin-top: 10px; font-size: 0.9rem; color: #4a7c5c;">二十四节气始于立春，终于大寒<br>周而复始，生生不息</p>
                         </div>
                     </div>
-                    
-                    <div class="scroll-hint">内容可上下滚动</div>
+                </div>
+                
+                <button class="scene-btn" data-scene="panchun">
+                    <i class="fas fa-image"></i>查看盼春场景图
+                </button>
+            </div>
+            
+            <div class="swipe-area" id="swipeArea5">
+                <div class="swipe-hint">
+                    <i class="fas fa-chevron-down"></i>
+                    <span>向下滑动返回上一页</span>
                 </div>
             </div>
-        </div>
-        
-        <!-- 滑动提示 -->
-        <div class="swipe-hint" id="swipeHint">
-            <i class="fas fa-chevron-up"></i>
-            <span>向上滑动切换页面</span>
         </div>
         
         <!-- 页脚 -->
@@ -802,22 +830,21 @@
             // 页面元素
             const pages = document.querySelectorAll('.page');
             const container = document.getElementById('container');
-            const loading = document.getElementById('loading');
             const musicBtn = document.getElementById('musicBtn');
             const bgMusic = document.getElementById('bgMusic');
-            const swipeHint = document.getElementById('swipeHint');
-            const scrollableContents = document.querySelectorAll('.scrollable-content');
-            const prevBtns = document.querySelectorAll('.prev-page');
-            const nextBtns = document.querySelectorAll('.next-page');
+            const sceneModal = document.getElementById('sceneModal');
+            const closeModal = document.getElementById('closeModal');
+            const sceneImage = document.getElementById('sceneImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const sceneBtns = document.querySelectorAll('.scene-btn');
+            const swipeAreas = document.querySelectorAll('.swipe-area');
             
             let currentPage = 0;
             let isScrolling = false;
             let scrollDelay = 800; // 防止快速滚动
             
-            // 隐藏加载页面
+            // 尝试自动播放音乐
             setTimeout(() => {
-                loading.classList.add('hidden');
-                // 尝试自动播放音乐
                 try {
                     bgMusic.volume = 0.6;
                     bgMusic.play().then(() => {
@@ -831,7 +858,7 @@
                 } catch(e) {
                     console.log('音乐播放出错:', e);
                 }
-            }, 1500);
+            }, 500);
             
             // 音乐控制
             musicBtn.addEventListener('click', function() {
@@ -845,16 +872,6 @@
                     musicBtn.style.background = 'rgba(45, 90, 61, 0.85)';
                 }
             });
-            
-            // 检查内容是否可滚动
-            function checkScrollable() {
-                scrollableContents.forEach(content => {
-                    // 如果内容高度大于容器高度，添加可滚动类
-                    if (content.scrollHeight > content.clientHeight) {
-                        content.classList.add('scrollable');
-                    }
-                });
-            }
             
             // 切换页面函数
             function goToPage(pageIndex) {
@@ -875,24 +892,68 @@
                     currentScrollable.scrollTop = 0;
                 }
                 
-                // 如果是最后一页，隐藏滑动提示
-                if (currentPage === pages.length - 1) {
-                    swipeHint.style.opacity = '0';
-                } else {
-                    swipeHint.style.opacity = '1';
-                }
-                
                 // 滚动结束后重置状态
                 setTimeout(() => {
                     isScrolling = false;
                 }, scrollDelay);
             }
             
-            // 检查内容区域滚动状态
-            function isContentScrollable(element) {
-                return element && (element.scrollHeight > element.clientHeight);
-            }
+            // 场景图片映射
+            const sceneImages = {
+                'yaochun': {
+                    filename: 'yaochun.jpg',
+                    title: '立春 · 咬春场景图',
+                    description: '咬春场景应展示一家人围坐在一起品尝春饼、春卷等春季美食的场景。画面温馨，色调温暖，展现家庭的团聚和春天的喜悦。'
+                },
+                'dachun': {
+                    filename: 'dachun.jpg',
+                    title: '立春 · 打春场景图',
+                    description: '打春场景应展示传统打春牛仪式的场景，有官员和百姓一起用彩鞭抽打土牛的画面。背景可以是农田或村庄，展现农耕文化的传统。'
+                },
+                'chunfan': {
+                    filename: 'chunfan.jpg',
+                    title: '立春 · 春幡场景图',
+                    description: '春幡场景应展示古代女子头戴春幡或在树枝上悬挂春幡的画面。春幡色彩鲜艳，样式精巧，画面柔和唯美，展现春天的轻盈与美丽。'
+                },
+                'yajian': {
+                    filename: 'yajian.jpg',
+                    title: '立春 · 芽尖场景图',
+                    description: '芽尖场景应展示植物嫩芽的特写，如柳枝新芽、草地初绿等。画面清新自然，微距摄影，背景虚化，突出嫩芽的生命力和春天的萌发。'
+                },
+                'panchun': {
+                    filename: 'panchun.jpg',
+                    title: '立春 · 盼春场景图',
+                    description: '盼春场景应展示人们在冬日里期盼春天的画面，可以是望向远方的人物，或是冰雪初融、春意初现的自然景观。画面充满希望和期待。'
+                }
+            };
             
+            // 场景图按钮点击事件
+            sceneBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const sceneName = this.getAttribute('data-scene');
+                    const sceneInfo = sceneImages[sceneName];
+                    
+                    if (sceneInfo) {
+                        sceneImage.src = sceneInfo.filename;
+                        modalTitle.textContent = sceneInfo.title;
+                        sceneModal.classList.add('active');
+                    }
+                });
+            });
+            
+            // 关闭模态框
+            closeModal.addEventListener('click', function() {
+                sceneModal.classList.remove('active');
+            });
+            
+            // 点击模态框背景关闭
+            sceneModal.addEventListener('click', function(e) {
+                if (e.target === sceneModal) {
+                    sceneModal.classList.remove('active');
+                }
+            });
+            
+            // 检查内容区域滚动状态
             function isContentAtTop(element) {
                 return element && element.scrollTop === 0;
             }
@@ -902,36 +963,46 @@
                 return element.scrollHeight - element.scrollTop <= element.clientHeight + 1;
             }
             
-            // 鼠标滚轮事件
-            container.addEventListener('wheel', function(e) {
-                if (isScrolling) return;
+            // 滑动区域触摸事件 - 用于翻页
+            swipeAreas.forEach((area, index) => {
+                let touchStartY = 0;
+                let touchEndY = 0;
                 
-                const currentScrollable = document.getElementById(`scrollable${currentPage + 1}`);
+                area.addEventListener('touchstart', function(e) {
+                    touchStartY = e.changedTouches[0].screenY;
+                }, {passive: true});
                 
-                // 检查是否在内容区域内滚动
-                if (currentScrollable && isContentScrollable(currentScrollable)) {
-                    // 向下滚动
-                    if (e.deltaY > 0) {
-                        // 如果内容不在底部，先滚动内容
-                        if (!isContentAtBottom(currentScrollable)) {
-                            return; // 让浏览器自然滚动内容
-                        } else {
-                            // 内容已到底部，切换页面
+                area.addEventListener('touchend', function(e) {
+                    if (isScrolling) return;
+                    
+                    touchEndY = e.changedTouches[0].screenY;
+                    const diff = touchStartY - touchEndY;
+                    
+                    // 滑动距离大于40px才触发翻页
+                    if (Math.abs(diff) > 40) {
+                        // 向上滑动，前往下一页
+                        if (diff > 0) {
                             goToPage(currentPage + 1);
-                        }
-                    } 
-                    // 向上滚动
-                    else if (e.deltaY < 0) {
-                        // 如果内容不在顶部，先滚动内容
-                        if (!isContentAtTop(currentScrollable)) {
-                            return; // 让浏览器自然滚动内容
-                        } else {
-                            // 内容已在顶部，切换页面
+                        } 
+                        // 向下滑动，前往上一页
+                        else {
                             goToPage(currentPage - 1);
                         }
                     }
-                } else {
-                    // 内容区域不可滚动，直接切换页面
+                }, {passive: true});
+            });
+            
+            // 鼠标滚轮事件 - 在滑动区域触发翻页
+            container.addEventListener('wheel', function(e) {
+                if (isScrolling) return;
+                
+                // 检查鼠标是否在滑动区域
+                const mouseY = e.clientY;
+                const containerRect = container.getBoundingClientRect();
+                const containerHeight = containerRect.height;
+                
+                // 如果鼠标在底部120px区域内（滑动区域），则允许翻页
+                if (mouseY > containerHeight - 120) {
                     if (e.deltaY > 0) {
                         goToPage(currentPage + 1);
                     } else if (e.deltaY < 0) {
@@ -939,44 +1010,6 @@
                     }
                 }
             });
-            
-            // 触摸滑动事件（移动端）
-            let touchStartY = 0;
-            let touchEndY = 0;
-            
-            container.addEventListener('touchstart', function(e) {
-                touchStartY = e.changedTouches[0].screenY;
-            }, {passive: true});
-            
-            container.addEventListener('touchend', function(e) {
-                if (isScrolling) return;
-                
-                touchEndY = e.changedTouches[0].screenY;
-                const diff = touchStartY - touchEndY;
-                const currentScrollable = document.getElementById(`scrollable${currentPage + 1}`);
-                
-                // 滑动距离大于50px才触发
-                if (Math.abs(diff) > 50) {
-                    // 向上滑动
-                    if (diff > 0) {
-                        // 如果内容区域可滚动且不在底部，不切换页面
-                        if (currentScrollable && isContentScrollable(currentScrollable) && !isContentAtBottom(currentScrollable)) {
-                            return;
-                        }
-                        // 前往下一页
-                        goToPage(currentPage + 1);
-                    } 
-                    // 向下滑动
-                    else {
-                        // 如果内容区域可滚动且不在顶部，不切换页面
-                        if (currentScrollable && isContentScrollable(currentScrollable) && !isContentAtTop(currentScrollable)) {
-                            return;
-                        }
-                        // 前往上一页
-                        goToPage(currentPage - 1);
-                    }
-                }
-            }, {passive: true});
             
             // 添加键盘控制
             document.addEventListener('keydown', function(e) {
@@ -993,19 +1026,6 @@
                 }
             });
             
-            // 导航箭头事件
-            prevBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    goToPage(currentPage - 1);
-                });
-            });
-            
-            nextBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    goToPage(currentPage + 1);
-                });
-            });
-            
             // 页面加载完成后尝试播放音乐（需要用户交互）
             document.addEventListener('click', function initAudio() {
                 if (bgMusic.paused) {
@@ -1016,10 +1036,6 @@
                 }
                 document.removeEventListener('click', initAudio);
             });
-            
-            // 初始检查和窗口大小变化检查
-            setTimeout(checkScrollable, 100);
-            window.addEventListener('resize', checkScrollable);
         });
     </script>
 </body>
