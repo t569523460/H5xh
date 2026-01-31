@@ -17,31 +17,42 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #000;
+            background: #f8fdf9;
         }
         
-        /* 背景渐变 */
+        /* 渐变背景 */
         .background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0a3d2f 0%, #1e5c47 50%, #2d7a5e 100%);
+            background: linear-gradient(135deg, #e6f7ed 0%, #c6e8d6 30%, #a8d9c1 70%, #8bcab4 100%);
             z-index: -2;
         }
         
-        /* 背景装饰图案 */
-        .bg-pattern {
+        /* 背景装饰元素 */
+        .bg-circle {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('pattern.png');
-            background-size: 300px;
-            opacity: 0.05;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
             z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+        }
+        
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -80px;
+            left: -80px;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
         }
         
         /* 音乐控制按钮 */
@@ -52,7 +63,7 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(45, 90, 61, 0.85);
             backdrop-filter: blur(8px);
             z-index: 1000;
             display: flex;
@@ -61,13 +72,13 @@
             color: #fff;
             font-size: 22px;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             transition: all 0.3s;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
         .music-control:hover {
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(45, 90, 61, 0.95);
             transform: scale(1.05);
         }
         
@@ -103,21 +114,22 @@
             z-index: 10;
         }
         
-        /* 页面内容容器 */
+        /* 页面内容容器 - 调整位置使其下移 */
         .page-content-container {
-            width: 100%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.95);
+            width: 92%;
+            max-width: 750px;
+            background: rgba(255, 255, 255, 0.92);
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            margin-top: 20px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            margin-top: 60px; /* 增加上边距，使文本框下移 */
             display: flex;
             flex-direction: column;
+            max-height: 80vh; /* 限制最大高度 */
         }
         
         /* 可滚动内容区域 */
@@ -125,7 +137,7 @@
             flex: 1;
             overflow-y: auto;
             padding-right: 5px;
-            max-height: calc(100vh - 200px);
+            max-height: calc(80vh - 150px);
         }
         
         /* 自定义滚动条样式 */
@@ -202,7 +214,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(45, 90, 61, 0.9);
             font-size: 0.9rem;
             z-index: 100;
             animation: float 2s infinite ease-in-out;
@@ -211,7 +223,7 @@
         .swipe-hint i {
             font-size: 1.6rem;
             margin-bottom: 8px;
-            color: #fff;
+            color: #2d5a3d;
         }
         
         @keyframes float {
@@ -219,67 +231,87 @@
             50% { transform: translateY(-8px); }
         }
         
-        /* 装饰元素 */
-        .decoration {
+        /* CSS装饰元素 */
+        .css-decoration {
             position: absolute;
             z-index: 0;
             pointer-events: none;
         }
         
-        /* 装饰图片的通用样式 */
-        .decoration-img {
-            position: absolute;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.9;
+        .leaf {
+            width: 40px;
+            height: 40px;
+            background: #8bc34a;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            opacity: 0.3;
         }
         
-        /* 特定装饰位置 */
-        .decoration-top-left {
-            top: 5%;
+        .leaf-1 {
+            top: 15%;
+            left: 10%;
+            transform: rotate(45deg);
+        }
+        
+        .leaf-2 {
+            top: 20%;
+            right: 12%;
+            transform: rotate(-20deg);
+            width: 30px;
+            height: 30px;
+        }
+        
+        .blossom {
+            width: 25px;
+            height: 25px;
+            background: #ffb6c1;
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+        
+        .blossom-1 {
+            bottom: 25%;
+            left: 8%;
+        }
+        
+        .blossom-2 {
+            bottom: 20%;
+            right: 10%;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .branch {
+            width: 60px;
+            height: 3px;
+            background: #8b7355;
+            position: relative;
+            opacity: 0.4;
+        }
+        
+        .branch:before, .branch:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: #8b7355;
+        }
+        
+        .branch:before {
+            top: -15px;
+            left: 10px;
+            transform: rotate(30deg);
+        }
+        
+        .branch:after {
+            bottom: -15px;
+            left: 10px;
+            transform: rotate(-30deg);
+        }
+        
+        .branch-1 {
+            top: 12%;
             left: 5%;
-            width: 100px;
-            height: auto;
-        }
-        
-        .decoration-top-right {
-            top: 8%;
-            right: 6%;
-            width: 90px;
-            height: auto;
             transform: rotate(15deg);
-        }
-        
-        .decoration-bottom-left {
-            bottom: 15%;
-            left: 7%;
-            width: 95px;
-            height: auto;
-            transform: rotate(-10deg);
-        }
-        
-        .decoration-bottom-right {
-            bottom: 18%;
-            right: 8%;
-            width: 110px;
-            height: auto;
-            transform: rotate(5deg);
-        }
-        
-        .decoration-center {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120px;
-            height: auto;
-            opacity: 0.15;
-        }
-        
-        /* 页面特定装饰 */
-        .page-specific-decoration {
-            position: absolute;
-            z-index: 5;
-            pointer-events: none;
         }
         
         /* 页面加载动画 */
@@ -331,8 +363,8 @@
             top: 20px;
             left: 20px;
             font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.8);
-            background: rgba(0, 0, 0, 0.2);
+            color: #2d5a3d;
+            background: rgba(255, 255, 255, 0.8);
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -341,6 +373,7 @@
             justify-content: center;
             font-weight: bold;
             z-index: 10;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         /* 主题颜色 */
@@ -353,6 +386,8 @@
             color: #2d5a3d;
             font-weight: bold;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(transparent 70%, rgba(139, 195, 74, 0.2) 70%);
+            padding: 0 2px;
         }
         
         /* 页脚 */
@@ -362,7 +397,7 @@
             left: 0;
             width: 100%;
             text-align: center;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(45, 90, 61, 0.7);
             font-size: 0.8rem;
             z-index: 10;
         }
@@ -389,11 +424,20 @@
             z-index: 5;
         }
         
+        /* 页面特定CSS装饰 */
+        .page-decoration {
+            position: absolute;
+            font-size: 3rem;
+            color: rgba(45, 90, 61, 0.1);
+            z-index: 1;
+        }
+        
         /* 响应式调整 */
         @media (max-width: 768px) {
             .page-content-container {
-                padding: 20px;
-                margin-top: 15px;
+                width: 95%;
+                padding: 22px;
+                margin-top: 50px; /* 在小屏幕上也保持下移 */
             }
             
             .page-title {
@@ -410,25 +454,15 @@
             }
             
             .scrollable-content {
-                max-height: calc(100vh - 180px);
-            }
-            
-            .decoration-top-left,
-            .decoration-top-right,
-            .decoration-bottom-left,
-            .decoration-bottom-right {
-                width: 70px;
-            }
-            
-            .decoration-center {
-                width: 90px;
+                max-height: calc(75vh - 150px);
             }
         }
         
         @media (max-width: 480px) {
             .page-content-container {
-                padding: 15px;
-                margin-top: 10px;
+                padding: 18px;
+                margin-top: 45px; /* 在小屏幕上也保持下移 */
+                width: 96%;
             }
             
             .page-title {
@@ -453,18 +487,7 @@
             }
             
             .scrollable-content {
-                max-height: calc(100vh - 160px);
-            }
-            
-            .decoration-top-left,
-            .decoration-top-right,
-            .decoration-bottom-left,
-            .decoration-bottom-right {
-                width: 55px;
-            }
-            
-            .decoration-center {
-                width: 70px;
+                max-height: calc(70vh - 150px);
             }
             
             .swipe-hint {
@@ -481,12 +504,16 @@
                 height: 35px;
                 font-size: 1rem;
             }
+            
+            .leaf-1, .leaf-2, .blossom-1, .blossom-2, .branch-1 {
+                display: none; /* 在小屏幕上隐藏装饰元素以节省空间 */
+            }
         }
         
         @media (max-height: 700px) {
             .page-content-container {
                 padding: 15px;
-                margin-top: 10px;
+                margin-top: 40px; /* 在矮屏幕上调整位置 */
             }
             
             .page-title {
@@ -506,7 +533,7 @@
             }
             
             .scrollable-content {
-                max-height: calc(100vh - 150px);
+                max-height: calc(75vh - 140px);
             }
             
             .swipe-hint {
@@ -530,23 +557,63 @@
         .scrollable-content.scrollable > .scroll-hint {
             display: block;
         }
+        
+        /* 页面切换箭头 */
+        .page-nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: rgba(45, 90, 61, 0.5);
+            z-index: 20;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .page-nav-arrow:hover {
+            color: #2d5a3d;
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .prev-page {
+            left: 10px;
+        }
+        
+        .next-page {
+            right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-nav-arrow {
+                display: none; /* 在移动设备上隐藏箭头 */
+            }
+        }
     </style>
 </head>
 <body>
     <!-- 背景 -->
     <div class="background"></div>
-    <div class="bg-pattern"></div>
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
     
     <!-- 装饰条 -->
     <div class="top-decoration"></div>
     <div class="bottom-decoration"></div>
     
-    <!-- 装饰元素 -->
-    <img src="decoration-branch1.png" class="decoration-img decoration-top-left" alt="树枝装饰">
-    <img src="decoration-branch2.png" class="decoration-img decoration-top-right" alt="花朵装饰">
-    <img src="decoration-leaf1.png" class="decoration-img decoration-bottom-left" alt="叶子装饰">
-    <img src="decoration-butterfly.png" class="decoration-img decoration-bottom-right" alt="蝴蝶装饰">
-    <img src="decoration-pattern.png" class="decoration-img decoration-center" alt="背景图案">
+    <!-- CSS装饰元素 -->
+    <div class="css-decoration leaf leaf-1"></div>
+    <div class="css-decoration leaf leaf-2"></div>
+    <div class="css-decoration blossom blossom-1"></div>
+    <div class="css-decoration blossom blossom-2"></div>
+    <div class="css-decoration branch branch-1"></div>
     
     <!-- 音乐控制 -->
     <div class="music-control" id="musicBtn">
@@ -564,6 +631,15 @@
         <!-- 第1页: 咬春 -->
         <div class="page active" id="page1">
             <div class="page-number">一</div>
+            <div class="page-decoration" style="top: 15%; right: 10%;"><i class="fas fa-utensils"></i></div>
+            
+            <div class="page-nav-arrow prev-page" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="page-nav-arrow next-page" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 咬春</h1>
                 <h2 class="page-subtitle theme-color-2">一口嚼碎残冬，吞下春光</h2>
@@ -579,14 +655,21 @@
                     
                     <div class="scroll-hint">内容可上下滚动</div>
                 </div>
-                
-                <img src="decoration-food.png" class="page-specific-decoration" style="width: 90px; bottom: 15px; right: 15px;" alt="春饼装饰">
             </div>
         </div>
         
         <!-- 第2页: 打春 -->
         <div class="page" id="page2">
             <div class="page-number">二</div>
+            <div class="page-decoration" style="top: 20%; left: 10%;"><i class="fas fa-pagelines"></i></div>
+            
+            <div class="page-nav-arrow prev-page">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="page-nav-arrow next-page">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 打春</h1>
                 <h2 class="page-subtitle theme-color-2">一头耕牛，敲醒一年的生机</h2>
@@ -602,14 +685,21 @@
                     
                     <div class="scroll-hint">内容可上下滚动</div>
                 </div>
-                
-                <img src="decoration-ox.png" class="page-specific-decoration" style="width: 100px; bottom: 20px; left: 20px;" alt="耕牛装饰">
             </div>
         </div>
         
         <!-- 第3页: 春幡 -->
         <div class="page" id="page3">
             <div class="page-number">三</div>
+            <div class="page-decoration" style="bottom: 25%; right: 15%;"><i class="fas fa-flag"></i></div>
+            
+            <div class="page-nav-arrow prev-page">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="page-nav-arrow next-page">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 春幡</h1>
                 <h2 class="page-subtitle theme-color-2">一缕轻红，挂起满城春意</h2>
@@ -625,14 +715,21 @@
                     
                     <div class="scroll-hint">内容可上下滚动</div>
                 </div>
-                
-                <img src="decoration-flag.png" class="page-specific-decoration" style="width: 80px; top: 30px; right: 30px;" alt="春幡装饰">
             </div>
         </div>
         
         <!-- 第4页: 芽尖 -->
         <div class="page" id="page4">
             <div class="page-number">四</div>
+            <div class="page-decoration" style="top: 30%; left: 12%;"><i class="fas fa-seedling"></i></div>
+            
+            <div class="page-nav-arrow prev-page">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="page-nav-arrow next-page">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 芽尖</h1>
                 <h2 class="page-subtitle theme-color-2">一点新绿，藏着自然的答案</h2>
@@ -648,14 +745,18 @@
                     
                     <div class="scroll-hint">内容可上下滚动</div>
                 </div>
-                
-                <img src="decoration-sprout.png" class="page-specific-decoration" style="width: 70px; bottom: 30px; right: 30px;" alt="嫩芽装饰">
             </div>
         </div>
         
         <!-- 第5页: 盼春 -->
         <div class="page" id="page5">
             <div class="page-number">五</div>
+            <div class="page-decoration" style="bottom: 20%; right: 10%;"><i class="fas fa-heart"></i></div>
+            
+            <div class="page-nav-arrow prev-page">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 盼春</h1>
                 <h2 class="page-subtitle theme-color-2">一份藏在寒天里的温柔期许</h2>
@@ -706,6 +807,8 @@
             const bgMusic = document.getElementById('bgMusic');
             const swipeHint = document.getElementById('swipeHint');
             const scrollableContents = document.querySelectorAll('.scrollable-content');
+            const prevBtns = document.querySelectorAll('.prev-page');
+            const nextBtns = document.querySelectorAll('.next-page');
             
             let currentPage = 0;
             let isScrolling = false;
@@ -720,7 +823,7 @@
                     bgMusic.play().then(() => {
                         console.log('音乐开始播放');
                         musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                        musicBtn.style.background = 'rgba(141, 195, 74, 0.3)';
+                        musicBtn.style.background = 'rgba(45, 90, 61, 0.95)';
                     }).catch(e => {
                         console.log('自动播放被阻止，等待用户交互');
                         musicBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
@@ -735,11 +838,11 @@
                 if (bgMusic.paused) {
                     bgMusic.play();
                     musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                    musicBtn.style.background = 'rgba(141, 195, 74, 0.3)';
+                    musicBtn.style.background = 'rgba(45, 90, 61, 0.95)';
                 } else {
                     bgMusic.pause();
                     musicBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                    musicBtn.style.background = 'rgba(255, 255, 255, 0.25)';
+                    musicBtn.style.background = 'rgba(45, 90, 61, 0.85)';
                 }
             });
             
@@ -890,12 +993,25 @@
                 }
             });
             
+            // 导航箭头事件
+            prevBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    goToPage(currentPage - 1);
+                });
+            });
+            
+            nextBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    goToPage(currentPage + 1);
+                });
+            });
+            
             // 页面加载完成后尝试播放音乐（需要用户交互）
             document.addEventListener('click', function initAudio() {
                 if (bgMusic.paused) {
                     bgMusic.play().then(() => {
                         musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                        musicBtn.style.background = 'rgba(141, 195, 74, 0.3)';
+                        musicBtn.style.background = 'rgba(45, 90, 61, 0.95)';
                     });
                 }
                 document.removeEventListener('click', initAudio);
