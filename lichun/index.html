@@ -676,12 +676,14 @@
             font-size: 0.9rem;
             text-align: center;
             padding: 20px;
+            min-height: 200px;
         }
         
         .scene-img.error:before {
-            content: "图片加载失败";
+            content: "图片加载中...";
             font-size: 1rem;
             margin-bottom: 10px;
+            color: #4a7c5c;
         }
         
         /* 防止文本选中 */
@@ -690,6 +692,38 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+        }
+        
+        /* 图片占位样式 */
+        .scene-img.placeholder {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+        
+        .scene-img.placeholder:before {
+            content: "加载场景图...";
+            font-size: 1rem;
+            color: #4a7c5c;
+            margin-bottom: 10px;
+        }
+        
+        .scene-img.placeholder:after {
+            content: "";
+            width: 40px;
+            height: 40px;
+            border: 3px solid #8bc34a;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -723,7 +757,7 @@
         <div class="modal-content">
             <div class="modal-title" id="modalTitle">立春 · 咬春</div>
             <button class="close-modal" id="closeModal"><i class="fas fa-times"></i></button>
-            <img class="scene-img" id="sceneImage" src="" alt="场景图" onerror="this.classList.add('error')">
+            <img class="scene-img placeholder" id="sceneImage" src="" alt="场景图">
         </div>
     </div>
     
@@ -991,61 +1025,64 @@
                 }
             });
             
-            // 场景图片映射 - 使用base64占位图解决手机端显示问题
+            // 场景图片映射 - 修复图片显示问题
             const sceneImages = {
                 'yaochun': {
-                    // 这是一个base64编码的占位图，确保手机端可以显示
                     src: 'yaochun.jpg',
                     title: '立春 · 咬春场景图',
-                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
+                    desc: '展示一家人围坐品尝春饼、春卷等春季美食的场景'
                 },
                 'dachun': {
                     src: 'dachun.jpg',
                     title: '立春 · 打春场景图',
-                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
+                    desc: '展示传统打春牛仪式的场景'
                 },
                 'chunfan': {
                     src: 'chunfan.jpg',
                     title: '立春 · 春幡场景图',
-                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
+                    desc: '展示古代女子头戴春幡或在树枝上悬挂春幡的画面'
                 },
                 'yajian': {
                     src: 'yajian.jpg',
                     title: '立春 · 芽尖场景图',
-                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
+                    desc: '展示植物嫩芽的特写画面'
                 },
                 'panchun': {
                     src: 'panchun.jpg',
                     title: '立春 · 盼春场景图',
-                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
+                    desc: '展示人们在冬日里期盼春天的画面'
                 }
             };
             
-            // 场景图按钮点击事件
+            // 场景图按钮点击事件 - 修复图片加载逻辑
             sceneBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const sceneName = this.getAttribute('data-scene');
                     const sceneInfo = sceneImages[sceneName];
                     
                     if (sceneInfo) {
-                        // 先设置占位图，然后加载真实图片
-                        sceneImage.src = sceneInfo.placeholder;
-                        sceneImage.onload = function() {
-                            // 加载真实图片
-                            const realImage = new Image();
-                            realImage.src = sceneInfo.src;
-                            realImage.onload = function() {
-                                sceneImage.src = sceneInfo.src;
-                                sceneImage.classList.remove('error');
-                            };
-                            realImage.onerror = function() {
-                                // 如果真实图片加载失败，保持占位图
-                                sceneImage.classList.add('error');
-                            };
-                        };
+                        // 显示加载状态
+                        sceneImage.src = '';
+                        sceneImage.className = 'scene-img placeholder';
                         
+                        // 设置模态框标题
                         modalTitle.textContent = sceneInfo.title;
+                        
+                        // 显示模态框
                         sceneModal.classList.add('active');
+                        
+                        // 加载图片
+                        const img = new Image();
+                        img.onload = function() {
+                            sceneImage.src = sceneInfo.src;
+                            sceneImage.className = 'scene-img';
+                            sceneImage.alt = sceneInfo.desc;
+                        };
+                        img.onerror = function() {
+                            sceneImage.className = 'scene-img error';
+                            sceneImage.alt = '图片加载失败';
+                        };
+                        img.src = sceneInfo.src;
                     }
                 });
             });
@@ -1101,6 +1138,17 @@
             document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
             });
+            
+            // 图片预加载（可选）
+            function preloadImages() {
+                for (const key in sceneImages) {
+                    const img = new Image();
+                    img.src = sceneImages[key].src;
+                }
+            }
+            
+            // 页面加载完成后预加载图片
+            window.addEventListener('load', preloadImages);
         });
     </script>
 </body>
