@@ -11,6 +11,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'STKaiti', serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         html, body {
@@ -18,6 +19,8 @@
             height: 100%;
             overflow: hidden;
             background: #f8fdf9;
+            -webkit-text-size-adjust: 100%;
+            touch-action: manipulation;
         }
         
         /* 渐变背景 */
@@ -40,46 +43,73 @@
         }
         
         .circle-1 {
-            width: 300px;
-            height: 300px;
-            top: -100px;
-            right: -100px;
+            width: 200px;
+            height: 200px;
+            top: -80px;
+            right: -80px;
             background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
         }
         
         .circle-2 {
-            width: 200px;
-            height: 200px;
-            bottom: -80px;
-            left: -80px;
+            width: 150px;
+            height: 150px;
+            bottom: -60px;
+            left: -60px;
             background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
         }
         
         /* 音乐控制按钮 */
         .music-control {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
+            top: 15px;
+            right: 15px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            background: rgba(45, 90, 61, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(45, 90, 61, 0.9);
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
             border: 2px solid rgba(255, 255, 255, 0.5);
             transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
         }
         
-        .music-control:hover {
+        .music-control:active {
             background: rgba(45, 90, 61, 0.95);
-            transform: scale(1.05);
+            transform: scale(0.95);
+        }
+        
+        /* 返回按钮 */
+        .back-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(45, 90, 61, 0.9);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+        }
+        
+        .back-btn:active {
+            background: rgba(45, 90, 61, 0.95);
+            transform: scale(0.95);
         }
         
         /* 页面容器 */
@@ -89,8 +119,10 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
+            padding: 10px;
+            overflow: hidden;
         }
         
         /* 页面通用样式 */
@@ -102,38 +134,51 @@
             left: 0;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             overflow: hidden;
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s, transform 0.8s;
+            transform: translateX(30px);
+            transition: opacity 0.5s, transform 0.5s;
             z-index: 1;
         }
         
         .page.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(0);
             z-index: 10;
         }
         
-        /* 页面内容容器 */
+        /* 翻页转场效果 */
+        .page.exit-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        
+        .page.exit-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        
+        /* 页面内容容器 - 优化手机端布局 */
         .page-content-container {
-            width: 92%;
-            max-width: 750px;
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            width: 100%;
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            margin-top: 20px;
             display: flex;
             flex-direction: column;
-            max-height: 70vh;
+            margin-top: 10px;
+            max-height: calc(100vh - 150px);
         }
         
         /* 可滚动内容区域 */
@@ -141,16 +186,16 @@
             flex: 1;
             overflow-y: auto;
             padding-right: 5px;
-            max-height: calc(70vh - 180px);
+            -webkit-overflow-scrolling: touch;
         }
         
         /* 自定义滚动条样式 */
         .scrollable-content::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
         
         .scrollable-content::-webkit-scrollbar-track {
-            background: rgba(45, 90, 61, 0.1);
+            background: rgba(45, 90, 61, 0.05);
             border-radius: 10px;
         }
         
@@ -159,19 +204,15 @@
             border-radius: 10px;
         }
         
-        .scrollable-content::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, #1e3d2d, #6fa03a);
-        }
-        
         /* 页面标题样式 */
         .page-title {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             color: #2d5a3d;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             text-align: center;
             font-weight: bold;
             position: relative;
-            padding-bottom: 15px;
+            padding-bottom: 10px;
         }
         
         .page-title:after {
@@ -180,7 +221,7 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 80px;
+            width: 60px;
             height: 3px;
             background: linear-gradient(to right, #2d5a3d, #8bc34a);
             border-radius: 3px;
@@ -188,74 +229,110 @@
         
         /* 副标题样式 */
         .page-subtitle {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: #4a7c5c;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
             font-weight: 500;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
         
         /* 内容样式 - 首字下沉效果 */
         .page-content {
-            font-size: 1.1rem;
-            line-height: 1.8;
+            font-size: 1.05rem;
+            line-height: 1.7;
             color: #333;
             text-align: justify;
-            padding: 15px 10px;
-            border-radius: 12px;
+            padding: 12px 8px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.7);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             position: relative;
         }
         
         /* 首字下沉效果 */
         .page-content p:first-of-type::first-letter {
-            font-size: 3.5rem;
+            font-size: 3rem;
             float: left;
             line-height: 1;
-            margin: 0 8px 0 0;
+            margin: 0 6px 0 0;
             color: #8bc34a;
             font-weight: bold;
             font-family: 'STKaiti', serif;
-            padding: 5px;
+            padding: 3px;
             background: rgba(139, 195, 74, 0.1);
             border-radius: 5px;
         }
         
-        /* 滑动提示区域 - 用于翻页 */
-        .swipe-area {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
+        /* 底部按钮区域 */
+        .bottom-nav {
             width: 100%;
-            height: 120px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding: 0 10px;
+        }
+        
+        /* 下一页按钮 */
+        .next-btn {
+            padding: 12px 30px;
+            background: linear-gradient(to right, #2d5a3d, #4a7c5c);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(45, 90, 61, 0.3);
+            display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 100;
+            flex: 1;
+            max-width: 180px;
+            margin: 0 auto;
+        }
+        
+        .next-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 5px rgba(45, 90, 61, 0.4);
+            background: linear-gradient(to right, #1e3d2d, #2d5a3d);
+        }
+        
+        .next-btn i {
+            margin-left: 8px;
+            font-size: 1.1rem;
+        }
+        
+        /* 最后一页的特殊按钮 */
+        .end-btn {
+            padding: 12px 30px;
+            background: linear-gradient(to right, #8bc34a, #4a7c5c);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.05rem;
+            font-weight: 500;
             cursor: pointer;
-        }
-        
-        .swipe-hint {
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(139, 195, 74, 0.3);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            color: rgba(45, 90, 61, 0.9);
-            font-size: 0.9rem;
-            animation: float 2s infinite ease-in-out;
+            justify-content: center;
+            flex: 1;
+            max-width: 180px;
+            margin: 0 auto;
         }
         
-        .swipe-hint i {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-            color: #2d5a3d;
+        .end-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 5px rgba(139, 195, 74, 0.4);
+            background: linear-gradient(to right, #6fa03a, #2d5a3d);
         }
         
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        .end-btn i {
+            margin-left: 8px;
         }
         
         /* CSS装饰元素 */
@@ -266,64 +343,64 @@
         }
         
         .leaf {
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             background: #8bc34a;
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            opacity: 0.3;
+            opacity: 0.2;
         }
         
         .leaf-1 {
-            top: 15%;
-            left: 10%;
+            top: 10%;
+            left: 5%;
             transform: rotate(45deg);
         }
         
         .leaf-2 {
-            top: 20%;
-            right: 12%;
+            top: 15%;
+            right: 5%;
             transform: rotate(-20deg);
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
         }
         
         .blossom {
-            width: 25px;
-            height: 25px;
+            width: 20px;
+            height: 20px;
             background: #ffb6c1;
             border-radius: 50%;
-            opacity: 0.4;
+            opacity: 0.2;
         }
         
         .blossom-1 {
-            bottom: 25%;
-            left: 8%;
+            bottom: 20%;
+            left: 6%;
         }
         
         .blossom-2 {
-            bottom: 20%;
-            right: 10%;
-            width: 20px;
-            height: 20px;
+            bottom: 15%;
+            right: 6%;
+            width: 15px;
+            height: 15px;
         }
         
         /* 页面编号 */
         .page-number {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 1.2rem;
+            top: 10px;
+            right: 10px;
+            font-size: 1rem;
             color: #2d5a3d;
             background: rgba(255, 255, 255, 0.8);
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             z-index: 10;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         
         /* 主题颜色 */
@@ -335,21 +412,18 @@
         .highlight {
             color: #2d5a3d;
             font-weight: bold;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            background: linear-gradient(transparent 70%, rgba(139, 195, 74, 0.2) 70%);
+            background: linear-gradient(transparent 70%, rgba(139, 195, 74, 0.15) 70%);
             padding: 0 2px;
         }
         
         /* 页脚 */
         .footer {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
             width: 100%;
             text-align: center;
-            color: rgba(45, 90, 61, 0.7);
-            font-size: 0.8rem;
-            z-index: 10;
+            color: rgba(45, 90, 61, 0.6);
+            font-size: 0.75rem;
+            padding: 5px 0;
+            margin-top: 5px;
         }
         
         /* 顶部装饰条 */
@@ -358,18 +432,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, #0a3d2f, #8bc34a, #0a3d2f);
-            z-index: 5;
-        }
-        
-        /* 底部装饰条 */
-        .bottom-decoration {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
+            height: 3px;
             background: linear-gradient(to right, #0a3d2f, #8bc34a, #0a3d2f);
             z-index: 5;
         }
@@ -377,51 +440,52 @@
         /* 页面特定CSS装饰 */
         .page-decoration {
             position: absolute;
-            font-size: 3rem;
-            color: rgba(45, 90, 61, 0.1);
+            font-size: 2rem;
+            color: rgba(45, 90, 61, 0.08);
             z-index: 1;
         }
         
         /* 查看场景图按钮 */
         .scene-btn {
             display: block;
-            margin: 15px auto 0;
-            padding: 10px 25px;
-            background: linear-gradient(to right, #2d5a3d, #4a7c5c);
+            margin: 12px auto 0;
+            padding: 10px 22px;
+            background: linear-gradient(to right, #8bc34a, #4a7c5c);
             color: white;
             border: none;
-            border-radius: 25px;
-            font-size: 1rem;
+            border-radius: 20px;
+            font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(45, 90, 61, 0.3);
+            box-shadow: 0 3px 8px rgba(139, 195, 74, 0.3);
         }
         
-        .scene-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(45, 90, 61, 0.4);
-            background: linear-gradient(to right, #1e3d2d, #2d5a3d);
+        .scene-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 4px rgba(139, 195, 74, 0.4);
+            background: linear-gradient(to right, #6fa03a, #2d5a3d);
         }
         
         .scene-btn i {
-            margin-right: 8px;
+            margin-right: 6px;
         }
         
-        /* 场景图模态框 */
+        /* 场景图模态框 - 手机端优化 */
         .scene-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 2000;
             opacity: 0;
             transition: opacity 0.3s;
+            padding: 20px;
         }
         
         .scene-modal.active {
@@ -431,14 +495,14 @@
         
         .modal-content {
             position: relative;
-            width: 90%;
-            max-width: 800px;
+            width: 100%;
+            max-width: 500px;
             max-height: 80vh;
             background: white;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            animation: modalFadeIn 0.4s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            animation: modalFadeIn 0.3s;
         }
         
         @keyframes modalFadeIn {
@@ -449,30 +513,31 @@
         .scene-img {
             width: 100%;
             height: auto;
-            max-height: 70vh;
+            max-height: 60vh;
             object-fit: contain;
             display: block;
+            background: #f5f5f5;
         }
         
         .modal-title {
-            padding: 15px 20px;
+            padding: 12px 15px;
             background: #2d5a3d;
             color: white;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             text-align: center;
         }
         
         .close-modal {
             position: absolute;
-            top: 15px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            font-size: 1.2rem;
+            font-size: 1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -480,143 +545,151 @@
             transition: all 0.3s;
         }
         
-        .close-modal:hover {
+        .close-modal:active {
             background: rgba(255, 255, 255, 0.3);
             transform: rotate(90deg);
         }
         
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .page-content-container {
-                width: 95%;
-                padding: 22px;
-                max-height: 65vh;
-            }
-            
-            .page-title {
-                font-size: 1.9rem;
-            }
-            
-            .page-subtitle {
-                font-size: 1.4rem;
-            }
-            
-            .page-content {
-                font-size: 1rem;
-                padding: 12px 8px;
-            }
-            
-            .scrollable-content {
-                max-height: calc(65vh - 180px);
-            }
-            
-            /* 首字下沉效果在移动端调整 */
-            .page-content p:first-of-type::first-letter {
-                font-size: 2.8rem;
-            }
-        }
-        
+        /* 响应式调整 - 专注于手机端 */
         @media (max-width: 480px) {
+            .container {
+                padding: 8px;
+            }
+            
+            .page {
+                padding: 10px;
+            }
+            
             .page-content-container {
-                padding: 18px;
-                max-height: 60vh;
-                width: 96%;
+                padding: 15px;
+                border-radius: 12px;
+                margin-top: 5px;
+                max-height: calc(100vh - 130px);
             }
             
             .page-title {
-                font-size: 1.7rem;
+                font-size: 1.6rem;
+                margin-bottom: 8px;
             }
             
             .page-subtitle {
                 font-size: 1.2rem;
-                margin-bottom: 15px;
+                margin-bottom: 10px;
             }
             
             .page-content {
-                font-size: 0.95rem;
-                line-height: 1.7;
+                font-size: 1rem;
+                line-height: 1.6;
                 padding: 10px 6px;
             }
             
-            .music-control {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
-            }
-            
-            .scrollable-content {
-                max-height: calc(60vh - 180px);
-            }
-            
-            .swipe-area {
-                bottom: 15px;
-                height: 100px;
-            }
-            
-            .swipe-hint {
-                font-size: 0.8rem;
-            }
-            
-            .swipe-hint i {
-                font-size: 1.4rem;
-            }
-            
-            .page-number {
-                width: 35px;
-                height: 35px;
-                font-size: 1rem;
-            }
-            
-            .leaf-1, .leaf-2, .blossom-1, .blossom-2 {
-                display: none;
-            }
-            
-            /* 移动端首字下沉效果调整 */
+            /* 首字下沉效果在手机端调整 */
             .page-content p:first-of-type::first-letter {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
+                margin: 0 5px 0 0;
+            }
+            
+            .music-control, .back-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+            
+            .next-btn, .end-btn {
+                padding: 10px 25px;
+                font-size: 1rem;
+                max-width: 160px;
             }
             
             .scene-btn {
-                padding: 8px 20px;
-                font-size: 0.95rem;
+                padding: 8px 18px;
+                font-size: 0.9rem;
             }
             
             .modal-content {
                 width: 95%;
                 max-height: 85vh;
             }
+            
+            .scene-img {
+                max-height: 55vh;
+            }
+            
+            .modal-title {
+                padding: 10px 12px;
+                font-size: 1rem;
+            }
+            
+            .close-modal {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+            
+            .footer {
+                font-size: 0.7rem;
+            }
         }
         
         @media (max-height: 700px) {
             .page-content-container {
-                padding: 15px;
-                max-height: 55vh;
+                max-height: calc(100vh - 120px);
             }
             
             .page-title {
-                font-size: 1.7rem;
-                margin-bottom: 10px;
+                font-size: 1.5rem;
             }
             
             .page-subtitle {
-                font-size: 1.2rem;
-                margin-bottom: 12px;
+                font-size: 1.1rem;
             }
             
             .page-content {
-                padding: 10px 6px;
-                margin-bottom: 10px;
+                font-size: 0.95rem;
+                padding: 8px 5px;
+            }
+            
+            .page-content p:first-of-type::first-letter {
+                font-size: 2.2rem;
+            }
+            
+            .next-btn, .end-btn {
+                padding: 8px 20px;
                 font-size: 0.95rem;
             }
             
-            .scrollable-content {
-                max-height: calc(55vh - 150px);
+            .scene-btn {
+                margin: 8px auto 0;
+                padding: 7px 16px;
+                font-size: 0.9rem;
             }
-            
-            .swipe-area {
-                bottom: 10px;
-                height: 90px;
-            }
+        }
+        
+        /* 图片加载失败时的样式 */
+        .scene-img.error {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f0;
+            color: #999;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .scene-img.error:before {
+            content: "图片加载失败";
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        
+        /* 防止文本选中 */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
     </style>
 </head>
@@ -628,7 +701,6 @@
     
     <!-- 装饰条 -->
     <div class="top-decoration"></div>
-    <div class="bottom-decoration"></div>
     
     <!-- CSS装饰元素 -->
     <div class="css-decoration leaf leaf-1"></div>
@@ -641,12 +713,17 @@
         <i class="fas fa-music"></i>
     </div>
     
+    <!-- 返回按钮 -->
+    <div class="back-btn" id="backBtn">
+        <i class="fas fa-arrow-left"></i>
+    </div>
+    
     <!-- 场景图模态框 -->
     <div class="scene-modal" id="sceneModal">
         <div class="modal-content">
             <div class="modal-title" id="modalTitle">立春 · 咬春</div>
             <button class="close-modal" id="closeModal"><i class="fas fa-times"></i></button>
-            <img class="scene-img" id="sceneImage" src="" alt="场景图">
+            <img class="scene-img" id="sceneImage" src="" alt="场景图" onerror="this.classList.add('error')">
         </div>
     </div>
     
@@ -654,8 +731,8 @@
     <div class="container" id="container">
         <!-- 第1页: 咬春 -->
         <div class="page active" id="page1">
-            <div class="page-number">一</div>
-            <div class="page-decoration" style="top: 15%; right: 10%;"><i class="fas fa-utensils"></i></div>
+            <div class="page-number">1</div>
+            <div class="page-decoration" style="top: 12%; right: 8%;"><i class="fas fa-utensils"></i></div>
             
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 咬春</h1>
@@ -675,18 +752,19 @@
                 </button>
             </div>
             
-            <div class="swipe-area" id="swipeArea1">
-                <div class="swipe-hint">
-                    <i class="fas fa-chevron-up"></i>
-                    <span>向上滑动进入下一页</span>
-                </div>
+            <div class="bottom-nav">
+                <button class="next-btn" id="nextBtn1">
+                    打春 <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
+            
+            <div class="footer">立春 · 万物始生 | 二十四节气之首</div>
         </div>
         
         <!-- 第2页: 打春 -->
         <div class="page" id="page2">
-            <div class="page-number">二</div>
-            <div class="page-decoration" style="top: 20%; left: 10%;"><i class="fas fa-pagelines"></i></div>
+            <div class="page-number">2</div>
+            <div class="page-decoration" style="top: 15%; left: 8%;"><i class="fas fa-pagelines"></i></div>
             
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 打春</h1>
@@ -705,20 +783,19 @@
                 </button>
             </div>
             
-            <div class="swipe-area" id="swipeArea2">
-                <div class="swipe-hint">
-                    <i class="fas fa-chevron-up"></i>
-                    <span>向上滑动进入下一页</span>
-                    <i class="fas fa-chevron-down" style="margin-top: 10px;"></i>
-                    <span style="margin-top: 5px;">向下滑动返回上一页</span>
-                </div>
+            <div class="bottom-nav">
+                <button class="next-btn" id="nextBtn2">
+                    春幡 <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
+            
+            <div class="footer">立春 · 万物始生 | 二十四节气之首</div>
         </div>
         
         <!-- 第3页: 春幡 -->
         <div class="page" id="page3">
-            <div class="page-number">三</div>
-            <div class="page-decoration" style="bottom: 25%; right: 15%;"><i class="fas fa-flag"></i></div>
+            <div class="page-number">3</div>
+            <div class="page-decoration" style="bottom: 20%; right: 8%;"><i class="fas fa-flag"></i></div>
             
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 春幡</h1>
@@ -737,20 +814,19 @@
                 </button>
             </div>
             
-            <div class="swipe-area" id="swipeArea3">
-                <div class="swipe-hint">
-                    <i class="fas fa-chevron-up"></i>
-                    <span>向上滑动进入下一页</span>
-                    <i class="fas fa-chevron-down" style="margin-top: 10px;"></i>
-                    <span style="margin-top: 5px;">向下滑动返回上一页</span>
-                </div>
+            <div class="bottom-nav">
+                <button class="next-btn" id="nextBtn3">
+                    芽尖 <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
+            
+            <div class="footer">立春 · 万物始生 | 二十四节气之首</div>
         </div>
         
         <!-- 第4页: 芽尖 -->
         <div class="page" id="page4">
-            <div class="page-number">四</div>
-            <div class="page-decoration" style="top: 30%; left: 12%;"><i class="fas fa-seedling"></i></div>
+            <div class="page-number">4</div>
+            <div class="page-decoration" style="top: 25%; left: 8%;"><i class="fas fa-seedling"></i></div>
             
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 芽尖</h1>
@@ -769,20 +845,19 @@
                 </button>
             </div>
             
-            <div class="swipe-area" id="swipeArea4">
-                <div class="swipe-hint">
-                    <i class="fas fa-chevron-up"></i>
-                    <span>向上滑动进入下一页</span>
-                    <i class="fas fa-chevron-down" style="margin-top: 10px;"></i>
-                    <span style="margin-top: 5px;">向下滑动返回上一页</span>
-                </div>
+            <div class="bottom-nav">
+                <button class="next-btn" id="nextBtn4">
+                    盼春 <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
+            
+            <div class="footer">立春 · 万物始生 | 二十四节气之首</div>
         </div>
         
         <!-- 第5页: 盼春 -->
         <div class="page" id="page5">
-            <div class="page-number">五</div>
-            <div class="page-decoration" style="bottom: 20%; right: 10%;"><i class="fas fa-heart"></i></div>
+            <div class="page-number">5</div>
+            <div class="page-decoration" style="bottom: 18%; right: 8%;"><i class="fas fa-heart"></i></div>
             
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">立春 · 盼春</h1>
@@ -794,10 +869,10 @@
                         <p>这份藏在寒天里的温柔期许，正是人类与自然和谐共生的永恒主题。当我们学会像自然一样，在冬天积蓄力量，在春天奋力生长，生命的每个季节都将充满意义。古人对春天的期盼，不仅体现在习俗仪式上，也融入了诗词歌赋。唐代诗人白居易在《立春后五日》中写道："立春后五日，春态纷婀娜。白日斜渐长，碧云低欲堕。"描绘了立春后春意渐浓的美丽景象。</p>
                         <p>立春时节，北方虽然仍是冰天雪地，但南方已春意萌动。这种地理差异，更增添了人们对春天的共同期盼。无论身在何处，春天的希望都同样在心中生长。</p>
                         
-                        <div style="margin-top: 25px; padding: 15px; background: rgba(141, 195, 74, 0.15); border-radius: 10px; border-left: 4px solid #8bc34a;">
-                            <p style="font-size: 1.1rem; color: #2d5a3d; font-weight: bold;">春已至，万物生</p>
-                            <p style="margin-top: 5px; font-size: 1rem;">愿您与春日一同焕发生机，心怀希望，静待花开</p>
-                            <p style="margin-top: 10px; font-size: 0.9rem; color: #4a7c5c;">二十四节气始于立春，终于大寒<br>周而复始，生生不息</p>
+                        <div style="margin-top: 20px; padding: 12px; background: rgba(141, 195, 74, 0.12); border-radius: 8px; border-left: 3px solid #8bc34a;">
+                            <p style="font-size: 1.05rem; color: #2d5a3d; font-weight: bold;">春已至，万物生</p>
+                            <p style="margin-top: 5px; font-size: 0.95rem;">愿您与春日一同焕发生机，心怀希望，静待花开</p>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: #4a7c5c;">二十四节气始于立春，终于大寒<br>周而复始，生生不息</p>
                         </div>
                     </div>
                 </div>
@@ -807,20 +882,18 @@
                 </button>
             </div>
             
-            <div class="swipe-area" id="swipeArea5">
-                <div class="swipe-hint">
-                    <i class="fas fa-chevron-down"></i>
-                    <span>向下滑动返回上一页</span>
-                </div>
+            <div class="bottom-nav">
+                <button class="end-btn" id="endBtn">
+                    重新开始 <i class="fas fa-redo"></i>
+                </button>
             </div>
+            
+            <div class="footer">立春 · 万物始生 | 二十四节气之首</div>
         </div>
-        
-        <!-- 页脚 -->
-        <div class="footer">立春 · 万物始生 | 二十四节气之首</div>
     </div>
     
     <!-- 背景音乐 -->
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop preload="auto">
         <source src="lichunbgm.mp3" type="audio/mpeg">
         您的浏览器不支持音频播放
     </audio>
@@ -829,19 +902,57 @@
         document.addEventListener('DOMContentLoaded', function() {
             // 页面元素
             const pages = document.querySelectorAll('.page');
-            const container = document.getElementById('container');
             const musicBtn = document.getElementById('musicBtn');
+            const backBtn = document.getElementById('backBtn');
             const bgMusic = document.getElementById('bgMusic');
             const sceneModal = document.getElementById('sceneModal');
             const closeModal = document.getElementById('closeModal');
             const sceneImage = document.getElementById('sceneImage');
             const modalTitle = document.getElementById('modalTitle');
             const sceneBtns = document.querySelectorAll('.scene-btn');
-            const swipeAreas = document.querySelectorAll('.swipe-area');
+            const nextBtns = [
+                document.getElementById('nextBtn1'),
+                document.getElementById('nextBtn2'),
+                document.getElementById('nextBtn3'),
+                document.getElementById('nextBtn4')
+            ];
+            const endBtn = document.getElementById('endBtn');
             
             let currentPage = 0;
-            let isScrolling = false;
-            let scrollDelay = 800; // 防止快速滚动
+            let isTransitioning = false;
+            
+            // 页面切换函数
+            function goToPage(pageIndex, direction = 'right') {
+                if (pageIndex < 0 || pageIndex >= pages.length || isTransitioning) return;
+                
+                isTransitioning = true;
+                
+                // 添加退出动画
+                pages[currentPage].classList.add(direction === 'right' ? 'exit-left' : 'exit-right');
+                
+                // 更新返回按钮显示
+                backBtn.style.display = pageIndex > 0 ? 'flex' : 'none';
+                
+                setTimeout(() => {
+                    // 隐藏当前页面
+                    pages[currentPage].classList.remove('active', 'exit-left', 'exit-right');
+                    
+                    // 显示新页面
+                    currentPage = pageIndex;
+                    pages[currentPage].classList.add('active');
+                    
+                    // 滚动到内容顶部
+                    const currentScrollable = document.getElementById(`scrollable${currentPage + 1}`);
+                    if (currentScrollable) {
+                        currentScrollable.scrollTop = 0;
+                    }
+                    
+                    isTransitioning = false;
+                }, 300);
+            }
+            
+            // 初始化返回按钮显示
+            backBtn.style.display = 'none';
             
             // 尝试自动播放音乐
             setTimeout(() => {
@@ -873,57 +984,40 @@
                 }
             });
             
-            // 切换页面函数
-            function goToPage(pageIndex) {
-                if (pageIndex < 0 || pageIndex >= pages.length || isScrolling) return;
-                
-                isScrolling = true;
-                
-                // 隐藏当前页面
-                pages[currentPage].classList.remove('active');
-                
-                // 显示新页面
-                currentPage = pageIndex;
-                pages[currentPage].classList.add('active');
-                
-                // 滚动到内容顶部
-                const currentScrollable = document.getElementById(`scrollable${currentPage + 1}`);
-                if (currentScrollable) {
-                    currentScrollable.scrollTop = 0;
+            // 返回按钮事件
+            backBtn.addEventListener('click', function() {
+                if (currentPage > 0) {
+                    goToPage(currentPage - 1, 'left');
                 }
-                
-                // 滚动结束后重置状态
-                setTimeout(() => {
-                    isScrolling = false;
-                }, scrollDelay);
-            }
+            });
             
-            // 场景图片映射
+            // 场景图片映射 - 使用base64占位图解决手机端显示问题
             const sceneImages = {
                 'yaochun': {
-                    filename: 'yaochun.jpg',
+                    // 这是一个base64编码的占位图，确保手机端可以显示
+                    src: 'yaochun.jpg',
                     title: '立春 · 咬春场景图',
-                    description: '咬春场景应展示一家人围坐在一起品尝春饼、春卷等春季美食的场景。画面温馨，色调温暖，展现家庭的团聚和春天的喜悦。'
+                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
                 },
                 'dachun': {
-                    filename: 'dachun.jpg',
+                    src: 'dachun.jpg',
                     title: '立春 · 打春场景图',
-                    description: '打春场景应展示传统打春牛仪式的场景，有官员和百姓一起用彩鞭抽打土牛的画面。背景可以是农田或村庄，展现农耕文化的传统。'
+                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
                 },
                 'chunfan': {
-                    filename: 'chunfan.jpg',
+                    src: 'chunfan.jpg',
                     title: '立春 · 春幡场景图',
-                    description: '春幡场景应展示古代女子头戴春幡或在树枝上悬挂春幡的画面。春幡色彩鲜艳，样式精巧，画面柔和唯美，展现春天的轻盈与美丽。'
+                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
                 },
                 'yajian': {
-                    filename: 'yajian.jpg',
+                    src: 'yajian.jpg',
                     title: '立春 · 芽尖场景图',
-                    description: '芽尖场景应展示植物嫩芽的特写，如柳枝新芽、草地初绿等。画面清新自然，微距摄影，背景虚化，突出嫩芽的生命力和春天的萌发。'
+                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
                 },
                 'panchun': {
-                    filename: 'panchun.jpg',
+                    src: 'panchun.jpg',
                     title: '立春 · 盼春场景图',
-                    description: '盼春场景应展示人们在冬日里期盼春天的画面，可以是望向远方的人物，或是冰雪初融、春意初现的自然景观。画面充满希望和期待。'
+                    placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua7oeiNrjwvdGV4dD48L3N2Zz4='
                 }
             };
             
@@ -934,7 +1028,22 @@
                     const sceneInfo = sceneImages[sceneName];
                     
                     if (sceneInfo) {
-                        sceneImage.src = sceneInfo.filename;
+                        // 先设置占位图，然后加载真实图片
+                        sceneImage.src = sceneInfo.placeholder;
+                        sceneImage.onload = function() {
+                            // 加载真实图片
+                            const realImage = new Image();
+                            realImage.src = sceneInfo.src;
+                            realImage.onload = function() {
+                                sceneImage.src = sceneInfo.src;
+                                sceneImage.classList.remove('error');
+                            };
+                            realImage.onerror = function() {
+                                // 如果真实图片加载失败，保持占位图
+                                sceneImage.classList.add('error');
+                            };
+                        };
+                        
                         modalTitle.textContent = sceneInfo.title;
                         sceneModal.classList.add('active');
                     }
@@ -953,77 +1062,18 @@
                 }
             });
             
-            // 检查内容区域滚动状态
-            function isContentAtTop(element) {
-                return element && element.scrollTop === 0;
-            }
-            
-            function isContentAtBottom(element) {
-                if (!element) return true;
-                return element.scrollHeight - element.scrollTop <= element.clientHeight + 1;
-            }
-            
-            // 滑动区域触摸事件 - 用于翻页
-            swipeAreas.forEach((area, index) => {
-                let touchStartY = 0;
-                let touchEndY = 0;
-                
-                area.addEventListener('touchstart', function(e) {
-                    touchStartY = e.changedTouches[0].screenY;
-                }, {passive: true});
-                
-                area.addEventListener('touchend', function(e) {
-                    if (isScrolling) return;
-                    
-                    touchEndY = e.changedTouches[0].screenY;
-                    const diff = touchStartY - touchEndY;
-                    
-                    // 滑动距离大于40px才触发翻页
-                    if (Math.abs(diff) > 40) {
-                        // 向上滑动，前往下一页
-                        if (diff > 0) {
-                            goToPage(currentPage + 1);
-                        } 
-                        // 向下滑动，前往上一页
-                        else {
-                            goToPage(currentPage - 1);
-                        }
-                    }
-                }, {passive: true});
-            });
-            
-            // 鼠标滚轮事件 - 在滑动区域触发翻页
-            container.addEventListener('wheel', function(e) {
-                if (isScrolling) return;
-                
-                // 检查鼠标是否在滑动区域
-                const mouseY = e.clientY;
-                const containerRect = container.getBoundingClientRect();
-                const containerHeight = containerRect.height;
-                
-                // 如果鼠标在底部120px区域内（滑动区域），则允许翻页
-                if (mouseY > containerHeight - 120) {
-                    if (e.deltaY > 0) {
-                        goToPage(currentPage + 1);
-                    } else if (e.deltaY < 0) {
-                        goToPage(currentPage - 1);
-                    }
+            // 下一页按钮事件
+            nextBtns.forEach((btn, index) => {
+                if (btn) {
+                    btn.addEventListener('click', function() {
+                        goToPage(index + 1, 'right');
+                    });
                 }
             });
             
-            // 添加键盘控制
-            document.addEventListener('keydown', function(e) {
-                if (isScrolling) return;
-                
-                if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-                    goToPage(currentPage + 1);
-                    e.preventDefault();
-                } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-                    goToPage(currentPage - 1);
-                    e.preventDefault();
-                } else if (e.key >= '1' && e.key <= '5') {
-                    goToPage(parseInt(e.key) - 1);
-                }
+            // 重新开始按钮事件
+            endBtn.addEventListener('click', function() {
+                goToPage(0, 'left');
             });
             
             // 页面加载完成后尝试播放音乐（需要用户交互）
@@ -1035,6 +1085,21 @@
                     });
                 }
                 document.removeEventListener('click', initAudio);
+            });
+            
+            // 防止双击缩放
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+            
+            // 禁用上下文菜单
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
             });
         });
     </script>
