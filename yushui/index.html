@@ -18,7 +18,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #e0f2fe;
+            background: #0a1929;
             -webkit-text-size-adjust: 100%;
             touch-action: manipulation;
         }
@@ -39,12 +39,12 @@
             top: -20px;
             width: 1px;
             height: 20px;
-            background: linear-gradient(to bottom, transparent, rgba(56, 178, 172, 0.6));
+            background: linear-gradient(to bottom, transparent, rgba(173, 216, 230, 0.7));
             animation: rain-fall linear infinite;
         }
         
         .rain-drop:nth-child(odd) {
-            background: linear-gradient(to bottom, transparent, rgba(66, 153, 225, 0.4));
+            background: linear-gradient(to bottom, transparent, rgba(135, 206, 235, 0.5));
         }
         
         .rain-splash {
@@ -53,7 +53,7 @@
             width: 15px;
             height: 5px;
             border-radius: 50%;
-            background: rgba(56, 178, 172, 0.3);
+            background: rgba(135, 206, 235, 0.4);
             animation: splash 0.4s ease-out infinite;
         }
         
@@ -66,22 +66,23 @@
             100% { transform: scale(2); opacity: 0; }
         }
         
-        /* 渐变背景 */
+        /* 渐变背景 - 调整为深色背景突出雨点 */
         .background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 30%, #7dd3fc 70%, #38bdf8 100%);
+            background: linear-gradient(135deg, #0a1929 0%, #1a365d 30%, #2c5282 70%, #4299e1 100%);
             z-index: -2;
+            opacity: 0.9;
         }
         
         /* 背景装饰元素 */
         .bg-circle {
             position: fixed;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
             z-index: -1;
         }
         
@@ -90,7 +91,7 @@
             height: 200px;
             top: -80px;
             right: -80px;
-            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
         }
         
         .circle-2 {
@@ -98,13 +99,13 @@
             height: 150px;
             bottom: -60px;
             left: -60px;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
         }
         
         /* 云朵装饰 */
         .cloud {
             position: fixed;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 50px;
             z-index: -1;
         }
@@ -112,7 +113,7 @@
         .cloud:before, .cloud:after {
             content: '';
             position: absolute;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 50%;
         }
         
@@ -161,7 +162,7 @@
         /* 涟漪装饰 */
         .ripple {
             position: fixed;
-            border: 2px solid rgba(56, 178, 172, 0.2);
+            border: 2px solid rgba(135, 206, 235, 0.15);
             border-radius: 50%;
             animation: ripple-expand 3s infinite;
             z-index: -1;
@@ -194,7 +195,7 @@
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background: rgba(44, 82, 130, 0.9);
+            background: rgba(44, 82, 130, 0.8);
             z-index: 1001;
             display: flex;
             align-items: center;
@@ -202,13 +203,13 @@
             color: #fff;
             font-size: 20px;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         }
         
         .music-control:active {
-            background: rgba(44, 82, 130, 0.95);
+            background: rgba(44, 82, 130, 0.9);
             transform: scale(0.95);
         }
         
@@ -220,7 +221,7 @@
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background: rgba(44, 82, 130, 0.9);
+            background: rgba(44, 82, 130, 0.8);
             z-index: 1001;
             display: flex;
             align-items: center;
@@ -228,14 +229,14 @@
             color: #fff;
             font-size: 20px;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
             display: none; /* 默认隐藏，第一页不显示 */
         }
         
         .back-btn:active {
-            background: rgba(44, 82, 130, 0.95);
+            background: rgba(44, 82, 130, 0.9);
             transform: scale(0.95);
         }
         
@@ -297,11 +298,11 @@
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.9);
             display: flex;
             flex-direction: column;
             margin-top: 10px;
@@ -586,14 +587,14 @@
             margin-right: 6px;
         }
         
-        /* 场景图模态框 - 手机端优化 */
+        /* 场景图模态框 - 重新设计为纯图片展示 */
         .scene-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             display: none;
             justify-content: center;
             align-items: center;
@@ -611,58 +612,68 @@
         .modal-content {
             position: relative;
             width: 100%;
-            max-width: 500px;
-            max-height: 80vh;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            animation: modalFadeIn 0.3s;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+        .scene-img-container {
+            position: relative;
+            width: 90%;
+            height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .scene-img {
             width: 100%;
-            height: auto;
-            max-height: 60vh;
+            height: 100%;
             object-fit: contain;
             display: block;
-            background: #f5f5f5;
         }
         
-        .modal-title {
-            padding: 12px 15px;
-            background: #2c5282;
-            color: white;
-            font-size: 1.1rem;
-            text-align: center;
-        }
-        
-        .close-modal {
+        /* 左右导航箭头 */
+        .nav-arrow {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
             background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            width: 32px;
-            height: 32px;
             border-radius: 50%;
-            font-size: 1rem;
-            cursor: pointer;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
             transition: all 0.3s;
+            z-index: 10;
+            opacity: 0;
+            animation: arrow-pulse 2s infinite;
         }
         
-        .close-modal:active {
+        @keyframes arrow-pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        .nav-arrow:hover, .nav-arrow:active {
             background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg);
+        }
+        
+        .prev-arrow {
+            left: 10px;
+        }
+        
+        .next-arrow {
+            right: 10px;
+        }
+        
+        .scene-modal.active .nav-arrow {
+            opacity: 0.5;
         }
         
         /* 响应式调整 - 专注于手机端 */
@@ -721,24 +732,23 @@
                 font-size: 0.9rem;
             }
             
-            .modal-content {
+            .scene-img-container {
                 width: 95%;
-                max-height: 85vh;
+                height: 70%;
             }
             
-            .scene-img {
-                max-height: 55vh;
+            .nav-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
             }
             
-            .modal-title {
-                padding: 10px 12px;
-                font-size: 1rem;
+            .prev-arrow {
+                left: 5px;
             }
             
-            .close-modal {
-                width: 28px;
-                height: 28px;
-                font-size: 0.9rem;
+            .next-arrow {
+                right: 5px;
             }
             
             .footer {
@@ -778,27 +788,10 @@
                 padding: 7px 16px;
                 font-size: 0.9rem;
             }
-        }
-        
-        /* 图片加载失败时的样式 */
-        .scene-img.error {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #f0f0f0;
-            color: #999;
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 20px;
-            min-height: 200px;
-        }
-        
-        .scene-img.error:before {
-            content: "图片加载失败";
-            font-size: 1rem;
-            margin-bottom: 10px;
-            color: #4299e1;
+            
+            .scene-img-container {
+                height: 65%;
+            }
         }
         
         /* 防止文本选中 */
@@ -807,38 +800,6 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-        }
-        
-        /* 图片占位样式 */
-        .scene-img.placeholder {
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
-        }
-        
-        .scene-img.placeholder:before {
-            content: "加载场景图...";
-            font-size: 1rem;
-            color: #4299e1;
-            margin-bottom: 10px;
-        }
-        
-        .scene-img.placeholder:after {
-            content: "";
-            width: 40px;
-            height: 40px;
-            border: 3px solid #38b2ac;
-            border-top: 3px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -877,12 +838,18 @@
         <i class="fas fa-arrow-left"></i>
     </div>
     
-    <!-- 场景图模态框 -->
+    <!-- 场景图模态框 - 重新设计 -->
     <div class="scene-modal" id="sceneModal">
         <div class="modal-content">
-            <div class="modal-title" id="modalTitle">雨水节气</div>
-            <button class="close-modal" id="closeModal"><i class="fas fa-times"></i></button>
-            <img class="scene-img placeholder" id="sceneImage" src="" alt="场景图">
+            <div class="scene-img-container">
+                <img class="scene-img" id="sceneImage" src="" alt="场景图">
+                <div class="nav-arrow prev-arrow" id="prevArrow">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="nav-arrow next-arrow" id="nextArrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -906,8 +873,8 @@
                     </div>
                 </div>
                 
-                <button class="scene-btn" data-scene="yushui_intro">
-                    <i class="fas fa-image"></i>查看雨水场景图
+                <button class="scene-btn" data-scene="yushui_intro" data-scene-type="sanhou">
+                    <i class="fas fa-image"></i>雨水三候
                 </button>
             </div>
             
@@ -927,19 +894,19 @@
             
             <div class="page-content-container">
                 <h1 class="page-title theme-color-1">雨水习俗</h1>
-                <h2 class="page-subtitle theme-color-2">回娘屋与拉保保</h2>
+                <h2 class="page-subtitle theme-color-2">接寿与占稻色</h2>
                 
                 <div class="scrollable-content" id="scrollable2">
                     <div class="page-content">
-                        <p>雨水节气有许多传统习俗，其中最具代表性的当属<span class="highlight">"回娘屋"</span>和<span class="highlight">"拉保保"</span>。</p>
-                        <p>回娘屋是流行于川西一带的习俗。到了雨水节气，出嫁的女儿会带上礼物回娘家拜望父母。生育了孩子的妇女，须带上罐罐肉、椅子等礼物，感谢父母的养育之恩。久不怀孕的妇女，则由母亲为其缝制一条红裤子，穿到贴身处，据说这样可使其尽快怀孕生子。此习俗体现了中华民族孝亲敬老的传统美德。</p>
-                        <p>拉保保是四川一些地区的民间习俗。"保保"就是干爹，雨水节拉干爹，取"雨露滋润易生长"之意。这天，不管天晴下雨，父母会手牵幼子，在人群中寻找合适的人做孩子的干爹。如果希望孩子长大有知识，就拉一个文人做干爹；如果孩子身体瘦弱，就拉一个身材高大强壮的人作干爹。</p>
-                        <p>此外，雨水节气还有"撞拜寄"的习俗。早晨天刚亮，大路边就有一些年轻妇女，手牵幼子，等待第一个从面前经过的行人。一旦有人经过，不管男女老少，都会拦住对方，让孩子磕头拜寄，给对方做干儿子或干女儿，称为"撞拜寄"，希望孩子能够健康长大。</p>
+                        <p>雨水节气有许多传统习俗，其中南方地区最具代表性的当属<span class="highlight">"接寿"</span>和<span class="highlight">"占稻色"</span>。</p>
+                        <p>接寿是江南地区的一种习俗。雨水节气这天，女婿要去给岳父岳母送节礼。礼品通常是两把藤椅，上面缠着一丈二尺长的红带，称为"接寿"，意思是祝岳父岳母长命百岁。如果是新婚女婿送节，岳父岳母还要回赠雨伞，寓意女婿出门奔波能遮风挡雨，祝福女婿人生旅途顺利平安。</p>
+                        <p>占稻色是华南地区的传统习俗。人们通过爆炒糯谷米花，来占卜当年稻谷的收成。爆出的糯米花越多，预示着当年的收成越好。这一习俗源于稻作文化，体现了农民对丰收的期盼。古语有云："雨水节，烧干镬，以糯稻爆之，谓之孛罗花，占稻色。"</p>
+                        <p>此外，在湖南一些地区，雨水节气还有"送雨水"的习俗。这天，人们会将准备好的礼物送给亲朋好友，特别是送给那些需要帮助的人，寓意将春雨带来的福气和生机传递给他人，体现了邻里互助、共享春光的传统美德。</p>
                     </div>
                 </div>
                 
-                <button class="scene-btn" data-scene="yushui_custom">
-                    <i class="fas fa-image"></i>查看雨水习俗场景图
+                <button class="scene-btn" data-scene="yushui_custom" data-scene-type="custom">
+                    <i class="fas fa-image"></i>雨水习俗
                 </button>
             </div>
             
@@ -976,14 +943,13 @@
                     </div>
                 </div>
                 
-                <button class="scene-btn" data-scene="yushui_health">
-                    <i class="fas fa-image"></i>查看雨水养生场景图
-                </button>
+                <!-- 第三页没有查看图片按钮 -->
+                
             </div>
             
             <div class="bottom-nav">
                 <button class="end-btn" id="endBtn">
-                    重新开始 <i class="fas fa-redo"></i>
+                    重新回顾 <i class="fas fa-redo"></i>
                 </button>
             </div>
             
@@ -1002,7 +968,7 @@
             // 动态生成雨点
             function createRain() {
                 const rainBg = document.getElementById('rainBackground');
-                const rainCount = Math.floor(window.innerWidth / 10); // 根据屏幕宽度调整雨滴数量
+                const rainCount = Math.floor(window.innerWidth / 8); // 增加雨滴密度
                 
                 // 清空现有雨点（如果有的话）
                 rainBg.innerHTML = '';
@@ -1012,7 +978,7 @@
                     const drop = document.createElement('div');
                     drop.className = 'rain-drop';
                     drop.style.left = `${Math.random() * 100}%`;
-                    drop.style.animationDuration = `${0.5 + Math.random() * 0.7}s`;
+                    drop.style.animationDuration = `${0.3 + Math.random() * 0.5}s`; // 加快雨滴速度
                     drop.style.animationDelay = `${Math.random() * 2}s`;
                     rainBg.appendChild(drop);
                     
@@ -1040,9 +1006,9 @@
             const backBtn = document.getElementById('backBtn');
             const bgMusic = document.getElementById('bgMusic');
             const sceneModal = document.getElementById('sceneModal');
-            const closeModal = document.getElementById('closeModal');
             const sceneImage = document.getElementById('sceneImage');
-            const modalTitle = document.getElementById('modalTitle');
+            const prevArrow = document.getElementById('prevArrow');
+            const nextArrow = document.getElementById('nextArrow');
             const sceneBtns = document.querySelectorAll('.scene-btn');
             const nextBtns = [
                 document.getElementById('nextBtn1'),
@@ -1052,6 +1018,23 @@
             
             let currentPage = 0;
             let isTransitioning = false;
+            
+            // 图片数据 - 第一页3张，第二页2张
+            const sceneImages = {
+                'sanhou': [  // 第一页：雨水三候
+                    { src: 'yushui_intro.jpg', desc: '雨水三候：獭祭鱼' },
+                    { src: 'yushui_intro2.jpg', desc: '雨水三候：鸿雁来' },
+                    { src: 'yushui_intro3.jpg', desc: '雨水三候：草木萌动' }
+                ],
+                'custom': [  // 第二页：雨水习俗
+                    { src: 'yushui_custom.jpg', desc: '雨水习俗：接寿' },
+                    { src: 'yushui_custom2.jpg', desc: '雨水习俗：占稻色' }
+                ]
+            };
+            
+            // 当前查看的图片组和索引
+            let currentSceneType = '';
+            let currentImageIndex = 0;
             
             // 页面切换函数
             function goToPage(pageIndex, direction = 'right') {
@@ -1091,7 +1074,6 @@
                 try {
                     bgMusic.volume = 0.6;
                     bgMusic.play().then(() => {
-                        console.log('音乐开始播放');
                         musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
                         musicBtn.style.background = 'rgba(44, 82, 130, 0.95)';
                     }).catch(e => {
@@ -1123,68 +1105,64 @@
                 }
             });
             
-            // 场景图片映射 - 您需要准备的图片
-            const sceneImages = {
-                'yushui_intro': {
-                    src: 'yushui_intro.jpg',  // 雨水概述图片
-                    title: '雨水 · 润物无声',
-                    desc: '展示雨水节气自然景象，春雨润物细无声的场景'
-                },
-                'yushui_custom': {
-                    src: 'yushui_custom.jpg',  // 雨水习俗图片
-                    title: '雨水习俗 · 回娘屋',
-                    desc: '展示雨水节气回娘屋或拉保保习俗的场景'
-                },
-                'yushui_health': {
-                    src: 'yushui_health.jpg',  // 雨水养生图片
-                    title: '雨水养生 · 调理脾胃',
-                    desc: '展示雨水节气养生饮食和保健的场景'
-                }
-            };
+            // 显示图片函数
+            function showImage(sceneType, index) {
+                const images = sceneImages[sceneType];
+                if (!images || index < 0 || index >= images.length) return;
+                
+                sceneImage.src = images[index].src;
+                sceneImage.alt = images[index].desc;
+                currentSceneType = sceneType;
+                currentImageIndex = index;
+                
+                // 显示/隐藏导航箭头
+                prevArrow.style.display = index > 0 ? 'flex' : 'none';
+                nextArrow.style.display = index < images.length - 1 ? 'flex' : 'none';
+            }
             
             // 场景图按钮点击事件
             sceneBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const sceneName = this.getAttribute('data-scene');
-                    const sceneInfo = sceneImages[sceneName];
+                    const sceneType = this.getAttribute('data-scene-type');
                     
-                    if (sceneInfo) {
-                        // 显示加载状态
-                        sceneImage.src = '';
-                        sceneImage.className = 'scene-img placeholder';
-                        
-                        // 设置模态框标题
-                        modalTitle.textContent = sceneInfo.title;
+                    if (sceneImages[sceneType]) {
+                        // 显示第一张图片
+                        currentImageIndex = 0;
+                        showImage(sceneType, 0);
                         
                         // 显示模态框
                         sceneModal.classList.add('active');
-                        
-                        // 加载图片
-                        const img = new Image();
-                        img.onload = function() {
-                            sceneImage.src = sceneInfo.src;
-                            sceneImage.className = 'scene-img';
-                            sceneImage.alt = sceneInfo.desc;
-                        };
-                        img.onerror = function() {
-                            sceneImage.className = 'scene-img error';
-                            sceneImage.alt = '图片加载失败，请检查图片路径';
-                        };
-                        img.src = sceneInfo.src;
                     }
                 });
             });
             
-            // 关闭模态框
-            closeModal.addEventListener('click', function() {
-                sceneModal.classList.remove('active');
+            // 上一张图片
+            prevArrow.addEventListener('click', function(e) {
+                e.stopPropagation(); // 防止事件冒泡到模态框
+                if (currentImageIndex > 0) {
+                    currentImageIndex--;
+                    showImage(currentSceneType, currentImageIndex);
+                }
+            });
+            
+            // 下一张图片
+            nextArrow.addEventListener('click', function(e) {
+                e.stopPropagation(); // 防止事件冒泡到模态框
+                const images = sceneImages[currentSceneType];
+                if (currentImageIndex < images.length - 1) {
+                    currentImageIndex++;
+                    showImage(currentSceneType, currentImageIndex);
+                }
             });
             
             // 点击模态框背景关闭
-            sceneModal.addEventListener('click', function(e) {
-                if (e.target === sceneModal) {
-                    sceneModal.classList.remove('active');
-                }
+            sceneModal.addEventListener('click', function() {
+                sceneModal.classList.remove('active');
+            });
+            
+            // 点击图片本身不关闭模态框
+            sceneImage.addEventListener('click', function(e) {
+                e.stopPropagation();
             });
             
             // 下一页按钮事件
@@ -1196,7 +1174,7 @@
                 }
             });
             
-            // 重新开始按钮事件
+            // 重新回顾按钮事件
             endBtn.addEventListener('click', function() {
                 goToPage(0, 'left');
             });
@@ -1227,16 +1205,76 @@
                 e.preventDefault();
             });
             
-            // 图片预加载（可选）
+            // 图片预加载
             function preloadImages() {
-                for (const key in sceneImages) {
-                    const img = new Image();
-                    img.src = sceneImages[key].src;
+                for (const sceneType in sceneImages) {
+                    sceneImages[sceneType].forEach(img => {
+                        const image = new Image();
+                        image.src = img.src;
+                    });
                 }
             }
             
             // 页面加载完成后预加载图片
             window.addEventListener('load', preloadImages);
+            
+            // 添加键盘左右键控制图片浏览
+            document.addEventListener('keydown', function(e) {
+                if (sceneModal.classList.contains('active')) {
+                    if (e.key === 'ArrowLeft' || e.key === 'Left') {
+                        // 上一张
+                        if (currentImageIndex > 0) {
+                            currentImageIndex--;
+                            showImage(currentSceneType, currentImageIndex);
+                        }
+                    } else if (e.key === 'ArrowRight' || e.key === 'Right') {
+                        // 下一张
+                        const images = sceneImages[currentSceneType];
+                        if (currentImageIndex < images.length - 1) {
+                            currentImageIndex++;
+                            showImage(currentSceneType, currentImageIndex);
+                        }
+                    } else if (e.key === 'Escape' || e.key === 'Esc') {
+                        // 关闭模态框
+                        sceneModal.classList.remove('active');
+                    }
+                }
+            });
+            
+            // 添加触摸滑动支持
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            sceneModal.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            sceneModal.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50; // 滑动阈值
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        // 向左滑动，下一张
+                        const images = sceneImages[currentSceneType];
+                        if (currentImageIndex < images.length - 1) {
+                            currentImageIndex++;
+                            showImage(currentSceneType, currentImageIndex);
+                        }
+                    } else {
+                        // 向右滑动，上一张
+                        if (currentImageIndex > 0) {
+                            currentImageIndex--;
+                            showImage(currentSceneType, currentImageIndex);
+                        }
+                    }
+                }
+            }
         });
     </script>
 </body>
