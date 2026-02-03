@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>南北小年文化展</title>
+    <title>南北小年饮食习俗</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -82,7 +82,7 @@
         .title {
             font-size: 2.8rem;
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             color: #d2691e;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             font-weight: bold;
@@ -92,24 +92,25 @@
         .subtitle {
             font-size: 1.2rem;
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 3.5rem;
             color: #8b4513;
             font-weight: 300;
         }
 
+        /* 修改选择按钮为横版左右分布 */
         .selection-buttons {
             display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+            gap: 2rem;
             width: 80%;
-            max-width: 300px;
+            max-width: 500px;
+            justify-content: center;
         }
 
         .selection-btn {
-            padding: 1.2rem 2rem;
-            font-size: 1.3rem;
+            padding: 1.5rem 2.5rem;
+            font-size: 1.5rem;
             border: none;
-            border-radius: 50px;
+            border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
@@ -117,6 +118,9 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
+            flex: 1;
+            max-width: 200px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
         .selection-btn::before {
@@ -126,7 +130,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
             z-index: -1;
             transition: transform 0.5s ease;
             transform: scaleX(0);
@@ -138,16 +142,15 @@
             transform-origin: left;
         }
 
+        /* 修改按钮为黄色渐变 */
         .north-btn {
-            background: linear-gradient(to right, #8b4513, #d2691e);
-            color: white;
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+            background: linear-gradient(to right, #ffc107, #ff9800);
+            color: #5c3d2e;
         }
 
         .south-btn {
-            background: linear-gradient(to right, #2e8b57, #3cb371);
-            color: white;
-            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+            background: linear-gradient(to right, #ffeb3b, #ffc107);
+            color: #5c3d2e;
         }
 
         /* 物品展示页面 */
@@ -162,17 +165,17 @@
         }
 
         .back-btn {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.9);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             color: #5c3d2e;
             cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
@@ -182,70 +185,74 @@
         }
 
         .region-title {
-            margin-left: 1rem;
-            font-size: 1.5rem;
+            margin-left: 1.2rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: #5c3d2e;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
         }
 
         .items-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            align-items: center;
-            gap: 2rem;
+            align-items: flex-start;
+            gap: 3rem;
             width: 100%;
             padding: 2rem;
             max-width: 900px;
-            margin-top: 3rem;
+            margin-top: 5rem;
+            position: relative;
         }
 
+        /* 物品位置错落有致 */
         .item-card {
-            width: 150px;
-            height: 150px;
+            width: 160px;
+            height: 160px;
             position: relative;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease;
+        }
+
+        /* 为每个物品设置不同的垂直偏移 */
+        .item-card:nth-child(1) {
+            margin-top: -20px;
+        }
+        
+        .item-card:nth-child(2) {
+            margin-top: 30px;
+        }
+        
+        .item-card:nth-child(3) {
+            margin-top: -10px;
         }
 
         .item-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px) scale(1.05);
         }
 
         .item-img {
             width: 100%;
             height: 100%;
-            border-radius: 20px;
+            border-radius: 25px;
             object-fit: cover;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
             position: relative;
             z-index: 2;
         }
 
-        /* 呼吸边缘光效果 */
+        /* 修改呼吸边缘光为白色 */
         @keyframes breath-glow {
             0%, 100% {
-                box-shadow: 0 0 10px 5px rgba(210, 105, 30, 0.5);
+                box-shadow: 0 0 15px 8px rgba(255, 255, 255, 0.7);
             }
             50% {
-                box-shadow: 0 0 20px 10px rgba(210, 105, 30, 0.8);
+                box-shadow: 0 0 25px 15px rgba(255, 255, 255, 0.9);
             }
         }
 
         .breath-glow {
-            animation: breath-glow 2.5s infinite ease-in-out;
-        }
-
-        .item-name {
-            position: absolute;
-            bottom: -25px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #5c3d2e;
-            z-index: 1;
+            animation: breath-glow 3s infinite ease-in-out;
         }
 
         /* 物品详情弹窗 */
@@ -255,7 +262,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.85);
             display: none;
             align-items: center;
             justify-content: center;
@@ -270,15 +277,24 @@
         }
 
         .modal-content {
-            background-color: white;
+            background-color: #fff9f0;
             width: 85%;
-            max-width: 400px;
-            border-radius: 20px;
-            padding: 1.5rem;
+            max-width: 450px;
+            border-radius: 25px;
+            padding: 2rem;
             position: relative;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             transform: translateY(20px);
             transition: transform 0.3s ease;
+            /* 为文本框添加随机图案背景 */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 200, 124, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 30%, rgba(255, 200, 124, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 50% 80%, rgba(255, 200, 124, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 20% 70%, rgba(255, 200, 124, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 80% 10%, rgba(255, 200, 124, 0.15) 0%, transparent 20%);
+            background-size: 100% 100%;
+            border: 2px solid #ffc107;
         }
 
         .modal-active .modal-content {
@@ -287,127 +303,74 @@
 
         .close-modal {
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1.8rem;
-            color: #5c3d2e;
+            top: 15px;
+            right: 20px;
+            font-size: 2.2rem;
+            color: #d2691e;
             cursor: pointer;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.8);
         }
 
         .close-modal:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .modal-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin-bottom: 1rem;
+            background-color: white;
+            transform: rotate(90deg);
         }
 
         .modal-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
             color: #8b4513;
+            text-align: center;
+            border-bottom: 2px dashed #ffc107;
+            padding-bottom: 0.8rem;
         }
 
         .modal-desc {
-            font-size: 1rem;
-            line-height: 1.5;
-            color: #5c3d2e;
-        }
-
-        /* 完成页面 */
-        .completion-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .completion-active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .completion-content {
-            background-color: white;
-            width: 85%;
-            max-width: 400px;
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-            transform: translateY(20px);
-            transition: transform 0.5s ease;
-        }
-
-        .completion-active .completion-content {
-            transform: translateY(0);
-        }
-
-        .completion-title {
-            font-size: 1.8rem;
-            color: #d2691e;
-            margin-bottom: 1rem;
-        }
-
-        .completion-text {
             font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
+            line-height: 1.7;
             color: #5c3d2e;
+            text-align: justify;
+            padding: 0 0.5rem;
         }
 
-        .completion-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .completion-btn {
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
+        /* 底部返回主页按钮 */
+        .bottom-home-btn {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.8rem 2rem;
+            background: linear-gradient(to right, #ffc107, #ff9800);
+            color: #5c3d2e;
             border: none;
+            border-radius: 50px;
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
+            z-index: 20;
         }
 
-        .other-region {
-            background: linear-gradient(to right, #2e8b57, #3cb371);
-            color: white;
-        }
-
-        .back-start {
-            background: linear-gradient(to right, #8b4513, #d2691e);
-            color: white;
+        .bottom-home-btn:hover {
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         /* 音乐播放器 */
         .music-player {
             position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            width: 50px;
-            height: 50px;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background-color: rgba(255, 255, 255, 0.9);
             display: flex;
@@ -420,12 +383,12 @@
         }
 
         .music-player:hover {
-            transform: scale(1.05);
+            transform: scale(1.1);
             background-color: white;
         }
 
         .music-icon {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: #d2691e;
         }
 
@@ -445,34 +408,69 @@
             
             .subtitle {
                 font-size: 1rem;
+                margin-bottom: 3rem;
+            }
+            
+            .selection-buttons {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .selection-btn {
+                padding: 1.2rem 2rem;
+                font-size: 1.3rem;
+                max-width: 250px;
             }
             
             .item-card {
-                width: 130px;
-                height: 130px;
+                width: 140px;
+                height: 140px;
             }
             
             .modal-content {
                 width: 90%;
+                padding: 1.8rem;
+            }
+            
+            .modal-title {
+                font-size: 1.6rem;
+            }
+            
+            .modal-desc {
+                font-size: 1rem;
+            }
+            
+            .region-title {
+                font-size: 1.5rem;
             }
         }
 
         @media (max-width: 480px) {
             .title {
-                font-size: 1.8rem;
+                font-size: 1.9rem;
+            }
+            
+            .subtitle {
+                font-size: 0.95rem;
+                margin-bottom: 2.5rem;
             }
             
             .items-container {
-                gap: 1.5rem;
+                gap: 2rem;
             }
             
             .item-card {
-                width: 110px;
-                height: 110px;
+                width: 120px;
+                height: 120px;
             }
             
-            .item-name {
-                font-size: 1rem;
+            .selection-btn {
+                padding: 1rem 1.8rem;
+                font-size: 1.2rem;
+            }
+            
+            .region-title {
+                font-size: 1.3rem;
             }
         }
     </style>
@@ -481,8 +479,8 @@
     <!-- 开始页面 -->
     <div id="start-page" class="page active">
         <div class="bg-decoration"></div>
-        <h1 class="title">南北小年文化</h1>
-        <p class="subtitle">选择地区，探索不同的小年习俗</p>
+        <h1 class="title">南北小年饮食习俗</h1>
+        <p class="subtitle">选择地区，探索不同的小年传统美食</p>
         <div class="selection-buttons">
             <button class="selection-btn north-btn" id="north-btn">北方小年</button>
             <button class="selection-btn south-btn" id="south-btn">南方小年</button>
@@ -503,21 +501,21 @@
             <!-- 北方小年物品1 -->
             <div class="item-card" id="north-item1">
                 <img src="" alt="饺子" class="item-img breath-glow" id="north-img1">
-                <div class="item-name">饺子</div>
             </div>
             
             <!-- 北方小年物品2 -->
             <div class="item-card" id="north-item2">
                 <img src="" alt="灶糖" class="item-img breath-glow" id="north-img2">
-                <div class="item-name">灶糖</div>
             </div>
             
             <!-- 北方小年物品3 -->
             <div class="item-card" id="north-item3">
                 <img src="" alt="花馍" class="item-img breath-glow" id="north-img3">
-                <div class="item-name">花馍</div>
             </div>
         </div>
+        
+        <!-- 底部返回主页按钮 -->
+        <button class="bottom-home-btn" id="north-home-btn">返回首页</button>
     </div>
 
     <!-- 南方小年页面 -->
@@ -534,42 +532,29 @@
             <!-- 南方小年物品1 -->
             <div class="item-card" id="south-item1">
                 <img src="" alt="甘蔗" class="item-img breath-glow" id="south-img1">
-                <div class="item-name">甘蔗</div>
             </div>
             
             <!-- 南方小年物品2 -->
             <div class="item-card" id="south-item2">
                 <img src="" alt="年糕" class="item-img breath-glow" id="south-img2">
-                <div class="item-name">年糕</div>
             </div>
             
             <!-- 南方小年物品3 -->
             <div class="item-card" id="south-item3">
                 <img src="" alt="汤圆" class="item-img breath-glow" id="south-img3">
-                <div class="item-name">汤圆</div>
             </div>
         </div>
+        
+        <!-- 底部返回主页按钮 -->
+        <button class="bottom-home-btn" id="south-home-btn">返回首页</button>
     </div>
 
     <!-- 物品详情弹窗 -->
     <div id="item-modal" class="item-modal">
         <div class="modal-content">
             <div class="close-modal" id="close-modal">&times;</div>
-            <img src="" alt="" class="modal-img" id="modal-img">
             <h3 class="modal-title" id="modal-title">物品名称</h3>
             <p class="modal-desc" id="modal-desc">物品介绍内容...</p>
-        </div>
-    </div>
-
-    <!-- 完成页面弹窗 -->
-    <div id="completion-modal" class="completion-modal">
-        <div class="completion-content">
-            <h3 class="completion-title">探索完成！</h3>
-            <p class="completion-text" id="completion-text">您已完成北方小年的探索，想要继续了解另一边的小年习俗吗？</p>
-            <div class="completion-buttons">
-                <button class="completion-btn other-region" id="other-region-btn">查看另一边小年</button>
-                <button class="completion-btn back-start" id="back-to-start-btn">返回首页</button>
-            </div>
         </div>
     </div>
 
@@ -597,25 +582,16 @@
             const southBtn = document.getElementById('south-btn');
             const backFromNorth = document.getElementById('back-from-north');
             const backFromSouth = document.getElementById('back-from-south');
+            const northHomeBtn = document.getElementById('north-home-btn');
+            const southHomeBtn = document.getElementById('south-home-btn');
             
             // 获取弹窗元素
             const itemModal = document.getElementById('item-modal');
-            const completionModal = document.getElementById('completion-modal');
             const closeModal = document.getElementById('close-modal');
-            const otherRegionBtn = document.getElementById('other-region-btn');
-            const backToStartBtn = document.getElementById('back-to-start-btn');
             
             // 获取音乐元素
             const bgMusic = document.getElementById('bg-music');
             const musicPlayer = document.getElementById('music-player');
-            
-            // 当前查看的地区
-            let currentRegion = null;
-            // 已查看的物品计数
-            let viewedItems = {
-                north: 0,
-                south: 0
-            };
             
             // 物品数据
             const itemsData = {
@@ -623,19 +599,19 @@
                     {
                         id: 'north-item1',
                         name: '饺子',
-                        desc: '北方小年有吃饺子的习俗，取意"送行饺子迎风面"。饺子形似元宝，寓意招财进宝，也有团圆美满之意。',
+                        desc: '北方小年必不可少的传统美食，饺子形似元宝，寓意招财进宝。小年吃饺子取意"送行饺子迎风面"，为灶王爷送行。饺子馅料丰富，有白菜猪肉、韭菜鸡蛋等多种选择，全家围坐包饺子更显团圆气氛。饺子的制作讲究皮薄馅大，煮好后热气腾腾，蘸上醋和蒜泥，鲜美无比。',
                         imgId: 'north-img1'
                     },
                     {
                         id: 'north-item2',
                         name: '灶糖',
-                        desc: '灶糖是一种麦芽糖，粘性很大。北方小年祭灶时会供上灶糖，寓意粘住灶王爷的嘴，让他"上天言好事，回宫降吉祥"。',
+                        desc: '灶糖是一种麦芽糖制品，粘性极大，是北方小年祭灶必备供品。传统灶糖呈扁圆或长条状，外裹芝麻，香甜酥脆。民间认为灶糖能粘住灶王爷的嘴，让他"上天言好事，回宫降吉祥"。灶糖不仅用于祭祀，也是孩子们喜爱的甜食，寓意生活甜甜蜜蜜。制作灶糖需经过熬糖、拉糖、成型等多道工序，工艺讲究。',
                         imgId: 'north-img2'
                     },
                     {
                         id: 'north-item3',
                         name: '花馍',
-                        desc: '花馍又称面花，是北方民间面塑品。小年蒸花馍寓意来年日子"蒸蒸日上"，不同造型的花馍有不同的吉祥寓意。',
+                        desc: '花馍又称面花，是北方传统面塑艺术，小年蒸花馍寓意来年日子"蒸蒸日上"。花馍造型多样，有鱼形寓意年年有余，桃形象征长寿，石榴形代表多子多福。制作花馍需选用优质面粉，经过和面、发酵、塑形、蒸制等工序。蒸好的花馍不仅是美食，更是精美的艺术品，常作为馈赠亲友的节日礼品。',
                         imgId: 'north-img3'
                     }
                 ],
@@ -643,19 +619,19 @@
                     {
                         id: 'south-item1',
                         name: '甘蔗',
-                        desc: '南方小年有吃甘蔗的习俗，甘蔗寓意"节节高"和"甜甜蜜蜜"。甘蔗带有尾巴，象征着做事善始善终。',
+                        desc: '南方小年有吃甘蔗的习俗，寓意"节节高升"和"甜甜蜜蜜"。甘蔗带有尾巴，象征做事有始有终、善始善终。小年时，家家户户会将完整的甘蔗摆放在灶台旁，祭祀灶王爷后全家分食。甘蔗需选择紫皮粗壮的，汁多味甜。吃甘蔗时要注意从梢吃到根，寓意一年更比一年好，生活越来越甜蜜。',
                         imgId: 'south-img1'
                     },
                     {
                         id: 'south-item2',
                         name: '年糕',
-                        desc: '南方小年吃年糕，寓意"年年高"。年糕由糯米制成，软糯香甜，是南方许多地区过小年必备的传统食品。',
+                        desc: '年糕是南方小年必备的传统食品，谐音"年年高"，寓意生活一年比一年好。南方年糕多用糯米制成，有红糖年糕、白糖年糕、桂花年糕等多种口味。小年吃年糕象征着对来年事业进步、学业有成的美好祝愿。年糕的吃法多样，可蒸、可煎、可炒，软糯香甜，老少皆宜，是春节前夕的重要节令食品。',
                         imgId: 'south-img2'
                     },
                     {
                         id: 'south-item3',
                         name: '汤圆',
-                        desc: '南方部分地区小年有吃汤圆的习俗，取意"团团圆圆"。汤圆馅料多样，香甜软糯，象征家庭和睦、生活甜蜜。',
+                        desc: '南方部分地区小年有吃汤圆的习俗，取意"团团圆圆"。汤圆馅料丰富多样，有黑芝麻、花生、豆沙等多种甜馅，也有鲜肉等咸馅。小年吃汤圆象征家庭和睦、生活美满。汤圆外皮软糯，内馅香甜，煮好后浮在汤中宛如明月。全家人围坐一起吃汤圆，共话家常，温馨祥和，体现了浓浓的节日氛围和家庭温情。',
                         imgId: 'south-img3'
                     }
                 ]
@@ -665,32 +641,36 @@
             northBtn.addEventListener('click', function() {
                 startPage.classList.remove('active');
                 northPage.classList.add('active');
-                currentRegion = 'north';
-                // 重置已查看物品计数
-                viewedItems[currentRegion] = 0;
             });
             
             // 切换到南方页面
             southBtn.addEventListener('click', function() {
                 startPage.classList.remove('active');
                 southPage.classList.add('active');
-                currentRegion = 'south';
-                // 重置已查看物品计数
-                viewedItems[currentRegion] = 0;
             });
             
             // 从北方页面返回
             backFromNorth.addEventListener('click', function() {
                 northPage.classList.remove('active');
                 startPage.classList.add('active');
-                currentRegion = null;
             });
             
             // 从南方页面返回
             backFromSouth.addEventListener('click', function() {
                 southPage.classList.remove('active');
                 startPage.classList.add('active');
-                currentRegion = null;
+            });
+            
+            // 从北方页面底部按钮返回首页
+            northHomeBtn.addEventListener('click', function() {
+                northPage.classList.remove('active');
+                startPage.classList.add('active');
+            });
+            
+            // 从南方页面底部按钮返回首页
+            southHomeBtn.addEventListener('click', function() {
+                southPage.classList.remove('active');
+                startPage.classList.add('active');
             });
             
             // 为所有物品添加点击事件
@@ -700,14 +680,6 @@
                     const itemElement = document.getElementById(item.id);
                     itemElement.addEventListener('click', function() {
                         showItemModal(item);
-                        // 增加已查看物品计数
-                        viewedItems.north++;
-                        // 检查是否全部查看完毕
-                        if (viewedItems.north === itemsData.north.length) {
-                            setTimeout(() => {
-                                showCompletionModal('north');
-                            }, 500);
-                        }
                     });
                 });
                 
@@ -716,14 +688,6 @@
                     const itemElement = document.getElementById(item.id);
                     itemElement.addEventListener('click', function() {
                         showItemModal(item);
-                        // 增加已查看物品计数
-                        viewedItems.south++;
-                        // 检查是否全部查看完毕
-                        if (viewedItems.south === itemsData.south.length) {
-                            setTimeout(() => {
-                                showCompletionModal('south');
-                            }, 500);
-                        }
                     });
                 });
             }
@@ -732,7 +696,6 @@
             function showItemModal(item) {
                 document.getElementById('modal-title').textContent = item.name;
                 document.getElementById('modal-desc').textContent = item.desc;
-                document.getElementById('modal-img').src = document.getElementById(item.imgId).src;
                 
                 itemModal.classList.add('modal-active');
             }
@@ -749,53 +712,10 @@
                 }
             });
             
-            // 显示完成弹窗
-            function showCompletionModal(region) {
-                const completionText = document.getElementById('completion-text');
-                const otherRegionText = region === 'north' ? '南方小年' : '北方小年';
-                const currentRegionText = region === 'north' ? '北方' : '南方';
-                
-                completionText.textContent = `您已完成${currentRegionText}小年的探索，想要继续了解另一边的小年习俗吗？`;
-                document.getElementById('other-region-btn').textContent = `查看${otherRegionText}`;
-                
-                completionModal.classList.add('completion-active');
-            }
-            
-            // 完成弹窗按钮事件
-            otherRegionBtn.addEventListener('click', function() {
-                completionModal.classList.remove('completion-active');
-                itemModal.classList.remove('modal-active');
-                
-                // 切换到另一个地区
-                if (currentRegion === 'north') {
-                    northPage.classList.remove('active');
-                    southPage.classList.add('active');
-                    currentRegion = 'south';
-                } else {
-                    southPage.classList.remove('active');
-                    northPage.classList.add('active');
-                    currentRegion = 'north';
-                }
-                
-                // 重置已查看物品计数
-                viewedItems[currentRegion] = 0;
-            });
-            
-            backToStartBtn.addEventListener('click', function() {
-                completionModal.classList.remove('completion-active');
-                itemModal.classList.remove('modal-active');
-                
-                // 返回开始页面
-                northPage.classList.remove('active');
-                southPage.classList.remove('active');
-                startPage.classList.add('active');
-                currentRegion = null;
-            });
-            
             // 音乐控制
             // 自动播放音乐
             function playBackgroundMusic() {
-                bgMusic.volume = 0.5;
+                bgMusic.volume = 0.4;
                 bgMusic.play().catch(error => {
                     console.log("自动播放被阻止，需要用户交互");
                 });
@@ -829,16 +749,23 @@
             // 初始化物品点击事件
             setupItemClickEvents();
             
-            // 为页面添加加载动画
+            // 为物品添加加载动画
             const items = document.querySelectorAll('.item-card');
             items.forEach((item, index) => {
                 item.style.opacity = '0';
-                item.style.transform = 'translateY(20px)';
+                item.style.transform = 'translateY(30px)';
                 
                 setTimeout(() => {
-                    item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                     item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
+                    // 为不同位置的物品设置不同的最终位置
+                    if (index % 3 === 0) {
+                        item.style.transform = 'translateY(-20px)';
+                    } else if (index % 3 === 1) {
+                        item.style.transform = 'translateY(30px)';
+                    } else {
+                        item.style.transform = 'translateY(-10px)';
+                    }
                 }, 300 + index * 200);
             });
         });
