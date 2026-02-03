@@ -15,7 +15,6 @@
 
         body {
             font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
-            background-color: #f8f1e6;
             color: #5c3d2e;
             overflow: hidden;
             height: 100vh;
@@ -40,156 +39,152 @@
             opacity: 1;
         }
 
-        /* 背景装饰 */
-        .bg-decoration {
+        /* 背景图片容器 */
+        .bg-image {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: linear-gradient(135deg, rgba(255,245,230,0.8) 0%, rgba(248,241,230,1) 100%);
-            overflow: hidden;
+            background-size: cover;
+            background-position: center;
         }
 
-        .bg-decoration::before {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: rgba(232, 177, 136, 0.1);
-            border-radius: 50%;
-            top: -150px;
-            right: -100px;
+        /* 首页背景 */
+        #home-bg {
+            background-image: url(''); /* 用户自定义首页背景 */
         }
 
-        .bg-decoration::after {
-            content: "";
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: rgba(188, 108, 37, 0.08);
-            border-radius: 50%;
-            bottom: -100px;
-            left: -50px;
+        /* 北方页面背景 */
+        #north-bg {
+            background-image: url(''); /* 用户自定义北方背景 */
+        }
+
+        /* 南方页面背景 */
+        #south-bg {
+            background-image: url(''); /* 用户自定义南方背景 */
         }
 
         /* 开始页面 */
         #start-page {
-            background: linear-gradient(rgba(248, 241, 230, 0.9), rgba(248, 241, 230, 0.95)), url('') center/cover no-repeat;
+            position: relative;
         }
 
         .title {
             font-size: 2.8rem;
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
             color: #d2691e;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             font-weight: bold;
             letter-spacing: 3px;
+            position: relative;
+            top: -60px; /* 标题上移 */
         }
 
         .subtitle {
             font-size: 1.2rem;
             text-align: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 2rem;
             color: #8b4513;
             font-weight: 300;
+            position: relative;
+            top: -60px; /* 跟随标题上移 */
         }
 
-        /* 修改选择按钮为横版左右分布 */
+        /* 修改选择按钮为钱币形状 */
         .selection-buttons {
             display: flex;
-            gap: 2rem;
-            width: 80%;
+            gap: 2.5rem;
+            width: 90%;
             max-width: 500px;
             justify-content: center;
+            align-items: center;
+            position: relative;
+            top: -40px; /* 按钮上移 */
         }
 
         .selection-btn {
-            padding: 1.5rem 2.5rem;
-            font-size: 1.5rem;
-            border: none;
-            border-radius: 20px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
             letter-spacing: 2px;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: none;
             overflow: hidden;
-            z-index: 1;
-            flex: 1;
-            max-width: 200px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .selection-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            z-index: -1;
-            transition: transform 0.5s ease;
-            transform: scaleX(0);
-            transform-origin: right;
-        }
-
-        .selection-btn:hover::before {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
-
-        /* 修改按钮为黄色渐变 */
-        .north-btn {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             background: linear-gradient(to right, #ffc107, #ff9800);
             color: #5c3d2e;
         }
 
-        .south-btn {
-            background: linear-gradient(to right, #ffeb3b, #ffc107);
-            color: #5c3d2e;
+        /* 钱币形状 - 圆形中间镂空正方形 */
+        .selection-btn::before {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            background-color: rgba(255, 255, 255, 0.1);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%);
+            z-index: 1;
+        }
+
+        .selection-btn::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%);
+            z-index: 1;
+        }
+
+        .selection-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-text {
+            font-size: 1.3rem;
+            position: relative;
+            z-index: 2;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-subtext {
+            font-size: 0.9rem;
+            margin-top: 5px;
+            position: relative;
+            z-index: 2;
+            opacity: 0.9;
         }
 
         /* 物品展示页面 */
         .page-header {
             position: absolute;
             top: 1rem;
-            left: 1rem;
-            display: flex;
-            align-items: center;
             width: calc(100% - 2rem);
             z-index: 10;
-        }
-
-        .back-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #5c3d2e;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background-color: white;
-            transform: scale(1.05);
+            text-align: center;
         }
 
         .region-title {
-            margin-left: 1.2rem;
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
-            color: #5c3d2e;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            background-color: rgba(139, 69, 19, 0.6);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            display: inline-block;
         }
 
         .items-container {
@@ -236,12 +231,12 @@
             height: 100%;
             border-radius: 25px;
             object-fit: cover;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 2;
         }
 
-        /* 修改呼吸边缘光为白色 */
+        /* 白色呼吸边缘光 */
         @keyframes breath-glow {
             0%, 100% {
                 box-shadow: 0 0 15px 8px rgba(255, 255, 255, 0.7);
@@ -340,10 +335,10 @@
             padding: 0 0.5rem;
         }
 
-        /* 底部返回主页按钮 */
+        /* 底部返回主页按钮 - 位置上移 */
         .bottom-home-btn {
             position: absolute;
-            bottom: 2rem;
+            bottom: 5rem; /* 上移位置 */
             left: 50%;
             transform: translateX(-50%);
             padding: 0.8rem 2rem;
@@ -404,22 +399,27 @@
         @media (max-width: 768px) {
             .title {
                 font-size: 2.2rem;
+                top: -40px;
             }
             
             .subtitle {
                 font-size: 1rem;
-                margin-bottom: 3rem;
+                top: -40px;
             }
             
             .selection-buttons {
                 flex-direction: column;
-                gap: 1.5rem;
+                gap: 2rem;
+                top: -30px;
             }
             
             .selection-btn {
-                padding: 1.2rem 2rem;
-                font-size: 1.3rem;
-                max-width: 250px;
+                width: 130px;
+                height: 130px;
+            }
+            
+            .btn-text {
+                font-size: 1.2rem;
             }
             
             .item-card {
@@ -443,16 +443,21 @@
             .region-title {
                 font-size: 1.5rem;
             }
+            
+            .bottom-home-btn {
+                bottom: 4rem;
+            }
         }
 
         @media (max-width: 480px) {
             .title {
                 font-size: 1.9rem;
+                top: -30px;
             }
             
             .subtitle {
                 font-size: 0.95rem;
-                margin-bottom: 2.5rem;
+                top: -30px;
             }
             
             .items-container {
@@ -465,50 +470,67 @@
             }
             
             .selection-btn {
-                padding: 1rem 1.8rem;
-                font-size: 1.2rem;
+                width: 110px;
+                height: 110px;
+            }
+            
+            .btn-text {
+                font-size: 1.1rem;
             }
             
             .region-title {
                 font-size: 1.3rem;
             }
+            
+            .bottom-home-btn {
+                bottom: 3.5rem;
+                font-size: 1rem;
+                padding: 0.7rem 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 首页背景 -->
+    <div id="home-bg" class="bg-image"></div>
+    
     <!-- 开始页面 -->
     <div id="start-page" class="page active">
-        <div class="bg-decoration"></div>
         <h1 class="title">南北小年饮食习俗</h1>
         <p class="subtitle">选择地区，探索不同的小年传统美食</p>
         <div class="selection-buttons">
-            <button class="selection-btn north-btn" id="north-btn">北方小年</button>
-            <button class="selection-btn south-btn" id="south-btn">南方小年</button>
+            <button class="selection-btn" id="north-btn">
+                <span class="btn-text">北方小年</span>
+                <span class="btn-subtext">腊月廿三</span>
+            </button>
+            <button class="selection-btn" id="south-btn">
+                <span class="btn-text">南方小年</span>
+                <span class="btn-subtext">腊月廿四</span>
+            </button>
         </div>
     </div>
 
     <!-- 北方小年页面 -->
     <div id="north-page" class="page">
-        <div class="bg-decoration"></div>
+        <!-- 北方页面背景 -->
+        <div id="north-bg" class="bg-image"></div>
+        
         <div class="page-header">
-            <div class="back-btn" id="back-from-north">
-                <i class="fas fa-arrow-left"></i>
-            </div>
             <div class="region-title">北方小年 · 腊月廿三</div>
         </div>
         
         <div class="items-container">
-            <!-- 北方小年物品1 -->
+            <!-- 北方小年食物1 -->
             <div class="item-card" id="north-item1">
                 <img src="" alt="饺子" class="item-img breath-glow" id="north-img1">
             </div>
             
-            <!-- 北方小年物品2 -->
+            <!-- 北方小年食物2 -->
             <div class="item-card" id="north-item2">
                 <img src="" alt="灶糖" class="item-img breath-glow" id="north-img2">
             </div>
             
-            <!-- 北方小年物品3 -->
+            <!-- 北方小年食物3 -->
             <div class="item-card" id="north-item3">
                 <img src="" alt="花馍" class="item-img breath-glow" id="north-img3">
             </div>
@@ -520,26 +542,25 @@
 
     <!-- 南方小年页面 -->
     <div id="south-page" class="page">
-        <div class="bg-decoration"></div>
+        <!-- 南方页面背景 -->
+        <div id="south-bg" class="bg-image"></div>
+        
         <div class="page-header">
-            <div class="back-btn" id="back-from-south">
-                <i class="fas fa-arrow-left"></i>
-            </div>
             <div class="region-title">南方小年 · 腊月廿四</div>
         </div>
         
         <div class="items-container">
-            <!-- 南方小年物品1 -->
+            <!-- 南方小年食物1 -->
             <div class="item-card" id="south-item1">
                 <img src="" alt="甘蔗" class="item-img breath-glow" id="south-img1">
             </div>
             
-            <!-- 南方小年物品2 -->
+            <!-- 南方小年食物2 -->
             <div class="item-card" id="south-item2">
                 <img src="" alt="年糕" class="item-img breath-glow" id="south-img2">
             </div>
             
-            <!-- 南方小年物品3 -->
+            <!-- 南方小年食物3 -->
             <div class="item-card" id="south-item3">
                 <img src="" alt="汤圆" class="item-img breath-glow" id="south-img3">
             </div>
@@ -580,8 +601,6 @@
             // 获取按钮元素
             const northBtn = document.getElementById('north-btn');
             const southBtn = document.getElementById('south-btn');
-            const backFromNorth = document.getElementById('back-from-north');
-            const backFromSouth = document.getElementById('back-from-south');
             const northHomeBtn = document.getElementById('north-home-btn');
             const southHomeBtn = document.getElementById('south-home-btn');
             
@@ -647,18 +666,6 @@
             southBtn.addEventListener('click', function() {
                 startPage.classList.remove('active');
                 southPage.classList.add('active');
-            });
-            
-            // 从北方页面返回
-            backFromNorth.addEventListener('click', function() {
-                northPage.classList.remove('active');
-                startPage.classList.add('active');
-            });
-            
-            // 从南方页面返回
-            backFromSouth.addEventListener('click', function() {
-                southPage.classList.remove('active');
-                startPage.classList.add('active');
             });
             
             // 从北方页面底部按钮返回首页
