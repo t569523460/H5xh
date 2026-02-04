@@ -77,8 +77,8 @@
             font-size: 2.8rem;
             text-align: center;
             margin-bottom: 2.5rem;
-            color: #d2691e;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            color: #000000; /* 改为黑色 */
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5); /* 添加白色阴影增加可读性 */
             font-weight: bold;
             letter-spacing: 3px;
             position: relative;
@@ -89,7 +89,7 @@
             font-size: 1.2rem;
             text-align: center;
             margin-bottom: 2rem;
-            color: #8b4513;
+            color: #333333; /* 改为深灰色 */
             font-weight: 300;
             position: relative;
             top: -60px; /* 跟随标题上移 */
@@ -123,8 +123,8 @@
             border: none;
             overflow: hidden;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(to right, #ffc107, #ff9800);
-            color: #5c3d2e;
+            background: linear-gradient(to right, #b8860b, #8b6914); /* 改为黄褐色渐变 */
+            color: #fff;
         }
 
         /* 钱币形状 - 圆形中间镂空矩形（古钱币风格） */
@@ -134,7 +134,7 @@
             width: 100%;
             height: 100%;
             background-color: transparent;
-            border: 8px solid #ffc107;
+            border: 8px solid #daa520;
             border-radius: 50%;
             box-sizing: border-box;
             z-index: 1;
@@ -143,11 +143,13 @@
         .selection-btn::after {
             content: '';
             position: absolute;
-            width: 40%;
-            height: 40%;
+            width: 30%; /* 减小尺寸 */
+            height: 30%; /* 减小尺寸 */
             background-color: transparent;
-            border: 4px solid rgba(255, 255, 255, 0.8);
+            border: 3px solid rgba(255, 255, 255, 0.8);
             z-index: 2;
+            /* 正方形旋转45度，尖朝下 */
+            transform: rotate(45deg);
             /* 矩形镂空效果 */
             clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
         }
@@ -161,7 +163,8 @@
             font-size: 1.2rem;
             position: relative;
             z-index: 3;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            color: #fff;
         }
 
         .btn-subtext {
@@ -170,6 +173,7 @@
             position: relative;
             z-index: 3;
             opacity: 0.9;
+            color: #fff;
         }
 
         /* 物品展示页面 */
@@ -182,7 +186,7 @@
         }
 
         .region-title {
-            font-size: 2rem;
+            font-size: 2.2rem; /* 加大字体 */
             font-weight: bold;
             color: #fff;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
@@ -216,7 +220,7 @@
 
         /* 为每个物品设置不同的垂直偏移 */
         .item-card:nth-child(1) {
-            margin-top: -20px;
+            margin-top: 30px; /* 饺子和甘蔗再下去一些 */
         }
         
         .item-card:nth-child(2) {
@@ -224,7 +228,7 @@
         }
         
         .item-card:nth-child(3) {
-            margin-top: -10px;
+            margin-top: 60px; /* 花馍和汤圆也往下一些 */
         }
 
         .item-card:hover {
@@ -236,18 +240,21 @@
             height: 100%;
             border-radius: 25px;
             object-fit: cover;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 2;
         }
 
-        /* 白色呼吸边缘光 */
+        /* 白色呼吸边缘光 - 紧贴图片本身 */
         @keyframes breath-glow {
             0%, 100% {
-                box-shadow: 0 0 15px 8px rgba(255, 255, 255, 0.7);
+                box-shadow: 
+                    inset 0 0 10px 5px rgba(255, 255, 255, 0.7),
+                    0 5px 15px rgba(0, 0, 0, 0.3);
             }
             50% {
-                box-shadow: 0 0 25px 15px rgba(255, 255, 255, 0.9);
+                box-shadow: 
+                    inset 0 0 20px 10px rgba(255, 255, 255, 0.9),
+                    0 5px 15px rgba(0, 0, 0, 0.3);
             }
         }
 
@@ -347,8 +354,8 @@
             left: 50%;
             transform: translateX(-50%);
             padding: 0.8rem 2rem;
-            background: linear-gradient(to right, #ffc107, #ff9800);
-            color: #5c3d2e;
+            background: linear-gradient(to right, #b8860b, #8b6914); /* 改为黄褐色 */
+            color: #fff;
             border: none;
             border-radius: 50px;
             font-size: 1.1rem;
@@ -436,6 +443,19 @@
                 height: 140px;
             }
             
+            /* 移动端调整物品位置 */
+            .item-card:nth-child(1) {
+                margin-top: 20px;
+            }
+            
+            .item-card:nth-child(2) {
+                margin-top: 20px;
+            }
+            
+            .item-card:nth-child(3) {
+                margin-top: 40px;
+            }
+            
             .modal-content {
                 width: 90%;
                 padding: 1.8rem;
@@ -450,7 +470,7 @@
             }
             
             .region-title {
-                font-size: 1.5rem;
+                font-size: 1.8rem; /* 移动端标题字体加大 */
             }
             
             .bottom-home-btn {
@@ -496,7 +516,7 @@
             }
             
             .region-title {
-                font-size: 1.3rem;
+                font-size: 1.5rem; /* 小屏幕标题字体加大 */
             }
             
             .bottom-home-btn {
@@ -807,11 +827,11 @@
                     item.style.opacity = '1';
                     // 为不同位置的物品设置不同的最终位置
                     if (index % 3 === 0) {
-                        item.style.transform = 'translateY(-20px)';
+                        item.style.transform = 'translateY(30px)'; // 饺子和甘蔗
                     } else if (index % 3 === 1) {
                         item.style.transform = 'translateY(30px)';
                     } else {
-                        item.style.transform = 'translateY(-10px)';
+                        item.style.transform = 'translateY(60px)'; // 花馍和汤圆
                     }
                 }, 300 + index * 200);
             });
