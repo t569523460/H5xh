@@ -201,37 +201,49 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: flex-start;
-            gap: 3rem;
+            gap: 4rem; /* 增加间距，使食物分开 */
             width: 100%;
             padding: 2rem;
-            max-width: 900px;
+            max-width: 1000px;
             margin-top: 7rem; /* 食物位置下移 */
             position: relative;
         }
 
         /* 物品位置错落有致 */
         .item-card {
-            width: 160px;
-            height: 160px;
+            width: 200px; /* 增大食物大小 */
+            height: 200px; /* 增大食物大小 */
             position: relative;
             cursor: pointer;
             transition: transform 0.5s ease;
         }
 
         /* 为每个物品设置不同的垂直偏移 */
-        /* 饺子和甘蔗再下去一些 */
-        #north-item1, #south-item1 {
-            margin-top: 50px;
+        /* 饺子和甘蔗再下去一些，并且分开 */
+        #north-item1 {
+            margin-top: 80px;
+            margin-right: 20px; /* 向右移动一点，与灶糖分开 */
         }
         
-        /* 灶糖和年糕也下去一些 */
-        #north-item2, #south-item2 {
-            margin-top: 50px;
+        #south-item1 {
+            margin-top: 80px;
+            margin-right: 20px; /* 向右移动一点，与年糕分开 */
+        }
+        
+        /* 灶糖和年糕位置 */
+        #north-item2 {
+            margin-top: 80px;
+            margin-left: 20px; /* 向左移动一点，与饺子分开 */
+        }
+        
+        #south-item2 {
+            margin-top: 80px;
+            margin-left: 20px; /* 向左移动一点，与甘蔗分开 */
         }
         
         /* 花馍和汤圆位置 */
         #north-item3, #south-item3 {
-            margin-top: 60px; /* 花馍和汤圆也往下一些 */
+            margin-top: 100px; /* 花馍和汤圆再往下一些 */
         }
 
         .item-card:hover {
@@ -241,27 +253,28 @@
         .item-img {
             width: 100%;
             height: 100%;
-            border-radius: 25px;
-            object-fit: cover;
+            object-fit: contain; /* 确保整个图片可见 */
             position: relative;
             z-index: 2;
             /* 添加一个默认外阴影，但不参与呼吸动画 */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
         }
 
-        /* 紧密围绕图片的白色呼吸边缘光 */
+        /* 紧密围绕图片形状的白色呼吸边缘光 - 使用drop-shadow实现 */
         @keyframes breath-glow {
             0%, 100% {
-                box-shadow: 
-                    0 0 0 2px rgba(255, 255, 255, 0.8),
-                    0 0 10px 4px rgba(255, 255, 255, 0.5),
-                    0 5px 15px rgba(0, 0, 0, 0.3);
+                filter: 
+                    drop-shadow(0 0 5px rgba(255, 255, 255, 0.8))
+                    drop-shadow(0 0 10px rgba(255, 255, 255, 0.6))
+                    drop-shadow(0 0 15px rgba(255, 255, 255, 0.4))
+                    drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
             }
             50% {
-                box-shadow: 
-                    0 0 0 4px rgba(255, 255, 255, 0.9),
-                    0 0 20px 8px rgba(255, 255, 255, 0.7),
-                    0 5px 15px rgba(0, 0, 0, 0.3);
+                filter: 
+                    drop-shadow(0 0 10px rgba(255, 255, 255, 0.9))
+                    drop-shadow(0 0 20px rgba(255, 255, 255, 0.7))
+                    drop-shadow(0 0 30px rgba(255, 255, 255, 0.5))
+                    drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
             }
         }
 
@@ -446,21 +459,23 @@
             }
             
             .item-card {
-                width: 140px;
-                height: 140px;
+                width: 160px; /* 移动端调整大小 */
+                height: 160px;
             }
             
             /* 移动端调整物品位置 */
             #north-item1, #south-item1 {
-                margin-top: 40px;
+                margin-top: 60px;
+                margin-right: 10px;
             }
             
             #north-item2, #south-item2 {
-                margin-top: 40px;
+                margin-top: 60px;
+                margin-left: 10px;
             }
             
             #north-item3, #south-item3 {
-                margin-top: 50px;
+                margin-top: 80px;
             }
             
             .modal-content {
@@ -486,6 +501,7 @@
             
             .items-container {
                 margin-top: 6rem; /* 移动端食物位置下移调整 */
+                gap: 3rem; /* 移动端减小间距 */
             }
         }
 
@@ -505,8 +521,8 @@
             }
             
             .item-card {
-                width: 120px;
-                height: 120px;
+                width: 140px;
+                height: 140px;
             }
             
             .selection-btn {
@@ -553,6 +569,11 @@
             
             .btn-subtext {
                 font-size: 0.6rem;
+            }
+            
+            .item-card {
+                width: 120px;
+                height: 120px;
             }
         }
     </style>
@@ -834,9 +855,9 @@
                     item.style.opacity = '1';
                     // 为不同位置的物品设置不同的最终位置
                     if (index % 3 === 0 || index % 3 === 1) {
-                        item.style.transform = 'translateY(50px)'; // 饺子和甘蔗、灶糖和年糕
+                        item.style.transform = 'translateY(80px)'; // 饺子和甘蔗、灶糖和年糕
                     } else {
-                        item.style.transform = 'translateY(60px)'; // 花馍和汤圆
+                        item.style.transform = 'translateY(100px)'; // 花馍和汤圆
                     }
                 }, 300 + index * 200);
             });
