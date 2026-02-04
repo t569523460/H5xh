@@ -19,6 +19,7 @@
             overflow: hidden;
             height: 100vh;
             position: relative;
+            background-color: #000;
         }
 
         /* 页面容器 */
@@ -49,21 +50,22 @@
             z-index: -1;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
         }
 
         /* 首页背景 */
         #home-bg {
-            background-image: url(''); /* 用户自定义首页背景 */
+            background-image: url('bg_home.jpg'); /* 用户自定义首页背景 */
         }
 
         /* 北方页面背景 */
         #north-bg {
-            background-image: url(''); /* 用户自定义北方背景 */
+            background-image: url('bg_north.jpg'); /* 用户自定义北方背景 */
         }
 
         /* 南方页面背景 */
         #south-bg {
-            background-image: url(''); /* 用户自定义南方背景 */
+            background-image: url('bg_south.jpg'); /* 用户自定义南方背景 */
         }
 
         /* 开始页面 */
@@ -93,10 +95,10 @@
             top: -60px; /* 跟随标题上移 */
         }
 
-        /* 修改选择按钮为钱币形状 */
+        /* 修改选择按钮为钱币形状 - 左右并列 */
         .selection-buttons {
             display: flex;
-            gap: 2.5rem;
+            gap: 3rem;
             width: 90%;
             max-width: 500px;
             justify-content: center;
@@ -106,8 +108,8 @@
         }
 
         .selection-btn {
-            width: 150px;
-            height: 150px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -125,26 +127,29 @@
             color: #5c3d2e;
         }
 
-        /* 钱币形状 - 圆形中间镂空正方形 */
+        /* 钱币形状 - 圆形中间镂空矩形（古钱币风格） */
         .selection-btn::before {
             content: '';
             position: absolute;
-            width: 70%;
-            height: 70%;
-            background-color: rgba(255, 255, 255, 0.1);
-            clip-path: polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%);
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border: 8px solid #ffc107;
+            border-radius: 50%;
+            box-sizing: border-box;
             z-index: 1;
         }
 
         .selection-btn::after {
             content: '';
             position: absolute;
-            width: 50%;
-            height: 50%;
+            width: 40%;
+            height: 40%;
             background-color: transparent;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            clip-path: polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%);
-            z-index: 1;
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            z-index: 2;
+            /* 矩形镂空效果 */
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
         }
 
         .selection-btn:hover {
@@ -153,17 +158,17 @@
         }
 
         .btn-text {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             position: relative;
-            z-index: 2;
+            z-index: 3;
             text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
         }
 
         .btn-subtext {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             margin-top: 5px;
             position: relative;
-            z-index: 2;
+            z-index: 3;
             opacity: 0.9;
         }
 
@@ -196,7 +201,7 @@
             width: 100%;
             padding: 2rem;
             max-width: 900px;
-            margin-top: 5rem;
+            margin-top: 7rem; /* 食物位置下移 */
             position: relative;
         }
 
@@ -408,18 +413,22 @@
             }
             
             .selection-buttons {
-                flex-direction: column;
+                flex-direction: row; /* 保持左右并列 */
                 gap: 2rem;
                 top: -30px;
             }
             
             .selection-btn {
-                width: 130px;
-                height: 130px;
+                width: 110px;
+                height: 110px;
             }
             
             .btn-text {
-                font-size: 1.2rem;
+                font-size: 1rem;
+            }
+            
+            .btn-subtext {
+                font-size: 0.7rem;
             }
             
             .item-card {
@@ -447,6 +456,10 @@
             .bottom-home-btn {
                 bottom: 4rem;
             }
+            
+            .items-container {
+                margin-top: 6rem; /* 移动端食物位置下移调整 */
+            }
         }
 
         @media (max-width: 480px) {
@@ -470,12 +483,16 @@
             }
             
             .selection-btn {
-                width: 110px;
-                height: 110px;
+                width: 100px;
+                height: 100px;
             }
             
             .btn-text {
-                font-size: 1.1rem;
+                font-size: 0.9rem;
+            }
+            
+            .btn-subtext {
+                font-size: 0.65rem;
             }
             
             .region-title {
@@ -486,6 +503,29 @@
                 bottom: 3.5rem;
                 font-size: 1rem;
                 padding: 0.7rem 1.5rem;
+            }
+            
+            .items-container {
+                margin-top: 5.5rem; /* 小屏幕食物位置下移调整 */
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .selection-buttons {
+                gap: 1.5rem;
+            }
+            
+            .selection-btn {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .btn-text {
+                font-size: 0.85rem;
+            }
+            
+            .btn-subtext {
+                font-size: 0.6rem;
             }
         }
     </style>
@@ -522,17 +562,17 @@
         <div class="items-container">
             <!-- 北方小年食物1 -->
             <div class="item-card" id="north-item1">
-                <img src="" alt="饺子" class="item-img breath-glow" id="north-img1">
+                <img src="food_north_1.png" alt="饺子" class="item-img breath-glow" id="north-img1">
             </div>
             
             <!-- 北方小年食物2 -->
             <div class="item-card" id="north-item2">
-                <img src="" alt="灶糖" class="item-img breath-glow" id="north-img2">
+                <img src="food_north_2.png" alt="灶糖" class="item-img breath-glow" id="north-img2">
             </div>
             
             <!-- 北方小年食物3 -->
             <div class="item-card" id="north-item3">
-                <img src="" alt="花馍" class="item-img breath-glow" id="north-img3">
+                <img src="food_north_3.png" alt="花馍" class="item-img breath-glow" id="north-img3">
             </div>
         </div>
         
@@ -552,17 +592,17 @@
         <div class="items-container">
             <!-- 南方小年食物1 -->
             <div class="item-card" id="south-item1">
-                <img src="" alt="甘蔗" class="item-img breath-glow" id="south-img1">
+                <img src="food_south_1.png" alt="甘蔗" class="item-img breath-glow" id="south-img1">
             </div>
             
             <!-- 南方小年食物2 -->
             <div class="item-card" id="south-item2">
-                <img src="" alt="年糕" class="item-img breath-glow" id="south-img2">
+                <img src="food_south_2.png" alt="年糕" class="item-img breath-glow" id="south-img2">
             </div>
             
             <!-- 南方小年食物3 -->
             <div class="item-card" id="south-item3">
-                <img src="" alt="汤圆" class="item-img breath-glow" id="south-img3">
+                <img src="food_south_3.png" alt="汤圆" class="item-img breath-glow" id="south-img3">
             </div>
         </div>
         
