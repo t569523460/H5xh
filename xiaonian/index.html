@@ -241,9 +241,9 @@
             margin-left: 20px; /* 向左移动一点，与甘蔗分开 */
         }
         
-        /* 花馍和汤圆位置 */
+        /* 花馍和汤圆位置 - 往上调整 */
         #north-item3, #south-item3 {
-            margin-top: 100px; /* 花馍和汤圆再往下一些 */
+            margin-top: 70px; /* 花馍和汤圆往上一点 */
         }
 
         .item-card:hover {
@@ -475,7 +475,7 @@
             }
             
             #north-item3, #south-item3 {
-                margin-top: 80px;
+                margin-top: 50px; /* 移动端花馍和汤圆往上调整 */
             }
             
             .modal-content {
@@ -857,7 +857,7 @@
                     if (index % 3 === 0 || index % 3 === 1) {
                         item.style.transform = 'translateY(80px)'; // 饺子和甘蔗、灶糖和年糕
                     } else {
-                        item.style.transform = 'translateY(100px)'; // 花馍和汤圆
+                        item.style.transform = 'translateY(70px)'; // 花馍和汤圆
                     }
                 }, 300 + index * 200);
             });
