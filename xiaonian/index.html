@@ -219,15 +219,18 @@
         }
 
         /* 为每个物品设置不同的垂直偏移 */
-        .item-card:nth-child(1) {
-            margin-top: 30px; /* 饺子和甘蔗再下去一些 */
+        /* 饺子和甘蔗再下去一些 */
+        #north-item1, #south-item1 {
+            margin-top: 50px;
         }
         
-        .item-card:nth-child(2) {
-            margin-top: 30px;
+        /* 灶糖和年糕也下去一些 */
+        #north-item2, #south-item2 {
+            margin-top: 50px;
         }
         
-        .item-card:nth-child(3) {
+        /* 花馍和汤圆位置 */
+        #north-item3, #south-item3 {
             margin-top: 60px; /* 花馍和汤圆也往下一些 */
         }
 
@@ -242,18 +245,22 @@
             object-fit: cover;
             position: relative;
             z-index: 2;
+            /* 添加一个默认外阴影，但不参与呼吸动画 */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        /* 白色呼吸边缘光 - 紧贴图片本身 */
+        /* 紧密围绕图片的白色呼吸边缘光 */
         @keyframes breath-glow {
             0%, 100% {
                 box-shadow: 
-                    inset 0 0 10px 5px rgba(255, 255, 255, 0.7),
+                    0 0 0 2px rgba(255, 255, 255, 0.8),
+                    0 0 10px 4px rgba(255, 255, 255, 0.5),
                     0 5px 15px rgba(0, 0, 0, 0.3);
             }
             50% {
                 box-shadow: 
-                    inset 0 0 20px 10px rgba(255, 255, 255, 0.9),
+                    0 0 0 4px rgba(255, 255, 255, 0.9),
+                    0 0 20px 8px rgba(255, 255, 255, 0.7),
                     0 5px 15px rgba(0, 0, 0, 0.3);
             }
         }
@@ -444,16 +451,16 @@
             }
             
             /* 移动端调整物品位置 */
-            .item-card:nth-child(1) {
-                margin-top: 20px;
-            }
-            
-            .item-card:nth-child(2) {
-                margin-top: 20px;
-            }
-            
-            .item-card:nth-child(3) {
+            #north-item1, #south-item1 {
                 margin-top: 40px;
+            }
+            
+            #north-item2, #south-item2 {
+                margin-top: 40px;
+            }
+            
+            #north-item3, #south-item3 {
+                margin-top: 50px;
             }
             
             .modal-content {
@@ -826,10 +833,8 @@
                     item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                     item.style.opacity = '1';
                     // 为不同位置的物品设置不同的最终位置
-                    if (index % 3 === 0) {
-                        item.style.transform = 'translateY(30px)'; // 饺子和甘蔗
-                    } else if (index % 3 === 1) {
-                        item.style.transform = 'translateY(30px)';
+                    if (index % 3 === 0 || index % 3 === 1) {
+                        item.style.transform = 'translateY(50px)'; // 饺子和甘蔗、灶糖和年糕
                     } else {
                         item.style.transform = 'translateY(60px)'; // 花馍和汤圆
                     }
