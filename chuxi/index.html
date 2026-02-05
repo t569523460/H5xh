@@ -314,7 +314,6 @@
     
     <audio id="bg-music" loop>
         <source src="chuxibgm.mp3" type="audio/mpeg">
-        <source src="chuxibgm.m4a" type="audio/mp4">
         您的浏览器不支持音频播放
     </audio>
     
@@ -389,6 +388,7 @@
         // 加载图片
         function loadImages() {
             const imageElements = document.querySelectorAll('img');
+            let allImagesLoaded = false;
             
             imageElements.forEach(img => {
                 // 为每个图片设置onload事件
@@ -403,7 +403,8 @@
                     }
                     
                     // 所有图片加载完成后初始化游戏
-                    if (imagesLoaded >= totalImages) {
+                    if (imagesLoaded >= totalImages && !allImagesLoaded) {
+                        allImagesLoaded = true;
                         console.log("所有图片加载完成");
                         initGame();
                     }
@@ -411,10 +412,11 @@
                 
                 img.onerror = () => {
                     imagesLoaded++;
-                    console.warn(`图片加载失败: ${img.src}`);
+                    console.error(`图片加载失败: ${img.src}`);
                     
                     // 即使图片加载失败，也继续初始化游戏
-                    if (imagesLoaded >= totalImages) {
+                    if (imagesLoaded >= totalImages && !allImagesLoaded) {
+                        allImagesLoaded = true;
                         console.log("图片加载完成（部分失败）");
                         initGame();
                     }
@@ -423,8 +425,9 @@
             
             // 如果图片较少，确保游戏能初始化
             setTimeout(() => {
-                if (!gameRunning && imagesLoaded < totalImages) {
+                if (!gameRunning && !allImagesLoaded) {
                     console.log("部分图片加载超时，继续初始化");
+                    allImagesLoaded = true;
                     initGame();
                 }
             }, 3000);
@@ -611,33 +614,12 @@
             if (images.catcher && images.catcher.complete) {
                 ctx.drawImage(images.catcher, catcher.x, catcher.y, catcher.width, catcher.height);
             } else {
-                // 否则绘制一个简单的福袋图形
+                // 如果没有图片，什么也不绘制
                 ctx.fillStyle = "#ff3333";
                 ctx.beginPath();
                 ctx.roundRect(catcher.x, catcher.y, catcher.width, catcher.height, 20);
                 ctx.fill();
-                
-                // 福袋口
-                ctx.fillStyle = "#ff9900";
-                ctx.beginPath();
-                ctx.roundRect(catcher.x, catcher.y, catcher.width, 20, 10);
-                ctx.fill();
-                
-                // 福字
-                ctx.fillStyle = "#ffeb3b";
-                ctx.font = "bold 50px Arial";
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                ctx.fillText("福", catcher.x + catcher.width / 2, catcher.y + catcher.height / 2);
             }
-            
-            // 阴影效果
-            ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
-            ctx.shadowBlur = 10;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 5;
-            ctx.shadowColor = "transparent";
-            ctx.shadowBlur = 0;
         }
         
         // 创建掉落物品
@@ -671,76 +653,21 @@
             items.push(item);
         }
         
-        // 绘制物品
+        // 绘制物品 - 只使用图片，没有备用图形
         function drawItem(item) {
             const img = images[item.imageId];
+            
+            // 如果没有物品图片，什么也不绘制
+            if (!img || !img.complete) {
+                return;
+            }
             
             ctx.save();
             ctx.translate(item.x + item.width / 2, item.y + item.height / 2);
             ctx.rotate(item.rotation);
             
-            // 如果有物品图片，使用图片
-            if (img && img.complete) {
-                ctx.drawImage(img, -item.width/2, -item.height/2, item.width, item.height);
-            } else {
-                // 否则根据分数绘制不同颜色的形状
-                if (item.score === 1) {
-                    // 糖果 - 圆形
-                    ctx.fillStyle = "#ffcc00";
-                    ctx.beginPath();
-                    ctx.arc(0, 0, item.width / 2, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // 糖果条纹
-                    ctx.fillStyle = "#ffffff";
-                    ctx.fillRect(-item.width / 2, -5, item.width, 10);
-                    ctx.fillRect(-5, -item.height / 2, 10, item.height);
-                } else if (item.score === 3) {
-                    // 春联 - 矩形
-                    ctx.fillStyle = "#ff3333";
-                    ctx.fillRect(-item.width / 2, -item.height / 2, item.width, item.height);
-                    
-                    // 文字
-                    ctx.fillStyle = "#ffeb3b";
-                    ctx.font = "bold 20px Arial";
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle";
-                    ctx.fillText("春", 0, 0);
-                } else if (item.score === 5) {
-                    // 红包 - 矩形加圆形边角
-                    ctx.fillStyle = "#ff3333";
-                    ctx.beginPath();
-                    ctx.roundRect(-item.width / 2, -item.height / 2, item.width, item.height, 10);
-                    ctx.fill();
-                    
-                    // 金色边框
-                    ctx.strokeStyle = "#ffeb3b";
-                    ctx.lineWidth = 3;
-                    ctx.stroke();
-                    
-                    // 福字
-                    ctx.fillStyle = "#ffeb3b";
-                    ctx.font = "bold 24px Arial";
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle";
-                    ctx.fillText("福", 0, 0);
-                } else if (item.score === 10) {
-                    // 元宝 - 椭圆形
-                    ctx.fillStyle = "#ffcc00";
-                    ctx.beginPath();
-                    ctx.ellipse(0, 0, item.width / 2, item.height / 2.5, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // 高光
-                    const gradient = ctx.createRadialGradient(-10, -10, 5, 0, 0, 25);
-                    gradient.addColorStop(0, "rgba(255, 255, 255, 0.8)");
-                    gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-                    ctx.fillStyle = gradient;
-                    ctx.beginPath();
-                    ctx.arc(-10, -10, 15, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
+            // 绘制图片
+            ctx.drawImage(img, -item.width/2, -item.height/2, item.width, item.height);
             
             ctx.restore();
             
