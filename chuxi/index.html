@@ -3,889 +3,785 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>除夕接年货</title>
+    <title>除夕接年货 - 新年小游戏</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            touch-action: none;
+            touch-action: manipulation;
         }
         
         body {
-            font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
-            background-color: #f8e8d0;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+            background-color: #d32f2f;
             overflow: hidden;
+            color: #fff;
             width: 100vw;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #8B0000;
-            background-image: radial-gradient(#ffcccc 2px, transparent 2px);
-            background-size: 30px 30px;
         }
         
         #game-container {
+            width: 100%;
+            height: 100%;
             position: relative;
-            width: 100%;
-            max-width: 500px;
-            height: 100%;
-            max-height: 900px;
-            margin: 0 auto;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(139, 0, 0, 0.3);
-            border-radius: 20px;
-            background: linear-gradient(135deg, #ff4d4d 0%, #ff9966 100%);
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
         
-        #game-canvas {
+        /* 开始弹窗 */
+        #start-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
-        }
-        
-        #score-display {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: rgba(255, 87, 34, 0.95);
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #fff;
-            z-index: 10;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border: 3px solid #ffcc00;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-        
-        #timer-display {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: rgba(255, 193, 7, 0.95);
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #8B0000;
-            z-index: 10;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border: 3px solid #ff9800;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
-        
-        .modal {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(211, 47, 47, 0.95);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 100;
             padding: 20px;
+            text-align: center;
         }
         
         .modal-content {
-            background: linear-gradient(135deg, #ff6666 0%, #ff9966 100%);
+            background: linear-gradient(135deg, #ff9800, #ff5722);
             border-radius: 20px;
-            padding: 25px;
-            max-width: 90%;
-            width: 380px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            border: 8px solid #ffcc00;
+            padding: 30px 25px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 5px solid #ffeb3b;
             position: relative;
+            overflow: hidden;
         }
         
         .modal-content::before {
             content: "";
             position: absolute;
-            top: -15px;
-            left: -15px;
-            right: -15px;
-            bottom: -15px;
-            border: 5px dashed #ff5722;
-            border-radius: 30px;
-            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, #ff9800, #ffeb3b, #ff9800);
+            z-index: 2;
         }
         
         h1 {
-            color: #fff;
+            color: #ffeb3b;
+            font-size: 2.2rem;
             margin-bottom: 15px;
-            font-size: 30px;
-            text-shadow: 2px 2px 0 #ff5722;
+            text-shadow: 3px 3px 0 #d32f2f;
+            letter-spacing: 1px;
         }
         
         h2 {
-            color: #ffeb3b;
+            color: #fff;
+            font-size: 1.5rem;
             margin-bottom: 10px;
-            font-size: 24px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
         
         p {
-            color: #fff;
+            font-size: 1.1rem;
             line-height: 1.5;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-        
-        .game-rules {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 12px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border-left: 5px solid #ffcc00;
-        }
-        
-        .score-item {
-            display: flex;
-            align-items: center;
-            margin: 6px 0;
-            padding: 5px;
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 5px;
-            justify-content: center;
+            margin-bottom: 20px;
+            color: #fff;
         }
         
         .btn {
-            background: linear-gradient(to bottom, #ff5722, #e64a19);
-            color: white;
+            background: linear-gradient(to bottom, #ffeb3b, #ff9800);
+            color: #d32f2f;
             border: none;
-            padding: 14px 28px;
-            font-size: 20px;
+            padding: 15px 30px;
+            font-size: 1.3rem;
+            font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 15px;
-            font-weight: bold;
-            box-shadow: 0 5px 0 #bf360c;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transition: all 0.2s;
             width: 100%;
             max-width: 250px;
         }
         
         .btn:hover, .btn:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #bf360c;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* 游戏区域 */
+        #game-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        /* 分数显示 */
+        #score-display {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff5722, #d32f2f);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffeb3b;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            border: 3px solid #ff9800;
+            display: flex;
+            align-items: center;
+        }
+        
+        #score-display i {
+            margin-right: 10px;
+            font-size: 1.6rem;
+        }
+        
+        /* 计时器 */
+        #timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            border: 3px solid #ffeb3b;
+            display: flex;
+            align-items: center;
+        }
+        
+        #timer i {
+            margin-right: 10px;
+            font-size: 1.6rem;
+        }
+        
+        /* 结束弹窗 */
+        #end-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            padding: 20px;
+            text-align: center;
         }
         
         #final-score {
-            font-size: 60px;
+            font-size: 4rem;
             color: #ffeb3b;
             margin: 20px 0;
-            font-weight: bold;
-            text-shadow: 3px 3px 0 #ff5722;
+            text-shadow: 0 0 20px rgba(255, 235, 59, 0.7);
         }
         
-        #result-message {
-            font-size: 24px;
-            color: #ffeb3b;
-            margin: 20px 0;
-            font-weight: bold;
-            min-height: 60px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        #result-text {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #fff;
+            max-width: 500px;
+            line-height: 1.4;
         }
         
-        .hidden {
-            display: none !important;
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 300px;
         }
         
-        #music-toggle {
+        /* 音乐控制按钮 */
+        #music-control {
             position: absolute;
             bottom: 20px;
             right: 20px;
+            background: rgba(0, 0, 0, 0.7);
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background-color: rgba(255, 87, 34, 0.95);
-            border: 3px solid #ffcc00;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 10;
+            z-index: 50;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 2px solid #ff9800;
         }
         
-        .music-icon {
-            font-size: 24px;
-            color: #fff;
+        #music-control i {
+            font-size: 1.5rem;
+            color: #ff9800;
         }
         
-        #controls-hint {
+        /* 游戏说明 */
+        #instructions {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            background-color: rgba(255, 87, 34, 0.9);
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 14px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 300px;
+            font-size: 0.9rem;
+            line-height: 1.4;
             color: #fff;
-            z-index: 10;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            border: 2px solid #ffcc00;
+            border: 2px solid #ff9800;
+            z-index: 50;
         }
         
-        @media (max-width: 500px) {
-            #game-container {
-                max-height: 100vh;
-                border-radius: 0;
-            }
-            
+        /* 适配不同屏幕尺寸 */
+        @media (max-width: 480px) {
             h1 {
-                font-size: 26px;
+                font-size: 1.8rem;
             }
             
             h2 {
-                font-size: 22px;
+                font-size: 1.3rem;
             }
             
-            .modal-content {
-                padding: 20px;
+            p {
+                font-size: 1rem;
+            }
+            
+            #score-display, #timer {
+                font-size: 1.4rem;
+                padding: 10px 20px;
+            }
+            
+            #final-score {
+                font-size: 3rem;
+            }
+            
+            #result-text {
+                font-size: 1.4rem;
+            }
+            
+            #instructions {
+                font-size: 0.8rem;
+                max-width: 200px;
             }
         }
         
-        @media (max-width: 380px) {
-            .score-item span {
-                font-size: 14px;
-            }
+        /* 物品分值提示 */
+        .item-points {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .point-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .item-preview {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 5px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <canvas id="game-canvas"></canvas>
-        
-        <div id="score-display">分数: 0</div>
-        <div id="timer-display">时间: 30s</div>
-        
-        <div id="start-modal" class="modal">
+        <!-- 开始游戏弹窗 -->
+        <div id="start-screen">
             <div class="modal-content">
-                <h1>🧨 除夕接年货 🧨</h1>
-                <p>除夕到了，家家户户都在准备年货。用福袋接住从天而降的年货，把它们带回家！</p>
+                <h1><i class="fas fa-fire"></i> 除夕接年货 <i class="fas fa-fire"></i></h1>
+                <h2>把年货带回家！</h2>
+                <p>除夕到，福气到！移动下方的福袋，接住从天上掉落的年货，把它们带回家！</p>
+                <p>游戏限时30秒，接到的年货越多，福气越旺！</p>
                 
-                <div class="game-rules">
-                    <h2>游戏规则</h2>
-                    <p>游戏时间：30秒</p>
-                    <p>用手指左右移动底部的福袋，接住掉落的年货</p>
-                    
-                    <div class="score-item">
-                        <span>糖果 1分</span>
+                <div class="item-points">
+                    <div class="point-item">
+                        <div class="item-preview" style="background-image: url('item1.png');"></div>
+                        <div>糖果：1分</div>
                     </div>
-                    <div class="score-item">
-                        <span>春联 3分</span>
+                    <div class="point-item">
+                        <div class="item-preview" style="background-image: url('item3.png');"></div>
+                        <div>春联：3分</div>
                     </div>
-                    <div class="score-item">
-                        <span>红包 5分</span>
+                    <div class="point-item">
+                        <div class="item-preview" style="background-image: url('item5.png');"></div>
+                        <div>红包：5分</div>
                     </div>
-                    <div class="score-item">
-                        <span>元宝 10分</span>
+                    <div class="point-item">
+                        <div class="item-preview" style="background-image: url('item10.png');"></div>
+                        <div>元宝：10分</div>
                     </div>
                 </div>
                 
-                <button id="start-btn" class="btn">开始游戏</button>
+                <button id="start-btn" class="btn">
+                    <i class="fas fa-play-circle"></i> 开始游戏
+                </button>
+                <p style="margin-top: 15px; font-size: 0.9rem; color: #ffeb3b;">提示：使用手指左右滑动控制福袋移动</p>
             </div>
         </div>
         
-        <div id="end-modal" class="modal hidden">
+        <!-- 游戏画布 -->
+        <canvas id="game-canvas"></canvas>
+        
+        <!-- 分数显示 -->
+        <div id="score-display">
+            <i class="fas fa-star"></i> <span id="score">0</span> 分
+        </div>
+        
+        <!-- 计时器 -->
+        <div id="timer">
+            <i class="fas fa-clock"></i> <span id="time">30</span> 秒
+        </div>
+        
+        <!-- 音乐控制 -->
+        <div id="music-control">
+            <i id="music-icon" class="fas fa-volume-up"></i>
+        </div>
+        
+        <!-- 游戏说明 -->
+        <div id="instructions">
+            <i class="fas fa-info-circle"></i> 左右滑动屏幕移动福袋，接住掉落的年货！
+        </div>
+        
+        <!-- 结束游戏弹窗 -->
+        <div id="end-screen">
             <div class="modal-content">
-                <h1>游戏结束</h1>
-                <div id="final-score">0 分</div>
-                <div id="result-message">正在计算您的收获...</div>
-                <button id="restart-btn" class="btn">再来一局</button>
+                <h1><i class="fas fa-trophy"></i> 游戏结束 <i class="fas fa-trophy"></i></h1>
+                <h2>你的除夕福气值</h2>
+                <div id="final-score">0</div>
+                <p id="result-text">再接再厉！</p>
+                <div class="btn-container">
+                    <button id="restart-btn" class="btn">
+                        <i class="fas fa-redo"></i> 再来一局
+                    </button>
+                </div>
             </div>
         </div>
-        
-        <div id="music-toggle">
-            <div class="music-icon">🎵</div>
-        </div>
-        
-        <div id="controls-hint">← 左右移动手指控制福袋 →</div>
     </div>
-    
+
+    <!-- 背景音乐 -->
     <audio id="bg-music" loop>
         <source src="chuxibgm.mp3" type="audio/mpeg">
-        您的浏览器不支持音频播放
+        您的浏览器不支持音频元素。
     </audio>
-    
-    <!-- 图片预加载区域 -->
-    <div style="display:none;">
-        <!-- 背景图片 -->
-        <img id="bg-img" src="background.jpg" alt="背景">
-        <!-- 接物器图片 -->
-        <img id="catcher-img" src="catcher.png" alt="福袋">
-        <!-- 年货图片 -->
-        <img id="item1-img" src="item1.png" alt="糖果">
-        <img id="item3-img" src="item3.png" alt="春联">
-        <img id="item5-img" src="item5.png" alt="红包">
-        <img id="item10-img" src="item10.png" alt="元宝">
-    </div>
-    
+
     <script>
         // 游戏变量
-        let canvas, ctx;
-        let gameRunning = false;
-        let score = 0;
-        let timeLeft = 30;
-        let timerInterval;
-        let items = [];
-        let catcher = {
-            x: 0,
-            y: 0,
-            width: 120,
-            height: 100,
-            speed: 10
-        };
-        let lastTime = 0;
-        let animationId;
-        
-        // 图片对象
-        let images = {
-            background: null,
-            catcher: null,
-            item1: null,
-            item3: null,
-            item5: null,
-            item10: null
-        };
-        
-        // 游戏配置
-        const GAME_WIDTH = window.innerWidth > 500 ? 500 : window.innerWidth;
-        const GAME_HEIGHT = window.innerHeight > 900 ? 900 : window.innerHeight;
-        const ITEM_TYPES = [
-            { score: 1, imageId: "item1", name: "糖果", speed: 2, probability: 0.4 },
-            { score: 3, imageId: "item3", name: "春联", speed: 2.5, probability: 0.3 },
-            { score: 5, imageId: "item5", name: "红包", speed: 3, probability: 0.2 },
-            { score: 10, imageId: "item10", name: "元宝", speed: 3.5, probability: 0.1 }
-        ];
-        
-        // DOM元素
-        const startModal = document.getElementById('start-modal');
-        const endModal = document.getElementById('end-modal');
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('start-screen');
+        const endScreen = document.getElementById('end-screen');
+        const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const resultText = document.getElementById('result-text');
         const startBtn = document.getElementById('start-btn');
         const restartBtn = document.getElementById('restart-btn');
-        const scoreDisplay = document.getElementById('score-display');
-        const timerDisplay = document.getElementById('timer-display');
-        const finalScoreDisplay = document.getElementById('final-score');
-        const resultMessage = document.getElementById('result-message');
         const bgMusic = document.getElementById('bg-music');
-        const musicToggle = document.getElementById('music-toggle');
-        const musicIcon = musicToggle.querySelector('.music-icon');
+        const musicControl = document.getElementById('music-control');
+        const musicIcon = document.getElementById('music-icon');
         
-        // 图片加载完成计数器
-        let imagesLoaded = 0;
-        const totalImages = 6; // catcher + 4种物品 + background
+        // 设置画布尺寸为全屏
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
         
-        // 加载图片
+        // 游戏状态
+        let game = {
+            score: 0,
+            timeLeft: 30,
+            isRunning: false,
+            gameLoop: null,
+            items: [],
+            lastItemTime: 0,
+            catcher: {
+                x: 0,
+                y: 0,
+                width: 120,
+                height: 120,
+                speed: 15
+            },
+            // 物品配置
+            itemConfig: [
+                { type: 'candy', value: 1, speed: 3, probability: 0.4, image: 'item1.png', size: 80 },
+                { type: 'couplet', value: 3, speed: 4, probability: 0.3, image: 'item3.png', size: 80 },
+                { type: 'redpacket', value: 5, speed: 5, probability: 0.2, image: 'item5.png', size: 80 },
+                { type: 'gold', value: 10, speed: 6, probability: 0.1, image: 'item10.png', size: 80 }
+            ],
+            // 加载的图像
+            images: {},
+            // 触摸控制
+            touchStartX: 0,
+            catcherStartX: 0,
+            isDragging: false
+        };
+        
+        // 加载图像
         function loadImages() {
-            const imageElements = document.querySelectorAll('img');
-            let allImagesLoaded = false;
+            // 加载背景图
+            game.images.background = new Image();
+            game.images.background.src = 'background.jpg';
             
-            imageElements.forEach(img => {
-                // 为每个图片设置onload事件
-                img.onload = () => {
-                    imagesLoaded++;
-                    console.log(`图片加载成功: ${img.id}`);
-                    
-                    // 将图片存储到images对象中
-                    const id = img.id.replace('-img', '');
-                    if (id in images) {
-                        images[id] = img;
-                    }
-                    
-                    // 所有图片加载完成后初始化游戏
-                    if (imagesLoaded >= totalImages && !allImagesLoaded) {
-                        allImagesLoaded = true;
-                        console.log("所有图片加载完成");
-                        initGame();
-                    }
-                };
-                
-                img.onerror = () => {
-                    imagesLoaded++;
-                    console.error(`图片加载失败: ${img.src}`);
-                    
-                    // 即使图片加载失败，也继续初始化游戏
-                    if (imagesLoaded >= totalImages && !allImagesLoaded) {
-                        allImagesLoaded = true;
-                        console.log("图片加载完成（部分失败）");
-                        initGame();
-                    }
-                };
+            // 加载福袋
+            game.images.catcher = new Image();
+            game.images.catcher.src = 'catcher.png';
+            
+            // 加载物品图像
+            game.itemConfig.forEach(config => {
+                game.images[config.type] = new Image();
+                game.images[config.type].src = config.image;
             });
-            
-            // 如果图片较少，确保游戏能初始化
-            setTimeout(() => {
-                if (!gameRunning && !allImagesLoaded) {
-                    console.log("部分图片加载超时，继续初始化");
-                    allImagesLoaded = true;
-                    initGame();
-                }
-            }, 3000);
         }
         
         // 初始化游戏
         function initGame() {
-            canvas = document.getElementById('game-canvas');
-            ctx = canvas.getContext('2d');
+            game.score = 0;
+            game.timeLeft = 30;
+            game.items = [];
+            game.lastItemTime = 0;
             
-            // 设置画布尺寸
-            canvas.width = GAME_WIDTH;
-            canvas.height = GAME_HEIGHT;
+            // 初始化福袋位置
+            game.catcher.x = canvas.width / 2 - game.catcher.width / 2;
+            game.catcher.y = canvas.height - game.catcher.height - 20;
             
-            // 初始化接物器位置
-            catcher.x = (GAME_WIDTH - catcher.width) / 2;
-            catcher.y = GAME_HEIGHT - catcher.height - 20;
+            // 更新显示
+            scoreDisplay.textContent = game.score;
+            timeDisplay.textContent = game.timeLeft;
             
-            // 事件监听 - 修复手机端点击响应问题
-            startBtn.addEventListener('click', startGame);
-            startBtn.addEventListener('touchstart', function(e) {
-                e.preventDefault(); // 防止默认行为
-                startGame();
-            }, { passive: false });
+            // 确保画布尺寸正确
+            resizeCanvas();
             
-            restartBtn.addEventListener('click', restartGame);
-            restartBtn.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                restartGame();
-            }, { passive: false });
-            
-            // 音乐控制
-            musicToggle.addEventListener('click', toggleMusic);
-            musicToggle.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                toggleMusic();
-            }, { passive: false });
-            
-            // 触摸/鼠标控制
-            setupControls();
-            
-            // 绘制初始游戏界面
-            drawBackground();
-            drawCatcher();
-            
-            // 尝试自动播放音乐
-            try {
-                bgMusic.volume = 0.7;
-                bgMusic.play().then(() => {
-                    musicIcon.textContent = "🎵";
-                }).catch(e => {
-                    console.log("自动播放被阻止，需要用户交互");
-                    musicIcon.textContent = "🔇";
-                });
-            } catch (e) {
-                console.log("音乐播放错误:", e);
+            // 开始游戏循环
+            if (game.gameLoop) {
+                clearInterval(game.gameLoop);
             }
             
-            console.log("游戏初始化完成，可以点击开始按钮");
+            game.gameLoop = setInterval(updateGame, 1000 / 60); // 60fps
+            game.isRunning = true;
         }
         
-        // 设置控制
-        function setupControls() {
-            let touchStartX = 0;
-            let catcherStartX = 0;
+        // 更新游戏状态
+        function updateGame() {
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 鼠标控制
-            canvas.addEventListener('mousemove', (e) => {
-                if (!gameRunning) return;
-                
-                const rect = canvas.getBoundingClientRect();
-                const mouseX = e.clientX - rect.left;
-                
-                catcher.x = mouseX - catcher.width / 2;
-                
-                // 限制在画布内
-                if (catcher.x < 0) catcher.x = 0;
-                if (catcher.x + catcher.width > GAME_WIDTH) {
-                    catcher.x = GAME_WIDTH - catcher.width;
-                }
-            });
-            
-            // 触摸控制 - 修复手机端响应问题
-            canvas.addEventListener('touchstart', (e) => {
-                if (!gameRunning) return;
-                
-                e.preventDefault();
-                const touch = e.touches[0];
-                const rect = canvas.getBoundingClientRect();
-                touchStartX = touch.clientX - rect.left;
-                catcherStartX = catcher.x;
-            }, { passive: false });
-            
-            canvas.addEventListener('touchmove', (e) => {
-                if (!gameRunning) return;
-                
-                e.preventDefault();
-                const touch = e.touches[0];
-                const rect = canvas.getBoundingClientRect();
-                const touchX = touch.clientX - rect.left;
-                const deltaX = touchX - touchStartX;
-                
-                catcher.x = catcherStartX + deltaX;
-                
-                // 限制在画布内
-                if (catcher.x < 0) catcher.x = 0;
-                if (catcher.x + catcher.width > GAME_WIDTH) {
-                    catcher.x = GAME_WIDTH - catcher.width;
-                }
-            }, { passive: false });
-            
-            // 允许在游戏未开始时通过触摸关闭弹窗
-            startBtn.addEventListener('touchstart', (e) => {
-                e.stopPropagation(); // 防止事件冒泡
-            }, { passive: false });
-        }
-        
-        // 绘制背景
-        function drawBackground() {
-            // 如果有背景图片，使用背景图片
-            if (images.background && images.background.complete) {
-                // 绘制背景图片，适应画布大小
-                ctx.drawImage(images.background, 0, 0, GAME_WIDTH, GAME_HEIGHT);
+            // 绘制背景
+            if (game.images.background.complete) {
+                ctx.drawImage(game.images.background, 0, 0, canvas.width, canvas.height);
             } else {
-                // 否则使用喜庆的渐变背景
-                const gradient = ctx.createLinearGradient(0, 0, 0, GAME_HEIGHT);
-                gradient.addColorStop(0, "#ff4d4d");
-                gradient.addColorStop(0.5, "#ff9966");
-                gradient.addColorStop(1, "#ffcc00");
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+                // 备用背景色
+                ctx.fillStyle = '#d32f2f';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            // 生成新物品
+            const now = Date.now();
+            if (now - game.lastItemTime > 500 && game.items.length < 15) { // 最多15个物品同时存在
+                const rand = Math.random();
+                let cumulativeProb = 0;
                 
-                // 绘制一些装饰性元素
-                drawDecorations();
-            }
-        }
-        
-        // 绘制装饰
-        function drawDecorations() {
-            // 灯笼装饰
-            ctx.fillStyle = "#ff5252";
-            ctx.beginPath();
-            ctx.ellipse(50, 100, 30, 40, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = "#ffeb3b";
-            ctx.beginPath();
-            ctx.ellipse(50, 100, 20, 30, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = "#ff5252";
-            ctx.beginPath();
-            ctx.ellipse(GAME_WIDTH - 50, 100, 30, 40, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = "#ffeb3b";
-            ctx.beginPath();
-            ctx.ellipse(GAME_WIDTH - 50, 100, 20, 30, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // 顶部装饰
-            ctx.fillStyle = "#ff3333";
-            ctx.fillRect(0, 0, GAME_WIDTH, 10);
-            
-            // 底部装饰
-            ctx.fillStyle = "#ff9900";
-            ctx.fillRect(0, GAME_HEIGHT - 10, GAME_WIDTH, 10);
-            
-            // 飘落的红色花瓣效果
-            for (let i = 0; i < 8; i++) {
-                const x = (Date.now() / 50 + i * 80) % GAME_WIDTH;
-                const y = (Date.now() / 40 + i * 40) % GAME_HEIGHT;
-                
-                ctx.fillStyle = i % 2 === 0 ? "#ff6666" : "#ffcc00";
-                ctx.beginPath();
-                ctx.arc(x, y, 4, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-        
-        // 绘制接物器 (福袋)
-        function drawCatcher() {
-            // 如果有福袋图片，使用图片
-            if (images.catcher && images.catcher.complete) {
-                ctx.drawImage(images.catcher, catcher.x, catcher.y, catcher.width, catcher.height);
-            } else {
-                // 如果没有图片，什么也不绘制
-                ctx.fillStyle = "#ff3333";
-                ctx.beginPath();
-                ctx.roundRect(catcher.x, catcher.y, catcher.width, catcher.height, 20);
-                ctx.fill();
-            }
-        }
-        
-        // 创建掉落物品
-        function createItem() {
-            // 根据概率随机选择物品类型
-            const rand = Math.random();
-            let cumulativeProb = 0;
-            let selectedType;
-            
-            for (const type of ITEM_TYPES) {
-                cumulativeProb += type.probability;
-                if (rand <= cumulativeProb) {
-                    selectedType = type;
-                    break;
+                for (const config of game.itemConfig) {
+                    cumulativeProb += config.probability;
+                    if (rand <= cumulativeProb) {
+                        createItem(config);
+                        game.lastItemTime = now;
+                        break;
+                    }
                 }
             }
             
-            const item = {
-                x: Math.random() * (GAME_WIDTH - 60) + 30,
-                y: -60,
-                width: 60,
-                height: 60,
-                score: selectedType.score,
-                imageId: selectedType.imageId,
-                name: selectedType.name,
-                speed: selectedType.speed,
-                rotation: Math.random() * Math.PI * 2,
-                rotationSpeed: (Math.random() - 0.5) * 0.1
-            };
-            
-            items.push(item);
-        }
-        
-        // 绘制物品 - 只使用图片，没有备用图形
-        function drawItem(item) {
-            const img = images[item.imageId];
-            
-            // 如果没有物品图片，什么也不绘制
-            if (!img || !img.complete) {
-                return;
-            }
-            
-            ctx.save();
-            ctx.translate(item.x + item.width / 2, item.y + item.height / 2);
-            ctx.rotate(item.rotation);
-            
-            // 绘制图片
-            ctx.drawImage(img, -item.width/2, -item.height/2, item.width, item.height);
-            
-            ctx.restore();
-            
-            // 分数标签
-            ctx.fillStyle = "#fff";
-            ctx.font = "bold 16px Arial";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            ctx.fillText(item.score, item.x + item.width / 2, item.y + item.height + 5);
-        }
-        
-        // 更新物品位置
-        function updateItems() {
-            for (let i = items.length - 1; i >= 0; i--) {
-                const item = items[i];
+            // 更新和绘制物品
+            for (let i = game.items.length - 1; i >= 0; i--) {
+                const item = game.items[i];
                 
                 // 更新位置
                 item.y += item.speed;
-                item.rotation += item.rotationSpeed;
                 
-                // 检测是否被接住
-                if (
-                    item.y + item.height >= catcher.y &&
-                    item.y <= catcher.y + catcher.height &&
-                    item.x + item.width >= catcher.x &&
-                    item.x <= catcher.x + catcher.width
-                ) {
-                    // 接住物品，增加分数
-                    score += item.score;
-                    scoreDisplay.textContent = `分数: ${score}`;
+                // 检查是否被接住
+                if (item.y + item.size > game.catcher.y &&
+                    item.x + item.size > game.catcher.x &&
+                    item.x < game.catcher.x + game.catcher.width &&
+                    item.y < game.catcher.y + game.catcher.height) {
+                    
+                    // 增加分数
+                    game.score += item.value;
+                    scoreDisplay.textContent = game.score;
                     
                     // 移除物品
-                    items.splice(i, 1);
+                    game.items.splice(i, 1);
                     
-                    // 创建接住效果
-                    createCatchEffect(item.x + item.width / 2, item.y + item.height / 2, item.score);
+                    // 创建得分动画
+                    createScoreAnimation(item.x, item.y, `+${item.value}`);
                     continue;
                 }
                 
-                // 移除超出屏幕的物品
-                if (item.y > GAME_HEIGHT + 100) {
-                    items.splice(i, 1);
+                // 检查是否超出屏幕
+                if (item.y > canvas.height) {
+                    game.items.splice(i, 1);
+                    continue;
+                }
+                
+                // 绘制物品
+                if (game.images[item.type].complete) {
+                    ctx.drawImage(game.images[item.type], item.x, item.y, item.size, item.size);
+                } else {
+                    // 备用绘制
+                    ctx.fillStyle = item.color;
+                    ctx.beginPath();
+                    ctx.arc(item.x + item.size/2, item.y + item.size/2, item.size/2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            
+            // 绘制福袋
+            if (game.images.catcher.complete) {
+                ctx.drawImage(game.images.catcher, game.catcher.x, game.catcher.y, game.catcher.width, game.catcher.height);
+            } else {
+                // 备用绘制
+                ctx.fillStyle = '#ff9800';
+                ctx.fillRect(game.catcher.x, game.catcher.y, game.catcher.width, game.catcher.height);
+            }
+            
+            // 绘制分数动画
+            drawScoreAnimations();
+        }
+        
+        // 创建新物品
+        function createItem(config) {
+            const size = config.size;
+            const x = Math.random() * (canvas.width - size);
+            
+            const item = {
+                type: config.type,
+                value: config.value,
+                speed: config.speed,
+                x: x,
+                y: -size,
+                size: size,
+                color: getItemColor(config.type)
+            };
+            
+            game.items.push(item);
+        }
+        
+        // 根据物品类型获取颜色
+        function getItemColor(type) {
+            switch(type) {
+                case 'candy': return '#ff4081';
+                case 'couplet': return '#4caf50';
+                case 'redpacket': return '#f44336';
+                case 'gold': return '#ff9800';
+                default: return '#9c27b0';
+            }
+        }
+        
+        // 创建得分动画
+        let scoreAnimations = [];
+        
+        function createScoreAnimation(x, y, text) {
+            scoreAnimations.push({
+                x: x,
+                y: y,
+                text: text,
+                alpha: 1,
+                life: 60 // 帧数
+            });
+        }
+        
+        function drawScoreAnimations() {
+            for (let i = scoreAnimations.length - 1; i >= 0; i--) {
+                const anim = scoreAnimations[i];
+                
+                ctx.save();
+                ctx.globalAlpha = anim.alpha;
+                ctx.font = 'bold 28px Arial';
+                ctx.fillStyle = '#ffeb3b';
+                ctx.textAlign = 'center';
+                ctx.fillText(anim.text, anim.x + 40, anim.y);
+                ctx.restore();
+                
+                anim.y -= 1.5;
+                anim.alpha -= 0.016;
+                anim.life--;
+                
+                if (anim.life <= 0) {
+                    scoreAnimations.splice(i, 1);
                 }
             }
         }
         
-        // 创建接住效果
-        function createCatchEffect(x, y, points) {
-            ctx.save();
-            ctx.font = "bold 30px Arial";
-            ctx.fillStyle = points >= 10 ? "#ffcc00" : points >= 5 ? "#ff9800" : "#ff3333";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(`+${points}`, x, y - 30);
-            ctx.restore();
-        }
-        
-        // 游戏主循环
-        function gameLoop(timestamp) {
-            if (!gameRunning) return;
-            
-            const deltaTime = timestamp - lastTime;
-            lastTime = timestamp;
-            
-            // 清空画布
-            ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-            
-            // 绘制背景
-            drawBackground();
-            
-            // 更新和绘制物品
-            updateItems();
-            items.forEach(item => drawItem(item));
-            
-            // 绘制接物器
-            drawCatcher();
-            
-            // 随机生成新物品 (根据时间调整生成速度，后期加快)
-            const spawnRate = timeLeft > 15 ? 0.04 : 0.06;
-            if (Math.random() < spawnRate) {
-                createItem();
-            }
-            
-            animationId = requestAnimationFrame(gameLoop);
-        }
-        
-        // 开始游戏
-        function startGame() {
-            console.log("开始游戏按钮被点击");
-            
-            // 重置游戏状态
-            score = 0;
-            timeLeft = 30;
-            items = [];
-            gameRunning = true;
-            
-            // 更新显示
-            scoreDisplay.textContent = `分数: ${score}`;
-            timerDisplay.textContent = `时间: ${timeLeft}s`;
-            
-            // 隐藏开始弹窗
-            startModal.classList.add('hidden');
-            
-            // 开始计时器
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = `时间: ${timeLeft}s`;
+        // 游戏计时
+        function startTimer() {
+            const timer = setInterval(() => {
+                if (!game.isRunning) {
+                    clearInterval(timer);
+                    return;
+                }
                 
-                if (timeLeft <= 0) {
+                game.timeLeft--;
+                timeDisplay.textContent = game.timeLeft;
+                
+                if (game.timeLeft <= 0) {
+                    game.isRunning = false;
+                    clearInterval(timer);
+                    clearInterval(game.gameLoop);
                     endGame();
                 }
             }, 1000);
-            
-            // 开始游戏循环
-            lastTime = performance.now();
-            animationId = requestAnimationFrame(gameLoop);
-            
-            // 确保音乐播放
-            try {
-                if (bgMusic.paused) {
-                    bgMusic.play();
-                    musicIcon.textContent = "🎵";
-                }
-            } catch (e) {
-                console.log("音乐播放错误:", e);
-            }
         }
         
         // 结束游戏
         function endGame() {
-            console.log("游戏结束");
-            gameRunning = false;
+            finalScoreDisplay.textContent = game.score;
             
-            // 清除计时器
-            clearInterval(timerInterval);
-            
-            // 停止游戏循环
-            cancelAnimationFrame(animationId);
-            
-            // 显示最终分数
-            finalScoreDisplay.textContent = `${score} 分`;
-            
-            // 显示评价 (调整分数阈值，因为时间延长到30秒)
-            let message = "";
-            if (score >= 400) {
-                message = "🎉 福星高照！您接到的年货堆成山了！";
-            } else if (score >= 250) {
-                message = "✨ 满载而归！今年过年不愁吃喝了！";
-            } else if (score >= 150) {
-                message = "👍 收获颇丰！除夕夜可以好好庆祝了！";
-            } else if (score >= 80) {
-                message = "😊 小有收获！过个温馨的除夕夜没问题！";
+            // 根据分数显示不同评价
+            let result = "";
+            if (game.score >= 150) {
+                result = "福星高照！你接到的年货堆成山啦！新年必定财运亨通！";
+            } else if (game.score >= 100) {
+                result = "满载而归！福袋都装不下啦！新年福气满满！";
+            } else if (game.score >= 70) {
+                result = "收获颇丰！年货满满，新年一定红红火火！";
+            } else if (game.score >= 40) {
+                result = "不错哦！接到的年货够过年啦！新年快乐！";
             } else {
-                message = "🤗 再接再厉！明年一定会更好！";
+                result = "再接再厉！福气正在路上，新年一定会更好！";
             }
             
-            resultMessage.textContent = message;
-            
-            // 显示结束弹窗
-            endModal.classList.remove('hidden');
+            resultText.textContent = result;
+            endScreen.style.display = "flex";
         }
         
-        // 重新开始游戏
-        function restartGame() {
-            console.log("重新开始游戏");
+        // 事件监听
+        startBtn.addEventListener('click', () => {
+            startScreen.style.display = "none";
+            initGame();
+            startTimer();
             
-            // 隐藏结束弹窗
-            endModal.classList.add('hidden');
-            
-            // 重新开始游戏
-            startGame();
-        }
+            // 播放背景音乐
+            bgMusic.play().catch(e => {
+                console.log("自动播放被阻止，请手动点击播放");
+            });
+        });
         
-        // 切换音乐
-        function toggleMusic() {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                musicIcon.textContent = "🎵";
-            } else {
+        restartBtn.addEventListener('click', () => {
+            endScreen.style.display = "none";
+            initGame();
+            startTimer();
+        });
+        
+        // 音乐控制
+        let isMusicPlaying = true;
+        musicControl.addEventListener('click', () => {
+            if (isMusicPlaying) {
                 bgMusic.pause();
-                musicIcon.textContent = "🔇";
+                musicIcon.className = "fas fa-volume-mute";
+            } else {
+                bgMusic.play();
+                musicIcon.className = "fas fa-volume-up";
             }
-        }
+            isMusicPlaying = !isMusicPlaying;
+        });
         
-        // 添加圆角矩形方法
-        CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
-            if (width < 2 * radius) radius = width / 2;
-            if (height < 2 * radius) radius = height / 2;
+        // 触摸控制
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            game.touchStartX = e.touches[0].clientX;
+            game.catcherStartX = game.catcher.x;
+            game.isDragging = true;
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!game.isDragging || !game.isRunning) return;
             
-            this.beginPath();
-            this.moveTo(x + radius, y);
-            this.arcTo(x + width, y, x + width, y + height, radius);
-            this.arcTo(x + width, y + height, x, y + height, radius);
-            this.arcTo(x, y + height, x, y, radius);
-            this.arcTo(x, y, x + width, y, radius);
-            this.closePath();
-            return this;
-        };
+            const touchX = e.touches[0].clientX;
+            const deltaX = touchX - game.touchStartX;
+            let newX = game.catcherStartX + deltaX;
+            
+            // 限制福袋在屏幕内
+            newX = Math.max(0, Math.min(newX, canvas.width - game.catcher.width));
+            game.catcher.x = newX;
+        });
         
-        // 页面加载完成后开始加载图片
-        window.addEventListener('load', loadImages);
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            game.isDragging = false;
+        });
         
-        // 防止页面滚动
-        document.addEventListener('touchmove', (e) => {
-            if (e.target === canvas || e.target === document.body) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // 鼠标控制（为桌面测试提供）
+        canvas.addEventListener('mousedown', (e) => {
+            game.touchStartX = e.clientX;
+            game.catcherStartX = game.catcher.x;
+            game.isDragging = true;
+        });
         
-        // 窗口大小变化时重新调整
+        canvas.addEventListener('mousemove', (e) => {
+            if (!game.isDragging || !game.isRunning) return;
+            
+            const mouseX = e.clientX;
+            const deltaX = mouseX - game.touchStartX;
+            let newX = game.catcherStartX + deltaX;
+            
+            // 限制福袋在屏幕内
+            newX = Math.max(0, Math.min(newX, canvas.width - game.catcher.width));
+            game.catcher.x = newX;
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            game.isDragging = false;
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            game.isDragging = false;
+        });
+        
+        // 窗口大小调整
         window.addEventListener('resize', () => {
-            if (canvas && ctx) {
-                canvas.width = window.innerWidth > 500 ? 500 : window.innerWidth;
-                canvas.height = window.innerHeight > 900 ? 900 : window.innerHeight;
-                drawBackground();
-                drawCatcher();
+            resizeCanvas();
+            
+            // 调整福袋位置确保在屏幕内
+            if (game.catcher.x + game.catcher.width > canvas.width) {
+                game.catcher.x = canvas.width - game.catcher.width;
             }
         });
+        
+        // 加载图像并初始化
+        loadImages();
+        resizeCanvas();
+        
+        // 确保音乐可以在用户交互后播放
+        document.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(e => console.log("音乐播放被阻止"));
+            }
+        }, { once: true });
     </script>
 </body>
 </html>
