@@ -157,13 +157,6 @@
             justify-content: center;
         }
         
-        .score-item img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-            object-fit: contain;
-        }
-        
         .btn {
             background: linear-gradient(to bottom, #ff5722, #e64a19);
             color: white;
@@ -259,19 +252,9 @@
             .modal-content {
                 padding: 20px;
             }
-            
-            .score-item img {
-                width: 35px;
-                height: 35px;
-            }
         }
         
         @media (max-width: 380px) {
-            .score-item img {
-                width: 30px;
-                height: 30px;
-            }
-            
             .score-item span {
                 font-size: 14px;
             }
@@ -296,23 +279,15 @@
                     <p>用手指左右移动底部的福袋，接住掉落的年货</p>
                     
                     <div class="score-item">
-                        <img id="preview-item1" src="" alt="糖果" style="display:none;">
-                        <div id="fallback-item1" style="width:40px;height:40px;margin-right:10px;display:flex;align-items:center;justify-content:center;font-size:30px;">🍬</div>
                         <span>糖果 1分</span>
                     </div>
                     <div class="score-item">
-                        <img id="preview-item3" src="" alt="春联" style="display:none;">
-                        <div id="fallback-item3" style="width:40px;height:40px;margin-right:10px;display:flex;align-items:center;justify-content:center;font-size:30px;">🧧</div>
                         <span>春联 3分</span>
                     </div>
                     <div class="score-item">
-                        <img id="preview-item5" src="" alt="红包" style="display:none;">
-                        <div id="fallback-item5" style="width:40px;height:40px;margin-right:10px;display:flex;align-items:center;justify-content:center;font-size:30px;">💰</div>
                         <span>红包 5分</span>
                     </div>
                     <div class="score-item">
-                        <img id="preview-item10" src="" alt="元宝" style="display:none;">
-                        <div id="fallback-item10" style="width:40px;height:40px;margin-right:10px;display:flex;align-items:center;justify-content:center;font-size:30px;">🏮</div>
                         <span>元宝 10分</span>
                     </div>
                 </div>
@@ -338,7 +313,6 @@
     </div>
     
     <audio id="bg-music" loop>
-        <!-- 音乐文件 chuxibgm.mp3 或 chuxibgm.m4a -->
         <source src="chuxibgm.mp3" type="audio/mpeg">
         <source src="chuxibgm.m4a" type="audio/mp4">
         您的浏览器不支持音频播放
@@ -362,7 +336,7 @@
         let canvas, ctx;
         let gameRunning = false;
         let score = 0;
-        let timeLeft = 30; // 改为30秒
+        let timeLeft = 30;
         let timerInterval;
         let items = [];
         let catcher = {
@@ -426,22 +400,6 @@
                     const id = img.id.replace('-img', '');
                     if (id in images) {
                         images[id] = img;
-                        
-                        // 如果是年货图片，也设置到弹窗预览中
-                        if (id.startsWith('item')) {
-                            const previewId = 'preview-' + id;
-                            const previewImg = document.getElementById(previewId);
-                            if (previewImg) {
-                                previewImg.src = img.src;
-                                previewImg.style.display = 'block';
-                                // 隐藏fallback
-                                const fallbackId = 'fallback-' + id;
-                                const fallbackDiv = document.getElementById(fallbackId);
-                                if (fallbackDiv) {
-                                    fallbackDiv.style.display = 'none';
-                                }
-                            }
-                        }
                     }
                     
                     // 所有图片加载完成后初始化游戏
@@ -485,12 +443,25 @@
             catcher.x = (GAME_WIDTH - catcher.width) / 2;
             catcher.y = GAME_HEIGHT - catcher.height - 20;
             
-            // 事件监听
+            // 事件监听 - 修复手机端点击响应问题
             startBtn.addEventListener('click', startGame);
+            startBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault(); // 防止默认行为
+                startGame();
+            }, { passive: false });
+            
             restartBtn.addEventListener('click', restartGame);
+            restartBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                restartGame();
+            }, { passive: false });
             
             // 音乐控制
             musicToggle.addEventListener('click', toggleMusic);
+            musicToggle.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                toggleMusic();
+            }, { passive: false });
             
             // 触摸/鼠标控制
             setupControls();
@@ -536,7 +507,7 @@
                 }
             });
             
-            // 触摸控制
+            // 触摸控制 - 修复手机端响应问题
             canvas.addEventListener('touchstart', (e) => {
                 if (!gameRunning) return;
                 
@@ -545,7 +516,7 @@
                 const rect = canvas.getBoundingClientRect();
                 touchStartX = touch.clientX - rect.left;
                 catcherStartX = catcher.x;
-            });
+            }, { passive: false });
             
             canvas.addEventListener('touchmove', (e) => {
                 if (!gameRunning) return;
@@ -563,7 +534,12 @@
                 if (catcher.x + catcher.width > GAME_WIDTH) {
                     catcher.x = GAME_WIDTH - catcher.width;
                 }
-            });
+            }, { passive: false });
+            
+            // 允许在游戏未开始时通过触摸关闭弹窗
+            startBtn.addEventListener('touchstart', (e) => {
+                e.stopPropagation(); // 防止事件冒泡
+            }, { passive: false });
         }
         
         // 绘制背景
