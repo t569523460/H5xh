@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>元宵节快乐</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: "微软雅黑", sans-serif; }
+
+    /* 背景 */
+    body {
+        background: url('bg.jpg') no-repeat center center;
+        background-size: cover;
+        position: relative;
+    }
+
+    /* 灯笼样式 */
+    .lantern {
+        position: absolute;
+        width: 120px;
+        height: 200px;
+        cursor: pointer;
+        animation: breathe 2s infinite;
+    }
+
+    /* 呼吸光动画 */
+    @keyframes breathe {
+        0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,180,0,0.7); }
+        50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,180,0,1); }
+    }
+
+    /* 小知识弹窗 */
+    .tip {
+        position: fixed;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255,255,255,0.95);
+        padding: 15px 20px;
+        border-radius: 12px;
+        font-size: 16px;
+        color: #333;
+        display: none;
+        max-width: 80%;
+        text-align: center;
+        z-index: 10;
+    }
+
+    /* 烟花效果 */
+    .firework {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        pointer-events: none;
+        display: none;
+        background: url('firework.png') no-repeat center center;
+        background-size: contain;
+    }
+
+    /* 下方装饰 */
+    .decor {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 200px;
+        background: url('decor.png') no-repeat center bottom;
+        background-size: contain;
+        pointer-events: none;
+    }
+</style>
+</head>
+<body>
+
+<!-- 背景音乐 -->
+<audio id="bgm" src="yuanxiaobgm.mp3" autoplay loop></audio>
+
+<!-- 灯笼 -->
+<img src="lantern1.png" class="lantern" id="lantern1" style="top:10%; left:10%;">
+<img src="lantern2.png" class="lantern" id="lantern2" style="top:10%; left:30%;">
+<img src="lantern3.png" class="lantern" id="lantern3" style="top:10%; left:50%;">
+<img src="lantern4.png" class="lantern" id="lantern4" style="top:10%; left:70%;">
+<img src="lantern5.png" class="lantern" id="lantern5" style="top:10%; left:90%;">
+<img src="lantern6.png" class="lantern" id="lantern6" style="top:25%; left:50%;">
+
+<!-- 烟花 -->
+<div id="fireworkContainer"></div>
+
+<!-- 小知识提示 -->
+<div class="tip" id="tip"></div>
+
+<!-- 下方装饰 -->
+<div class="decor"></div>
+
+<script>
+const lanternTips = {
+    lantern1: "元宵节，又称上元节，是农历正月十五的传统节日，起源于汉朝。",
+    lantern2: "元宵节习俗包括吃元宵、赏花灯、猜灯谜、舞龙舞狮。",
+    lantern3: "元宵节的‘元宵’寓意团圆、美满，人们通过吃元宵祈求幸福。",
+    lantern4: "猜灯谜是元宵节的传统娱乐活动，增添节日趣味。",
+    lantern5: "舞龙舞狮表演在元宵节常见，象征驱邪纳福。",
+    lantern6: "元宵节也有赏月习俗，正月十五是全年第一轮满月。"
+};
+
+const lanterns = document.querySelectorAll('.lantern');
+const tip = document.getElementById('tip');
+const fireworkContainer = document.getElementById('fireworkContainer');
+
+function createFirework(x, y){
+    const fw = document.createElement('div');
+    fw.className = 'firework';
+    fw.style.left = (x-75) + 'px';
+    fw.style.top = (y-75) + 'px';
+    fireworkContainer.appendChild(fw);
+    fw.style.display = 'block';
+    setTimeout(() => { fw.remove(); }, 800);
+}
+
+lanterns.forEach(lantern => {
+    lantern.addEventListener('click', (e) => {
+        const id = lantern.id;
+        tip.innerText = lanternTips[id];
+        tip.style.display = 'block';
+
+        createFirework(e.clientX, e.clientY);
+
+        setTimeout(() => { tip.style.display = 'none'; }, 3000);
+    });
+});
+</script>
+</body>
+</html>
