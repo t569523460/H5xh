@@ -28,18 +28,14 @@
         /* 书签样式 */
         .clue {
             position: absolute;
-            width: 225px;        /* 原90px * 2.5 ≈ 225px */
-            height: 450px;       /* 原180px * 2.5 = 450px */
+            width: 225px;
+            height: 450px;
             cursor: pointer;
             filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
             object-fit: contain;
-            /* 以顶部中心为旋转原点，添加轻微晃动动画 */
             transform-origin: top center;
             animation: sway 3s ease-in-out infinite;
         }
-
-        /* 移除悬停效果（保持常亮） */
-        /* .clue:hover 已删除，不再有放大变化 */
 
         /* 轻微晃动动画 */
         @keyframes sway {
@@ -49,23 +45,23 @@
             100% { transform: rotate(0deg); }
         }
 
-        /* 书签微调位置（最终版） */
+        /* 书签微调位置（最新版） */
         .clue1 {
-            top: 4%;     /* 左上，上移5% */
+            top: 9%;     /* 左上，中间值 */
             left: 15%;
         }
         .clue2 {
-            top: 6%;     /* 右上，上移5% */
+            top: 11%;    /* 右上，中间值 */
             right: 15%;
             left: auto;
         }
         .clue3 {
-            top: 37%;    /* 左下，下移2% */
+            top: 37%;    /* 左下，保持不变 */
             left: 15%;
             bottom: auto;
         }
         .clue4 {
-            top: 30%;    /* 右下，保持不变 */
+            top: 33%;    /* 右下，下降3% */
             right: 15%;
             left: auto;
             bottom: auto;
@@ -77,10 +73,10 @@
                 width: 150px;
                 height: 300px;
             }
-            .clue1 { left: 5%; top: 2%; }      /* 防止太靠上 */
-            .clue2 { right: 5%; top: 4%; }
-            .clue3 { left: 5%; top: 42%; }     /* 下排相应调整 */
-            .clue4 { right: 5%; top: 35%; }
+            .clue1 { left: 5%; top: 5%; }      /* 对应调整 */
+            .clue2 { right: 5%; top: 7%; }
+            .clue3 { left: 5%; top: 42%; }
+            .clue4 { right: 5%; top: 38%; }
         }
 
         /* 平板适中 */
@@ -89,10 +85,10 @@
                 width: 200px;
                 height: 400px;
             }
-            .clue1 { left: 10%; top: 5%; }
-            .clue2 { right: 10%; top: 7%; }
+            .clue1 { left: 10%; top: 10%; }
+            .clue2 { right: 10%; top: 12%; }
             .clue3 { left: 10%; top: 40%; }
-            .clue4 { right: 10%; top: 33%; }
+            .clue4 { right: 10%; top: 35%; }
         }
 
         /* 弹窗 (亮橙色) */
@@ -225,7 +221,7 @@
     <!-- 背景音乐 (同一目录) -->
     <audio id="bgm" loop src="bgm.mp3" preload="auto"></audio>
 
-    <!-- 书签图片，使用 dengmi1.png ~ dengmi4.png，最终位置已调整 -->
+    <!-- 书签图片，使用 dengmi1.png ~ dengmi4.png，最新位置已调整 -->
     <img src="dengmi1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。" alt="灯谜书签">
     <img src="dengmi2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。" alt="灯谜书签">
     <img src="dengmi3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。" alt="灯谜书签">
@@ -265,7 +261,6 @@
                 }
             }
 
-            // 页面加载尝试自动播放
             window.addEventListener('load', () => {
                 bgm.play().then(() => { bgmStarted = true; }).catch(() => {});
             });
