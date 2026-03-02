@@ -31,34 +31,41 @@
             width: 225px;        /* 原90px * 2.5 ≈ 225px */
             height: 450px;       /* 原180px * 2.5 = 450px */
             cursor: pointer;
-            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1), filter 0.3s;
             filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
-            will-change: transform;
             object-fit: contain;
+            /* 以顶部中心为旋转原点，添加轻微晃动动画 */
+            transform-origin: top center;
+            animation: sway 3s ease-in-out infinite;
         }
 
-        .clue:hover {
-            transform: scale(1.08) translateY(-4px);
-            filter: drop-shadow(0 15px 20px rgba(255, 180, 60, 0.8));
+        /* 移除悬停效果（保持常亮） */
+        /* .clue:hover 已删除，不再有放大变化 */
+
+        /* 轻微晃动动画 */
+        @keyframes sway {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            75% { transform: rotate(-1deg); }
+            100% { transform: rotate(0deg); }
         }
 
-        /* 书签微调位置：上排左高右低，下排左低右高 */
+        /* 书签微调位置（最终版） */
         .clue1 {
-            top: 14%;    /* 左上略高 */
+            top: 4%;     /* 左上，上移10% */
             left: 15%;
         }
         .clue2 {
-            top: 16%;    /* 右上略低（相对左上） */
+            top: 6%;     /* 右上，上移10% */
             right: 15%;
             left: auto;
         }
         .clue3 {
-            top: 35%;    /* 左下降低 */
+            top: 37%;    /* 左下，下移2% */
             left: 15%;
             bottom: auto;
         }
         .clue4 {
-            top: 30%;    /* 右下抬高 */
+            top: 30%;    /* 右下，保持不变 */
             right: 15%;
             left: auto;
             bottom: auto;
@@ -67,13 +74,13 @@
         /* 超小屏（如 iPhone SE）适当缩小尺寸，避免溢出 */
         @media (max-width: 480px) {
             .clue {
-                width: 150px;      /* 缩小以适应小屏 */
+                width: 150px;
                 height: 300px;
             }
-            .clue1 { left: 5%; top: 12%; }
-            .clue2 { right: 5%; top: 14%; }
-            .clue3 { left: 5%; top: 42%; }   /* 下排位置相应调整 */
-            .clue4 { right: 5%; top: 38%; }
+            .clue1 { left: 5%; top: 2%; }      /* 防止太靠上 */
+            .clue2 { right: 5%; top: 4%; }
+            .clue3 { left: 5%; top: 42%; }     /* 下排相应调整 */
+            .clue4 { right: 5%; top: 35%; }
         }
 
         /* 平板适中 */
@@ -82,9 +89,9 @@
                 width: 200px;
                 height: 400px;
             }
-            .clue1 { left: 10%; top: 15%; }
-            .clue2 { right: 10%; top: 17%; }
-            .clue3 { left: 10%; top: 38%; }
+            .clue1 { left: 10%; top: 5%; }
+            .clue2 { right: 10%; top: 7%; }
+            .clue3 { left: 10%; top: 40%; }
             .clue4 { right: 10%; top: 33%; }
         }
 
@@ -218,7 +225,7 @@
     <!-- 背景音乐 (同一目录) -->
     <audio id="bgm" loop src="bgm.mp3" preload="auto"></audio>
 
-    <!-- 书签图片，使用 dengmi1.png ~ dengmi4.png，位置已按需微调 -->
+    <!-- 书签图片，使用 dengmi1.png ~ dengmi4.png，最终位置已调整 -->
     <img src="dengmi1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。" alt="灯谜书签">
     <img src="dengmi2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。" alt="灯谜书签">
     <img src="dengmi3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。" alt="灯谜书签">
