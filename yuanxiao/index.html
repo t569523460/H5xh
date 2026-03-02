@@ -2,149 +2,296 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>元宵节灯谜互动</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>元宵灯谜 · 新韵</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; overflow: hidden; font-family: "微软雅黑", sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        /* 背景 */
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: "Microsoft YaHei", "苹方", "PingFang SC", sans-serif;
+        }
+
+        /* 背景图 —— 保留原有 wall.jpg，增加一层柔光遮罩，使书签更突出 */
         body {
-            background: url('wall.jpg') no-repeat center center;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('wall.jpg') no-repeat center center;
             background-size: cover;
             position: relative;
         }
 
-        /* 灯谜书签 */
+        /* 书签公用样式：尺寸略为缩减让分布更从容，增加柔和阴影 */
         .clue {
             position: absolute;
-            width: 100px;
-            height: 200px;
+            width: 90px;                /* 比原来稍小，避免太占空间 */
+            height: 180px;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1), filter 0.3s;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+            will-change: transform;
+            object-fit: contain;         /* 确保图片不变形，如果png有透明区域合适 */
         }
 
-        /* 灯谜点击效果 */
         .clue:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+            transform: scale(1.08) translateY(-4px);
+            filter: drop-shadow(0 15px 20px rgba(255, 215, 0, 0.6));
         }
 
-        /* 展示灯谜 */
+        /* ----- 重新分布四个书签：四角散落，绝不交叉 ----- */
+        .clue1 {
+            top: 6%;
+            left: 4%;
+        }
+
+        .clue2 {
+            top: 6%;
+            right: 4%;
+            left: auto;          /* 覆盖默认left，使用right定位 */
+        }
+
+        .clue3 {
+            bottom: 8%;
+            left: 5%;
+            top: auto;           /* 覆盖默认top */
+        }
+
+        .clue4 {
+            bottom: 8%;
+            right: 5%;
+            top: auto;
+            left: auto;
+        }
+
+        /* 针对小屏幕（如手机横屏）稍作调整，仍保持四角分离 */
+        @media (max-width: 600px) {
+            .clue {
+                width: 70px;
+                height: 140px;
+            }
+            .clue1 { left: 2%; top: 3%; }
+            .clue2 { right: 2%; top: 3%; }
+            .clue3 { left: 2%; bottom: 5%; }
+            .clue4 { right: 2%; bottom: 5%; }
+        }
+
+        /* ----------------- 弹窗 (灯谜卡片) 全新设计 ----------------- */
         .clue-content {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95); /* 背景色更明显 */
-            padding: 20px 30px;
-            border-radius: 10px;
-            max-width: 80%;
-            max-height: 80%;
+            width: min(600px, 85vw);          /* 更大尺寸，自适应 */
+            min-width: 300px;
+            background: rgba(255, 245, 235, 0.97);  /* 暖白透光感 */
+            backdrop-filter: blur(10px);        /* 背景模糊，现代感 */
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 48px 48px 48px 48px; /* 更大圆角 */
+            padding: 2.5rem 2rem 2.5rem 2rem;
+            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(255, 215, 0, 0.3) inset,
+                        0 0 30px rgba(255, 200, 100, 0.4);
             text-align: center;
+            z-index: 100;
             display: none;
-            font-size: 20px;
-            color: #333;
-            z-index: 10;
-            overflow-y: auto; /* 防止文本溢出 */
+            border: 2px solid rgba(255, 180, 60, 0.4);
         }
 
-        /* 答案按钮 */
+        /* 灯谜文本 (谜面) */
+        #clue-text {
+            font-size: 1.9rem;
+            font-weight: 550;
+            line-height: 1.4;
+            color: #2e1e0f;
+            text-shadow: 0 2px 5px rgba(255, 215, 0, 0.2);
+            margin: 1.5rem 0.5rem 1rem 0.5rem;
+            padding: 0 0.5rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            letter-spacing: 0.02em;
+        }
+
+        /* 显示答案按钮 —— 全新质感 */
         .show-answer-btn {
-            margin-top: 20px;
-            padding: 12px 25px;
-            background-color: #FF7F50; /* 橙色 */
+            margin: 2rem 0 1.2rem 0;
+            padding: 1rem 2.8rem;
+            background: linear-gradient(145deg, #f9a826, #f57c00);
             border: none;
-            color: #fff;
+            color: white;
+            font-size: 1.6rem;
+            font-weight: 600;
+            border-radius: 60px;
             cursor: pointer;
-            border-radius: 5px;
-            font-size: 18px;
+            box-shadow: 0 10px 18px -6px #b95e00, 0 0 0 2px rgba(255, 245, 200, 0.7) inset;
+            transition: all 0.25s ease;
+            letter-spacing: 4px;
+            border: 1px solid rgba(255, 255, 200, 0.6);
         }
 
         .show-answer-btn:hover {
-            background-color: #FF6347; /* 略红的橙色 */
+            background: linear-gradient(145deg, #ffb347, #ff8c1a);
+            transform: scale(1.02) translateY(-3px);
+            box-shadow: 0 18px 25px -8px #aa4e00, 0 0 0 3px rgba(255, 220, 120, 0.8) inset;
         }
 
-        /* 返回按钮 */
+        .show-answer-btn:active {
+            transform: scale(0.98) translateY(1px);
+            box-shadow: 0 5px 12px -3px #8f4200;
+        }
+
+        /* 答案区域 (只显示谜底，无解析) */
+        .answer {
+            margin: 1.5rem 0.5rem 0.8rem;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #aa4e1c;
+            background: rgba(255, 235, 200, 0.7);
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            display: none;
+            border: 2px dashed #ffb88c;
+            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.5);
+            word-break: break-word;
+            line-height: 1.3;
+            letter-spacing: 2px;
+        }
+
+        /* 右上角关闭按钮 —— 自然圆形，融入卡片 */
         .close-btn {
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            font-weight: bold;
+            top: 20px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            background-color: rgba(200, 160, 120, 0.25);
+            border-radius: 50%;
+            font-size: 36px;
+            font-weight: 300;
+            line-height: 42px;
+            text-align: center;
+            color: #8b5a2b;
             cursor: pointer;
-            color: #FF6347;
+            transition: background-color 0.2s, transform 0.2s, color 0.2s;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 210, 140, 0.5);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            user-select: none;
         }
 
-        /* 灯谜答案 */
-        .answer {
-            margin-top: 15px;
-            font-size: 18px;
-            color: #555;
-            display: none;
+        .close-btn:hover {
+            background-color: rgba(220, 170, 120, 0.6);
+            color: #4d2f12;
+            transform: rotate(90deg) scale(1.1);
+            border-color: #ffb347;
         }
 
-        /* 书签位置 */
-        .clue1 { top: 10%; left: 10%; }
-        .clue2 { top: 20%; left: 30%; }
-        .clue3 { top: 30%; left: 50%; }
-        .clue4 { top: 40%; left: 70%; }
+        .close-btn:active {
+            transform: rotate(90deg) scale(0.9);
+            background-color: #b98f62;
+            color: white;
+        }
+
+        /* 可选：为弹窗加一个顶部小装饰 */
+        .clue-content::before {
+            content: "🏮";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            filter: drop-shadow(0 6px 6px #ff8c42);
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        /* 当弹窗出现时，加个淡入效果 */
+        .clue-content[style*="display: block"] {
+            animation: gentlePopup 0.3s ease-out;
+        }
+
+        @keyframes gentlePopup {
+            0% { opacity: 0; transform: translate(-50%, -40%) scale(0.9); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
     </style>
 </head>
 <body>
 
-<!-- 灯谜书签 -->
-<img src="clue1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。">
-<img src="clue2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。">
-<img src="clue3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。">
-<img src="clue4.png" class="clue clue4" data-clue="日落西山并列明，二人肩并肩。">
+    <!-- 四枚书签，使用原图名，分布四角 -->
+    <img src="clue1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。" alt="灯谜书签">
+    <img src="clue2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。" alt="灯谜书签">
+    <img src="clue3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。" alt="灯谜书签">
+    <img src="clue4.png" class="clue clue4" data-clue="日落西山并列明，二人肩并肩。" alt="灯谜书签">
 
-<!-- 灯谜展示框 -->
-<div class="clue-content" id="clue-content">
-    <div id="clue-text"></div>
-    <button class="show-answer-btn" id="show-answer-btn">显示答案</button>
-    <div id="answer" class="answer"></div>
-    <span class="close-btn" id="close-btn">×</span>
-</div>
+    <!-- 灯谜展示卡 -->
+    <div class="clue-content" id="clue-content">
+        <div id="clue-text"></div>
+        <button class="show-answer-btn" id="show-answer-btn">谜底</button>
+        <div id="answer" class="answer"></div>
+        <span class="close-btn" id="close-btn">×</span>
+    </div>
 
-<script>
-    const clues = document.querySelectorAll('.clue');
-    const clueContent = document.getElementById('clue-content');
-    const clueText = document.getElementById('clue-text');
-    const showAnswerBtn = document.getElementById('show-answer-btn');
-    const answer = document.getElementById('answer');
-    const closeBtn = document.getElementById('close-btn');
+    <script>
+        (function() {
+            // 获取元素
+            const clues = document.querySelectorAll('.clue');
+            const clueContent = document.getElementById('clue-content');
+            const clueText = document.getElementById('clue-text');
+            const showAnswerBtn = document.getElementById('show-answer-btn');
+            const answerDiv = document.getElementById('answer');
+            const closeBtn = document.getElementById('close-btn');
 
-    // 灯谜内容和答案
-    const cluesData = {
-        "白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。": "谜底：闪电\n解析：闪电是瞬间明亮的自然现象。",
-        "一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。": "谜底：田\n解析：‘田’字的构造，且在四季都可见。",
-        "千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。": "谜底：雨\n解析：雨如线，风吹雨飘，雨后常见彩虹。",
-        "日落西山并列明，二人肩并肩。": "谜底：明\n解析：‘日’和‘月’组合成‘明’，光明如白昼。"
-    };
+            // 灯谜数据 —— 只保留纯谜底 (删掉了解析部分)
+            const cluesData = {
+                "白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。": "闪电",
+                "一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。": "田",
+                "千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。": "雨",
+                "日落西山并列明，二人肩并肩。": "明"
+            };
 
-    // 点击灯谜书签
-    clues.forEach(clue => {
-        clue.addEventListener('click', (e) => {
-            const clueTextContent = e.target.getAttribute('data-clue');
-            clueText.innerText = clueTextContent;
-            answer.style.display = 'none'; // 隐藏答案
-            clueContent.style.display = 'block'; // 显示灯谜内容
-        });
-    });
+            // 当前显示的谜面文本
+            let currentClueText = '';
 
-    // 显示答案
-    showAnswerBtn.addEventListener('click', () => {
-        const clueTextContent = clueText.innerText;
-        answer.innerText = cluesData[clueTextContent];
-        answer.style.display = 'block'; // 显示答案
-    });
+            // 点击书签：展示谜面，隐藏之前的答案
+            clues.forEach(clue => {
+                clue.addEventListener('click', (e) => {
+                    const clueTextContent = e.target.getAttribute('data-clue');
+                    // 更新弹窗内容
+                    clueText.innerText = clueTextContent;
+                    answerDiv.style.display = 'none';          // 新谜面先隐藏答案
+                    answerDiv.innerText = '';                  // 清空旧答案
+                    clueContent.style.display = 'block';       // 显示弹窗
+                    currentClueText = clueTextContent;         // 记录当前谜面
+                });
+            });
 
-    // 关闭灯谜内容
-    closeBtn.addEventListener('click', () => {
-        clueContent.style.display = 'none'; // 隐藏灯谜内容
-    });
-</script>
+            // 显示答案 (只显示纯谜底，不加额外修饰，但可以加前缀使更清晰)
+            showAnswerBtn.addEventListener('click', () => {
+                // 从数据中获取谜底，如果找不到则显示默认
+                const answerText = cluesData[currentClueText];
+                if (answerText) {
+                    // 为了更明确，可以显示“谜底：”前缀，但根据要求“解析删掉”，此处保留干净谜底，亦可加上“⚡”装饰
+                    // 这里采用直接显示谜底，但为了自然加上一个小灯笼emoji（可选）
+                    answerDiv.innerText = `✨ ${answerText} ✨`;   // 用星星包裹，更喜庆，实际还是只有谜底词
+                } else {
+                    answerDiv.innerText = '🏮 等您揭晓 🏮';
+                }
+                answerDiv.style.display = 'block';   // 显示答案区域
+            });
 
+            // 关闭弹窗
+            closeBtn.addEventListener('click', () => {
+                clueContent.style.display = 'none';
+            });
+
+            // 可选：点击弹窗外围也可以关闭？为了符合直觉，但无需求，暂不添加。
+            // 但若用户点击背景（书签以外）想关闭？暂时保留原逻辑，只有X关闭。
+            // 如果误触书签重新打开，无影响。
+        })();
+    </script>
 </body>
 </html>
