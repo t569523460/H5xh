@@ -1,132 +1,150 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>元宵节快乐</title>
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; font-family: "微软雅黑", sans-serif; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元宵节灯谜互动</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow: hidden; font-family: "微软雅黑", sans-serif; }
 
-    /* 背景 */
-    body {
-        background: url('bg.jpg') no-repeat center center;
-        background-size: cover;
-        position: relative;
-    }
+        /* 背景 */
+        body {
+            background: url('wall.jpg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
 
-    /* 灯笼样式 */
-    .lantern {
-        position: absolute;
-        width: 120px;
-        height: 200px;
-        cursor: pointer;
-        animation: breathe 2s infinite;
-    }
+        /* 灯谜书签 */
+        .clue {
+            position: absolute;
+            width: 100px;
+            height: 200px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
-    /* 呼吸光动画 */
-    @keyframes breathe {
-        0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,180,0,0.7); }
-        50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,180,0,1); }
-    }
+        /* 灯谜点击效果 */
+        .clue:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+        }
 
-    /* 小知识弹窗 */
-    .tip {
-        position: fixed;
-        bottom: 50px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(255,255,255,0.95);
-        padding: 15px 20px;
-        border-radius: 12px;
-        font-size: 16px;
-        color: #333;
-        display: none;
-        max-width: 80%;
-        text-align: center;
-        z-index: 10;
-    }
+        /* 展示灯谜 */
+        .clue-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95); /* 背景色更明显 */
+            padding: 20px 30px;
+            border-radius: 10px;
+            max-width: 80%;
+            max-height: 80%;
+            text-align: center;
+            display: none;
+            font-size: 20px;
+            color: #333;
+            z-index: 10;
+            overflow-y: auto; /* 防止文本溢出 */
+        }
 
-    /* 烟花效果 */
-    .firework {
-        position: absolute;
-        width: 150px;
-        height: 150px;
-        pointer-events: none;
-        display: none;
-        background: url('firework.png') no-repeat center center;
-        background-size: contain;
-    }
+        /* 答案按钮 */
+        .show-answer-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #FF7F50; /* 橙色 */
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 18px;
+        }
 
-    /* 下方装饰 */
-    .decor {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 200px;
-        background: url('decor.png') no-repeat center bottom;
-        background-size: contain;
-        pointer-events: none;
-    }
-</style>
+        .show-answer-btn:hover {
+            background-color: #FF6347; /* 略红的橙色 */
+        }
+
+        /* 返回按钮 */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #FF6347;
+        }
+
+        /* 灯谜答案 */
+        .answer {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #555;
+            display: none;
+        }
+
+        /* 书签位置 */
+        .clue1 { top: 10%; left: 10%; }
+        .clue2 { top: 20%; left: 30%; }
+        .clue3 { top: 30%; left: 50%; }
+        .clue4 { top: 40%; left: 70%; }
+    </style>
 </head>
 <body>
 
-<!-- 背景音乐 -->
-<audio id="bgm" src="yuanxiaobgm.mp3" autoplay loop></audio>
+<!-- 灯谜书签 -->
+<img src="clue1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。">
+<img src="clue2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。">
+<img src="clue3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。">
+<img src="clue4.png" class="clue clue4" data-clue="日落西山并列明，二人肩并肩。">
 
-<!-- 灯笼 -->
-<img src="lantern1.png" class="lantern" id="lantern1" style="top:10%; left:10%;">
-<img src="lantern2.png" class="lantern" id="lantern2" style="top:10%; left:30%;">
-<img src="lantern3.png" class="lantern" id="lantern3" style="top:10%; left:50%;">
-<img src="lantern4.png" class="lantern" id="lantern4" style="top:10%; left:70%;">
-<img src="lantern5.png" class="lantern" id="lantern5" style="top:10%; left:90%;">
-<img src="lantern6.png" class="lantern" id="lantern6" style="top:25%; left:50%;">
-
-<!-- 烟花 -->
-<div id="fireworkContainer"></div>
-
-<!-- 小知识提示 -->
-<div class="tip" id="tip"></div>
-
-<!-- 下方装饰 -->
-<div class="decor"></div>
+<!-- 灯谜展示框 -->
+<div class="clue-content" id="clue-content">
+    <div id="clue-text"></div>
+    <button class="show-answer-btn" id="show-answer-btn">显示答案</button>
+    <div id="answer" class="answer"></div>
+    <span class="close-btn" id="close-btn">×</span>
+</div>
 
 <script>
-const lanternTips = {
-    lantern1: "元宵节，又称上元节，是农历正月十五的传统节日，起源于汉朝。",
-    lantern2: "元宵节习俗包括吃元宵、赏花灯、猜灯谜、舞龙舞狮。",
-    lantern3: "元宵节的‘元宵’寓意团圆、美满，人们通过吃元宵祈求幸福。",
-    lantern4: "猜灯谜是元宵节的传统娱乐活动，增添节日趣味。",
-    lantern5: "舞龙舞狮表演在元宵节常见，象征驱邪纳福。",
-    lantern6: "元宵节也有赏月习俗，正月十五是全年第一轮满月。"
-};
+    const clues = document.querySelectorAll('.clue');
+    const clueContent = document.getElementById('clue-content');
+    const clueText = document.getElementById('clue-text');
+    const showAnswerBtn = document.getElementById('show-answer-btn');
+    const answer = document.getElementById('answer');
+    const closeBtn = document.getElementById('close-btn');
 
-const lanterns = document.querySelectorAll('.lantern');
-const tip = document.getElementById('tip');
-const fireworkContainer = document.getElementById('fireworkContainer');
+    // 灯谜内容和答案
+    const cluesData = {
+        "白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。": "谜底：闪电\n解析：闪电是瞬间明亮的自然现象。",
+        "一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。": "谜底：田\n解析：‘田’字的构造，且在四季都可见。",
+        "千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。": "谜底：雨\n解析：雨如线，风吹雨飘，雨后常见彩虹。",
+        "日落西山并列明，二人肩并肩。": "谜底：明\n解析：‘日’和‘月’组合成‘明’，光明如白昼。"
+    };
 
-function createFirework(x, y){
-    const fw = document.createElement('div');
-    fw.className = 'firework';
-    fw.style.left = (x-75) + 'px';
-    fw.style.top = (y-75) + 'px';
-    fireworkContainer.appendChild(fw);
-    fw.style.display = 'block';
-    setTimeout(() => { fw.remove(); }, 800);
-}
-
-lanterns.forEach(lantern => {
-    lantern.addEventListener('click', (e) => {
-        const id = lantern.id;
-        tip.innerText = lanternTips[id];
-        tip.style.display = 'block';
-
-        createFirework(e.clientX, e.clientY);
-
-        setTimeout(() => { tip.style.display = 'none'; }, 3000);
+    // 点击灯谜书签
+    clues.forEach(clue => {
+        clue.addEventListener('click', (e) => {
+            const clueTextContent = e.target.getAttribute('data-clue');
+            clueText.innerText = clueTextContent;
+            answer.style.display = 'none'; // 隐藏答案
+            clueContent.style.display = 'block'; // 显示灯谜内容
+        });
     });
-});
+
+    // 显示答案
+    showAnswerBtn.addEventListener('click', () => {
+        const clueTextContent = clueText.innerText;
+        answer.innerText = cluesData[clueTextContent];
+        answer.style.display = 'block'; // 显示答案
+    });
+
+    // 关闭灯谜内容
+    closeBtn.addEventListener('click', () => {
+        clueContent.style.display = 'none'; // 隐藏灯谜内容
+    });
 </script>
+
 </body>
 </html>
