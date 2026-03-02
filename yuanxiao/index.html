@@ -1,158 +1,260 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>元宵节猜灯谜</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>元宵灯谜 · 暖橙米白</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-body{
-    margin:0;
-    padding:0;
-    font-family:"微软雅黑";
-    background:#8b0000;
-    display:flex;
-    justify-content:center;
-}
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: "Microsoft YaHei", "苹方", "PingFang SC", sans-serif;
+        }
 
-/* 整体容器（手机比例） */
-.container{
-    width:100%;
-    max-width:480px;
-    min-height:100vh;
-    background:url("yuanxiao.jpg") no-repeat center;
-    background-size:cover;
-    padding:40px 20px;
-    box-sizing:border-box;
-}
+        /* 背景：使用同一目录下的 yuanxiao.jpg */
+        body {
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('yuanxiao.jpg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
 
-/* 标题 */
-.title{
-    text-align:center;
-    font-size:28px;
-    color:#fff;
-    font-weight:bold;
-    margin-bottom:40px;
-    letter-spacing:3px;
-}
+        /* 书签样式 */
+        .clue {
+            position: absolute;
+            width: 90px;
+            height: 180px;
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1), filter 0.3s;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+            will-change: transform;
+            object-fit: contain;
+        }
 
-/* 灯谜按钮 */
-.riddle-btn{
-    display:block;
-    width:100%;
-    padding:18px;
-    margin-bottom:25px;
-    background:linear-gradient(45deg,#ffae00,#ff3c00);
-    color:#fff;
-    font-size:18px;
-    border:none;
-    border-radius:12px;
-    text-align:center;
-    cursor:pointer;
-    box-shadow:0 4px 10px rgba(0,0,0,0.3);
-}
+        .clue:hover {
+            transform: scale(1.08) translateY(-4px);
+            filter: drop-shadow(0 15px 20px rgba(255, 180, 60, 0.8));
+        }
 
-.riddle-btn:active{
-    transform:scale(0.97);
-}
+        /* 书签位置 (向中心聚拢) */
+        .clue1 { top: 12%; left: 8%; }
+        .clue2 { top: 12%; right: 8%; left: auto; }
+        .clue3 { bottom: 12%; left: 8%; top: auto; }
+        .clue4 { bottom: 12%; right: 8%; top: auto; left: auto; }
 
-/* 弹出层背景 */
-.overlay{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
-    display:none;
-    justify-content:center;
-    align-items:center;
-}
+        @media (max-width: 480px) {
+            .clue { width: 70px; height: 140px; }
+            .clue1 { left: 5%; top: 10%; }
+            .clue2 { right: 5%; top: 10%; }
+            .clue3 { left: 5%; bottom: 10%; }
+            .clue4 { right: 5%; bottom: 10%; }
+        }
 
-/* 弹出内容框 */
-.popup{
-    width:85%;
-    max-width:400px;
-    background:#fff3e0;
-    border-radius:15px;
-    padding:30px 20px 40px 20px;
-    position:relative;
-    box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
+        /* 弹窗 (亮橙色) */
+        .clue-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(620px, 88vw);
+            min-width: 300px;
+            background: #FF8C42;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 2.4rem 1.8rem 2.4rem;
+            box-shadow: 0 30px 40px -15px rgba(200, 80, 0, 0.6), 0 0 0 2px #FFB57C inset;
+            text-align: center;
+            z-index: 100;
+            display: none;
+            border: 2px solid #FFD5AA;
+        }
 
-/* 关闭按钮 */
-.close{
-    position:absolute;
-    right:15px;
-    top:10px;
-    font-size:22px;
-    color:#ff3c00;
-    cursor:pointer;
-}
+        #clue-text {
+            font-size: 2.0rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #3D1F00;
+            text-shadow: 0 2px 5px #FFDDBB;
+            margin: 1rem 0.2rem 1.2rem;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 225, 190, 0.5);
+            border-radius: 40px;
+            word-break: break-word;
+        }
 
-/* 灯谜文字 */
-.riddle-text{
-    font-size:18px;
-    line-height:30px;
-    color:#b22222;
-    margin-top:20px;
-    margin-bottom:30px;
-}
+        /* 米白色按钮 */
+        .show-answer-btn {
+            margin: 2rem 0 1.2rem;
+            padding: 1.2rem 3rem;
+            background: #FFF8E7;
+            border: none;
+            color: #B14500;
+            font-size: 1.8rem;
+            font-weight: 700;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 8px 16px -6px #914B1A, 0 0 0 2px #FFB069 inset;
+            transition: all 0.25s ease;
+            letter-spacing: 3px;
+            border: 1px solid #FFAA66;
+        }
 
-/* 返回按钮 */
-.back-btn{
-    display:block;
-    width:100%;
-    padding:12px;
-    background:linear-gradient(45deg,#ff6f00,#ff0000);
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    cursor:pointer;
-}
-</style>
+        .show-answer-btn:hover {
+            background: #FFF2D0;
+            transform: scale(1.02) translateY(-4px);
+            box-shadow: 0 16px 24px -8px #B35600, 0 0 0 3px #FFBD7F inset;
+        }
+
+        .show-answer-btn:active {
+            transform: scale(0.97) translateY(1px);
+            box-shadow: 0 6px 12px -3px #7F3B00;
+        }
+
+        /* 答案区域 (纯谜底) */
+        .answer {
+            margin: 1.8rem 0.5rem 0.8rem;
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #5D2E00;
+            background: rgba(255, 235, 200, 0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            display: none;
+            border: 3px solid #FF9933;
+            text-shadow: 1px 1px 0 #FFEEDD;
+            word-break: break-word;
+        }
+
+        /* 关闭按钮 */
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background-color: rgba(230, 140, 70, 0.4);
+            border-radius: 50%;
+            font-size: 38px;
+            font-weight: 300;
+            line-height: 42px;
+            text-align: center;
+            color: #4F2C0C;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            backdrop-filter: blur(6px);
+            border: 1px solid #FFB681;
+            box-shadow: 0 4px 10px rgba(150, 60, 0, 0.3);
+            user-select: none;
+        }
+
+        .close-btn:hover {
+            background-color: rgba(240, 150, 80, 0.7);
+            color: #2C1705;
+            transform: rotate(90deg) scale(1.1);
+        }
+        .close-btn:active {
+            transform: rotate(90deg) scale(0.9);
+            background-color: #C96A2E;
+            color: white;
+        }
+
+        @media (max-width: 480px) {
+            #clue-text { font-size: 1.8rem; }
+            .show-answer-btn { font-size: 1.6rem; padding: 1rem 2rem; }
+            .answer { font-size: 2.2rem; }
+            .close-btn { width: 38px; height: 38px; font-size: 32px; line-height: 36px; top: 12px; right: 16px; }
+        }
+
+        .clue-content[style*="display: block"] {
+            animation: popFade 0.3s ease-out;
+        }
+        @keyframes popFade {
+            0% { opacity: 0; transform: translate(-50%, -35%) scale(0.9); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
-    <div class="title">元宵佳节 · 猜灯谜</div>
+    <!-- 背景音乐 (同一目录) -->
+    <audio id="bgm" loop src="bgm.mp3" preload="auto"></audio>
 
-    <button class="riddle-btn" onclick="openRiddle(1)">点击查看灯谜一</button>
-    <button class="riddle-btn" onclick="openRiddle(2)">点击查看灯谜二</button>
-    <button class="riddle-btn" onclick="openRiddle(3)">点击查看灯谜三</button>
-    <button class="riddle-btn" onclick="openRiddle(4)">点击查看灯谜四</button>
-</div>
+    <!-- 书签图片，使用 shuqian1.png ~ shuqian4.png -->
+    <img src="shuqian1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。" alt="灯谜书签">
+    <img src="shuqian2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。" alt="灯谜书签">
+    <img src="shuqian3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。" alt="灯谜书签">
+    <img src="shuqian4.png" class="clue clue4" data-clue="日落西山并列明，二人肩并肩。" alt="灯谜书签">
 
-<!-- 弹出层 -->
-<div class="overlay" id="overlay">
-    <div class="popup">
-        <div class="close" onclick="closeRiddle()">×</div>
-        <div class="riddle-text" id="riddleContent"></div>
-        <button class="back-btn" onclick="closeRiddle()">返回</button>
+    <!-- 弹窗 -->
+    <div class="clue-content" id="clue-content">
+        <div id="clue-text"></div>
+        <button class="show-answer-btn" id="show-answer-btn">谜底</button>
+        <div id="answer" class="answer"></div>
+        <span class="close-btn" id="close-btn">×</span>
     </div>
-</div>
 
-<script>
+    <script>
+        (function() {
+            const clues = document.querySelectorAll('.clue');
+            const clueContent = document.getElementById('clue-content');
+            const clueText = document.getElementById('clue-text');
+            const showAnswerBtn = document.getElementById('show-answer-btn');
+            const answerDiv = document.getElementById('answer');
+            const closeBtn = document.getElementById('close-btn');
+            const bgm = document.getElementById('bgm');
 
-const riddles = {
-1:"身穿绿衣裳，肚里水汪汪。\n生的子儿多，个个黑脸膛。（打一水果）",
-2:"有面没有口，有脚没有手。\n虽有四只脚，自己不会走。（打一物）",
-3:"弯弯一座桥，架在半天腰。\n七色排得好，雨后天上飘。（打一自然现象）",
-4:"小时青青腹中空，长大变成白头翁。\n飞到天边去，飘落无影踪。（打一植物）"
-};
+            const cluesData = {
+                "白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。": "闪电",
+                "一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。": "田",
+                "千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。": "雨",
+                "日落西山并列明，二人肩并肩。": "明"
+            };
 
-function openRiddle(num){
-    document.getElementById("riddleContent").innerText = riddles[num];
-    document.getElementById("overlay").style.display = "flex";
-}
+            let currentClueText = '';
+            let bgmStarted = false;
 
-function closeRiddle(){
-    document.getElementById("overlay").style.display = "none";
-}
+            function tryStartBGM() {
+                if (!bgmStarted) {
+                    bgm.play().then(() => { bgmStarted = true; }).catch(e => console.log('BGM play failed:', e));
+                }
+            }
 
-</script>
+            // 页面加载尝试自动播放
+            window.addEventListener('load', () => {
+                bgm.play().then(() => { bgmStarted = true; }).catch(() => {});
+            });
 
+            clues.forEach(clue => {
+                clue.addEventListener('click', (e) => {
+                    tryStartBGM();
+                    const text = e.target.getAttribute('data-clue');
+                    clueText.innerText = text;
+                    answerDiv.style.display = 'none';
+                    answerDiv.innerText = '';
+                    clueContent.style.display = 'block';
+                    currentClueText = text;
+                });
+            });
+
+            showAnswerBtn.addEventListener('click', () => {
+                const ans = cluesData[currentClueText];
+                answerDiv.innerText = ans || '喜乐元宵';
+                answerDiv.style.display = 'block';
+            });
+
+            closeBtn.addEventListener('click', () => {
+                clueContent.style.display = 'none';
+            });
+        })();
+    </script>
+
+    <!-- 提示：请确保所有资源文件（图片、音乐）与 index.html 位于同一文件夹内，文件名严格匹配 -->
 </body>
 </html>
