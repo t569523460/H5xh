@@ -3,418 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>元宵灯谜 · 新意暖灯</title>
+    <title>元宵灯谜 · 暖橙米白</title>
     <style>
-        /* 重置 & 基础 —— 全新设计，移动优先 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        body {
+        html, body {
             width: 100%;
-            min-height: 100vh;
-            background: #000; /* fallback */
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* 背景图：yuanxiao.jpg 直接铺满 */
-            background: url('yuanxiao.jpg') no-repeat center center fixed;
+            height: 100%;
+            overflow: hidden;
+            font-family: "Microsoft YaHei", "苹方", "PingFang SC", sans-serif;
+        }
+
+        /* 背景：使用同一目录下的 yuanxiao.jpg */
+        body {
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('yuanxiao.jpg') no-repeat center center;
             background-size: cover;
             position: relative;
         }
 
-        /* 半透明遮罩，让白色文字更清晰，同时保持背景可见 */
-        body::before {
-            content: '';
+        /* 书签样式 */
+        .clue {
+            position: absolute;
+            width: 90px;
+            height: 180px;
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1), filter 0.3s;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+            will-change: transform;
+            object-fit: contain;
+        }
+
+        .clue:hover {
+            transform: scale(1.08) translateY(-4px);
+            filter: drop-shadow(0 15px 20px rgba(255, 180, 60, 0.8));
+        }
+
+        /* 书签位置 (向中心聚拢) */
+        .clue1 { top: 12%; left: 8%; }
+        .clue2 { top: 12%; right: 8%; left: auto; }
+        .clue3 { bottom: 12%; left: 8%; top: auto; }
+        .clue4 { bottom: 12%; right: 8%; top: auto; left: auto; }
+
+        @media (max-width: 480px) {
+            .clue { width: 70px; height: 140px; }
+            .clue1 { left: 5%; top: 10%; }
+            .clue2 { right: 5%; top: 10%; }
+            .clue3 { left: 5%; bottom: 10%; }
+            .clue4 { right: 5%; bottom: 10%; }
+        }
+
+        /* 弹窗 (亮橙色) */
+        .clue-content {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(3px);
-            z-index: 0;
-        }
-
-        /* 主面板：四个灯谜卡片网格 */
-        .lantern-grid {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 400px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.2rem;
-            padding: 1.5rem 0;
-            margin: 0 auto;
-        }
-
-        /* 单个灯谜卡片 */
-        .riddle-card {
-            background: rgba(255, 245, 235, 0.7);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(620px, 88vw);
+            min-width: 300px;
+            background: #FF8C42;
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border-radius: 40px 40px 30px 30px;
-            padding: 1.2rem 0.8rem 1rem;
-            box-shadow: 0 20px 30px -10px rgba(140, 70, 0, 0.5), 0 0 0 2px rgba(255, 200, 150, 0.7) inset;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.2s ease, box-shadow 0.2s;
-            border: 1px solid #ffcba0;
-        }
-
-        .riddle-card:active {
-            transform: scale(0.97);
-            box-shadow: 0 8px 15px -5px rgba(160, 80, 0, 0.6);
-        }
-
-        /* 灯谜图片 (dengmi1-4.png) */
-        .riddle-img {
-            width: 80%;
-            max-width: 120px;
-            aspect-ratio: 2/3;  /* 适应书签比例 */
-            object-fit: contain;
-            filter: drop-shadow(0 8px 12px rgba(160, 70, 0, 0.4));
-            margin-bottom: 0.5rem;
-            transition: filter 0.2s;
-        }
-
-        .riddle-card:hover .riddle-img {
-            filter: drop-shadow(0 12px 18px #ff9f4b);
-        }
-
-        /* 谜语标题（简短装饰） */
-        .riddle-label {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #5a2e0e;
-            background: rgba(255, 255, 230, 0.8);
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            letter-spacing: 2px;
-            border: 1px solid #ffb87a;
-            backdrop-filter: blur(2px);
-        }
-
-        /* 弹窗模态框 */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            z-index: 1000;
+            border-radius: 48px;
+            padding: 2.4rem 1.8rem 2.4rem;
+            box-shadow: 0 30px 40px -15px rgba(200, 80, 0, 0.6), 0 0 0 2px #FFB57C inset;
+            text-align: center;
+            z-index: 100;
             display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
+            border: 2px solid #FFD5AA;
         }
 
-        .modal-card {
-            background: #fff6e8;
-            width: 100%;
-            max-width: 440px;
-            border-radius: 60px 60px 50px 50px;
-            padding: 2rem 1.8rem 2.2rem;
-            box-shadow: 0 30px 40px -15px #7b3f00, 0 0 0 3px #fec195 inset;
-            position: relative;
-            animation: modalPop 0.3s ease-out;
-            border: 2px solid #ffb87c;
+        #clue-text {
+            font-size: 2.0rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #3D1F00;
+            text-shadow: 0 2px 5px #FFDDBB;
+            margin: 1rem 0.2rem 1.2rem;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 225, 190, 0.5);
+            border-radius: 40px;
+            word-break: break-word;
         }
 
-        @keyframes modalPop {
-            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+        /* 米白色按钮 */
+        .show-answer-btn {
+            margin: 2rem 0 1.2rem;
+            padding: 1.2rem 3rem;
+            background: #FFF8E7;
+            border: none;
+            color: #B14500;
+            font-size: 1.8rem;
+            font-weight: 700;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 8px 16px -6px #914B1A, 0 0 0 2px #FFB069 inset;
+            transition: all 0.25s ease;
+            letter-spacing: 3px;
+            border: 1px solid #FFAA66;
+        }
+
+        .show-answer-btn:hover {
+            background: #FFF2D0;
+            transform: scale(1.02) translateY(-4px);
+            box-shadow: 0 16px 24px -8px #B35600, 0 0 0 3px #FFBD7F inset;
+        }
+
+        .show-answer-btn:active {
+            transform: scale(0.97) translateY(1px);
+            box-shadow: 0 6px 12px -3px #7F3B00;
+        }
+
+        /* 答案区域 (纯谜底) */
+        .answer {
+            margin: 1.8rem 0.5rem 0.8rem;
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #5D2E00;
+            background: rgba(255, 235, 200, 0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            display: none;
+            border: 3px solid #FF9933;
+            text-shadow: 1px 1px 0 #FFEEDD;
+            word-break: break-word;
         }
 
         /* 关闭按钮 */
-        .modal-close {
+        .close-btn {
             position: absolute;
             top: 16px;
             right: 20px;
-            width: 40px;
-            height: 40px;
-            background: #ffb081;
+            width: 44px;
+            height: 44px;
+            background-color: rgba(230, 140, 70, 0.4);
             border-radius: 50%;
-            color: #3d1c00;
-            font-size: 32px;
-            line-height: 40px;
+            font-size: 38px;
+            font-weight: 300;
+            line-height: 42px;
             text-align: center;
+            color: #4F2C0C;
             cursor: pointer;
-            border: 2px solid #ffdebc;
-            box-shadow: 0 6px 10px rgba(150, 60, 0, 0.3);
-            transition: 0.15s;
+            transition: background-color 0.2s, transform 0.2s;
+            backdrop-filter: blur(6px);
+            border: 1px solid #FFB681;
+            box-shadow: 0 4px 10px rgba(150, 60, 0, 0.3);
             user-select: none;
         }
 
-        .modal-close:active {
-            background: #e06920;
+        .close-btn:hover {
+            background-color: rgba(240, 150, 80, 0.7);
+            color: #2C1705;
+            transform: rotate(90deg) scale(1.1);
+        }
+        .close-btn:active {
+            transform: rotate(90deg) scale(0.9);
+            background-color: #C96A2E;
             color: white;
-            transform: scale(0.9);
         }
 
-        /* 谜面文字 */
-        .modal-riddle {
-            font-size: 1.7rem;
-            font-weight: 600;
-            line-height: 1.4;
-            color: #2f1a07;
-            background: #fde7cf;
-            padding: 1.5rem 1rem;
-            border-radius: 50px;
-            margin: 1.2rem 0 1.8rem;
-            border: 2px solid #ffb36b;
-            box-shadow: inset 0 4px 8px #ffe2ba;
-            word-break: break-word;
-            text-align: center;
+        @media (max-width: 480px) {
+            #clue-text { font-size: 1.8rem; }
+            .show-answer-btn { font-size: 1.6rem; padding: 1rem 2rem; }
+            .answer { font-size: 2.2rem; }
+            .close-btn { width: 38px; height: 38px; font-size: 32px; line-height: 36px; top: 12px; right: 16px; }
         }
 
-        /* 谜底按钮 */
-        .answer-btn {
-            background: #ff8a3c;
-            border: none;
-            color: #2f1504;
-            font-size: 1.8rem;
-            font-weight: 700;
-            padding: 1rem 2.5rem;
-            border-radius: 60px;
-            width: fit-content;
-            margin: 0 auto 1.2rem;
-            box-shadow: 0 10px 18px -8px #b14400, 0 0 0 3px #ffdbb5 inset;
-            cursor: pointer;
-            transition: 0.15s;
-            border: 1px solid #ffe2b3;
-            letter-spacing: 3px;
+        .clue-content[style*="display: block"] {
+            animation: popFade 0.3s ease-out;
         }
-
-        .answer-btn:active {
-            transform: scale(0.95);
-            background: #f07120;
-            box-shadow: 0 4px 8px -3px #7f3000;
-        }
-
-        /* 谜底展示区 */
-        .answer-text {
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: #6b3000;
-            background: #ffebc8;
-            padding: 0.8rem 1.8rem;
-            border-radius: 40px;
-            display: none;
-            width: fit-content;
-            margin: 1.2rem auto 0.5rem;
-            border: 3px solid #ffa94b;
-            text-shadow: 2px 2px 0 #ffeecc;
-            word-break: break-word;
-        }
-
-        /* 底部小提示（音乐、交互） */
-        .hint {
-            position: fixed;
-            bottom: 8px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            color: #fff9e6;
-            font-size: 0.8rem;
-            text-shadow: 0 2px 6px #b44f00;
-            z-index: 20;
-            background: rgba(0,0,0,0.1);
-            padding: 4px 0;
-            backdrop-filter: blur(5px);
-        }
-
-        /* 适配极小屏 */
-        @media (max-width: 380px) {
-            .riddle-label { font-size: 1rem; }
-            .modal-riddle { font-size: 1.4rem; }
-            .answer-btn { font-size: 1.5rem; padding: 0.8rem 1.8rem; }
-            .answer-text { font-size: 2rem; }
+        @keyframes popFade {
+            0% { opacity: 0; transform: translate(-50%, -35%) scale(0.9); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <!-- 背景音乐 (yuanxiaobgm.mp3) 静默预加载，自动播放策略由js处理 -->
-    <audio id="bgm" loop preload="auto" src="yuanxiaobgm.mp3"></audio>
+    <!-- 背景音乐 (同一目录) -->
+    <audio id="bgm" loop src="bgm.mp3" preload="auto"></audio>
 
-    <!-- 四个灯谜卡片网格 (图片 dengmi1.png ~ dengmi4.png) -->
-    <div class="lantern-grid">
-        <!-- 卡片 1 -->
-        <div class="riddle-card" data-index="0">
-            <img src="dengmi1.png" alt="灯谜一" class="riddle-img">
-            <span class="riddle-label">灯谜①</span>
-        </div>
-        <!-- 卡片 2 -->
-        <div class="riddle-card" data-index="1">
-            <img src="dengmi2.png" alt="灯谜二" class="riddle-img">
-            <span class="riddle-label">灯谜②</span>
-        </div>
-        <!-- 卡片 3 -->
-        <div class="riddle-card" data-index="2">
-            <img src="dengmi3.png" alt="灯谜三" class="riddle-img">
-            <span class="riddle-label">灯谜③</span>
-        </div>
-        <!-- 卡片 4 -->
-        <div class="riddle-card" data-index="3">
-            <img src="dengmi4.png" alt="灯谜四" class="riddle-img">
-            <span class="riddle-label">灯谜④</span>
-        </div>
+    <!-- 书签图片，使用 shuqian1.png ~ shuqian4.png -->
+    <img src="shuqian1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。" alt="灯谜书签">
+    <img src="shuqian2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。" alt="灯谜书签">
+    <img src="shuqian3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。" alt="灯谜书签">
+    <img src="shuqian4.png" class="clue clue4" data-clue="日落西山并列明，二人肩并肩。" alt="灯谜书签">
+
+    <!-- 弹窗 -->
+    <div class="clue-content" id="clue-content">
+        <div id="clue-text"></div>
+        <button class="show-answer-btn" id="show-answer-btn">谜底</button>
+        <div id="answer" class="answer"></div>
+        <span class="close-btn" id="close-btn">×</span>
     </div>
-
-    <!-- 谜语弹窗 (模态框) -->
-    <div class="modal" id="riddleModal">
-        <div class="modal-card">
-            <span class="modal-close" id="closeModalBtn">&times;</span>
-            <div class="modal-riddle" id="modalRiddleText">谜面占位</div>
-            <button class="answer-btn" id="revealAnswerBtn">谜底</button>
-            <div class="answer-text" id="answerDisplay"></div>
-        </div>
-    </div>
-
-    <!-- 轻提示（装饰+音乐提示） -->
-    <div class="hint">🎵 点击灯笼猜灯谜 · 元宵快乐 🏮</div>
 
     <script>
         (function() {
-            // --- 谜语数据 (沿用之前的四个谜面+答案) ---
-            const riddles = [
-                {
-                    question: "白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。",
-                    answer: "闪电"
-                },
-                {
-                    question: "一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。",
-                    answer: "田"
-                },
-                {
-                    question: "千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。",
-                    answer: "雨"
-                },
-                {
-                    question: "日落西山并列明，二人肩并肩。",
-                    answer: "明"
-                }
-            ];
-
-            // 获取元素
-            const cards = document.querySelectorAll('.riddle-card');
-            const modal = document.getElementById('riddleModal');
-            const modalRiddle = document.getElementById('modalRiddleText');
-            const revealBtn = document.getElementById('revealAnswerBtn');
-            const answerDisplay = document.getElementById('answerDisplay');
-            const closeBtn = document.getElementById('closeModalBtn');
-
+            const clues = document.querySelectorAll('.clue');
+            const clueContent = document.getElementById('clue-content');
+            const clueText = document.getElementById('clue-text');
+            const showAnswerBtn = document.getElementById('show-answer-btn');
+            const answerDiv = document.getElementById('answer');
+            const closeBtn = document.getElementById('close-btn');
             const bgm = document.getElementById('bgm');
 
-            // 音乐播放状态标记
-            let bgmPlaying = false;
-            let currentRiddleIndex = 0;
+            const cluesData = {
+                "白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。": "闪电",
+                "一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。": "田",
+                "千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。": "雨",
+                "日落西山并列明，二人肩并肩。": "明"
+            };
 
-            // ---------- 音乐自动播放尝试 ----------
-            function attemptAutoPlayBGM() {
-                bgm.play()
-                    .then(() => {
-                        bgmPlaying = true;
-                        console.log('BGM 自动播放成功');
-                    })
-                    .catch(err => {
-                        // 自动播放失败，等待用户交互后播放
-                        console.log('BGM 自动播放被阻止，将在首次点击卡片时播放');
-                        bgmPlaying = false;
-                    });
+            let currentClueText = '';
+            let bgmStarted = false;
+
+            function tryStartBGM() {
+                if (!bgmStarted) {
+                    bgm.play().then(() => { bgmStarted = true; }).catch(e => console.log('BGM play failed:', e));
+                }
             }
 
-            // 页面加载时尝试自动播放
-            window.addEventListener('load', attemptAutoPlayBGM);
+            // 页面加载尝试自动播放
+            window.addEventListener('load', () => {
+                bgm.play().then(() => { bgmStarted = true; }).catch(() => {});
+            });
 
-            // 用户手势播放音乐（如果还没播放）
-            function playBGMOnUserGesture() {
-                if (bgmPlaying) return;
-                bgm.play()
-                    .then(() => {
-                        bgmPlaying = true;
-                    })
-                    .catch(e => console.warn('仍然无法播放BGM:', e));
-            }
-
-            // ---------- 卡片点击：打开弹窗 + 确保音乐播放 ----------
-            cards.forEach((card, index) => {
-                card.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    // 先保证音乐播放 (如果还没播放)
-                    playBGMOnUserGesture();
-
-                    // 记录当前索引，更新弹窗谜面
-                    currentRiddleIndex = index;
-                    modalRiddle.innerText = riddles[index].question;
-                    // 隐藏上一次的答案
-                    answerDisplay.style.display = 'none';
-                    answerDisplay.innerText = '';
-
-                    // 显示模态框
-                    modal.style.display = 'flex';
+            clues.forEach(clue => {
+                clue.addEventListener('click', (e) => {
+                    tryStartBGM();
+                    const text = e.target.getAttribute('data-clue');
+                    clueText.innerText = text;
+                    answerDiv.style.display = 'none';
+                    answerDiv.innerText = '';
+                    clueContent.style.display = 'block';
+                    currentClueText = text;
                 });
             });
 
-            // ---------- 显示谜底 ----------
-            revealBtn.addEventListener('click', () => {
-                const answer = riddles[currentRiddleIndex].answer;
-                answerDisplay.innerText = answer;
-                answerDisplay.style.display = 'block';
+            showAnswerBtn.addEventListener('click', () => {
+                const ans = cluesData[currentClueText];
+                answerDiv.innerText = ans || '喜乐元宵';
+                answerDiv.style.display = 'block';
             });
 
-            // ---------- 关闭弹窗 ----------
-            const closeModal = () => {
-                modal.style.display = 'none';
-            };
-
-            closeBtn.addEventListener('click', closeModal);
-
-            // 点击模态背景（空白处）也关闭
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
+            closeBtn.addEventListener('click', () => {
+                clueContent.style.display = 'none';
             });
-
-            // 防止弹窗内点击事件冒泡导致关闭
-            document.querySelector('.modal-card').addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-
-            // 可选：如果用户点击任何地方仍未播放，额外监听一次body触摸（但卡片已经做了）
-            // 为了更积极播放，可以在document上监听第一个touchstart（但避免过度）
-            document.body.addEventListener('touchstart', function firstTouch() {
-                playBGMOnUserGesture();
-                document.body.removeEventListener('touchstart', firstTouch);
-            }, { once: true, passive: true });
-
-            // 同样对鼠标点击
-            document.body.addEventListener('click', function firstClick() {
-                playBGMOnUserGesture();
-                document.body.removeEventListener('click', firstClick);
-            }, { once: true });
-
         })();
     </script>
 
-    <!-- 资源文件要求：确保以下文件位于同一目录
-         yuanxiao.jpg
-         dengmi1.png
-         dengmi2.png
-         dengmi3.png
-         dengmi4.png
-         yuanxiaobgm.mp3
-    -->
+    <!-- 提示：请确保所有资源文件（图片、音乐）与 index.html 位于同一文件夹内，文件名严格匹配 -->
 </body>
 </html>
