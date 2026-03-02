@@ -45,59 +45,59 @@
             100% { transform: rotate(0deg); }
         }
 
-        /* 错开动画延迟，实现先后摇摆 */
+        /* 错开动画延迟 */
         .clue1 { animation-delay: 0s; }
         .clue2 { animation-delay: 0.4s; }
         .clue3 { animation-delay: 0.8s; }
         .clue4 { animation-delay: 1.2s; }
 
-        /* 书签微调位置（最终版） */
+        /* 书签最终微调位置 */
         .clue1 {
-            top: 12%;     /* 左上，下降3% */
+            top: 11.5%;    /* 左上上升0.5% */
             left: 15%;
         }
         .clue2 {
-            top: 14%;     /* 右上，下降3% */
-            right: 15%;
+            top: 13%;      /* 右上上升1% */
+            right: 13%;    /* 左移2% (原15% -> 13%) */
             left: auto;
         }
         .clue3 {
-            top: 37.5%;   /* 左下，下降0.5% */
+            top: 37.5%;    /* 左下保持不变 */
             left: 15%;
             bottom: auto;
         }
         .clue4 {
-            top: 33%;     /* 右下，保持不变 */
+            top: 33%;      /* 右下保持不变 */
             right: 15%;
             left: auto;
             bottom: auto;
         }
 
-        /* 超小屏（如 iPhone SE）适当缩小尺寸，避免溢出 */
+        /* 超小屏适配 */
         @media (max-width: 480px) {
             .clue {
                 width: 150px;
                 height: 300px;
             }
-            .clue1 { left: 5%; top: 8%; }      /* 相应调整 */
-            .clue2 { right: 5%; top: 10%; }
+            .clue1 { left: 5%; top: 7%; }
+            .clue2 { right: 5%; top: 9%; }
             .clue3 { left: 5%; top: 42%; }
             .clue4 { right: 5%; top: 38%; }
         }
 
-        /* 平板适中 */
+        /* 平板适配 */
         @media (min-width: 768px) and (max-width: 1024px) {
             .clue {
                 width: 200px;
                 height: 400px;
             }
-            .clue1 { left: 10%; top: 13%; }
-            .clue2 { right: 10%; top: 15%; }
+            .clue1 { left: 10%; top: 12%; }
+            .clue2 { right: 10%; top: 14%; }
             .clue3 { left: 10%; top: 40%; }
             .clue4 { right: 10%; top: 35%; }
         }
 
-        /* 底部标语：大家一起猜灯谜 */
+        /* 底部标语 */
         .slogan {
             position: absolute;
             bottom: 8%;
@@ -106,11 +106,11 @@
             text-align: center;
             font-size: 2.5rem;
             font-weight: bold;
-            color: #ff3333;                /* 红色 */
+            color: #ff3333;
             text-shadow: 0 0 15px #ffff99, 0 0 30px #ffcc00, 2px 2px 4px rgba(0,0,0,0.3);
             letter-spacing: 4px;
-            z-index: 5;                    /* 确保在背景之上，书签之下 */
-            pointer-events: none;           /* 允许点击穿透到书签 */
+            z-index: 5;
+            pointer-events: none;
             white-space: nowrap;
         }
 
@@ -122,7 +122,7 @@
             }
         }
 
-        /* 弹窗 (亮橙色) */
+        /* 弹窗 (渐变背景) */
         .clue-content {
             position: fixed;
             top: 50%;
@@ -130,7 +130,7 @@
             transform: translate(-50%, -50%);
             width: min(620px, 88vw);
             min-width: 300px;
-            background: #FF8C42;
+            background: linear-gradient(145deg, #FF8C42, #E06E2A); /* 橙红渐变 */
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border-radius: 48px;
@@ -183,7 +183,7 @@
             box-shadow: 0 6px 12px -3px #7F3B00;
         }
 
-        /* 答案区域 (纯谜底) */
+        /* 答案区域 */
         .answer {
             margin: 1.8rem 0.5rem 0.8rem;
             font-size: 2.6rem;
@@ -249,13 +249,14 @@
 </head>
 <body>
 
-    <!-- 背景音乐 (同一目录) -->
+    <!-- 背景音乐 -->
     <audio id="bgm" loop src="bgm.mp3" preload="auto"></audio>
 
-    <!-- 书签图片，使用 dengmi1.png ~ dengmi4.png，最终位置已调整 -->
+    <!-- 书签图片，使用 dengmi1.png ~ dengmi4.png -->
     <img src="dengmi1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。" alt="灯谜书签">
     <img src="dengmi2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。" alt="灯谜书签">
-    <img src="dengmi3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。" alt="灯谜书签">
+    <!-- 第三个灯谜文本已修改 -->
+    <img src="dengmi3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹起它起舞。" alt="灯谜书签">
     <img src="dengmi4.png" class="clue clue4" data-clue="日落西山并列明，二人肩并肩。" alt="灯谜书签">
 
     <!-- 底部标语 -->
@@ -282,7 +283,7 @@
             const cluesData = {
                 "白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。": "闪电",
                 "一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。": "田",
-                "千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。": "雨",
+                "千根线来万根线，落到水里看不见，风儿吹起它起舞。": "雨",  // 谜底仍为雨
                 "日落西山并列明，二人肩并肩。": "明"
             };
 
@@ -322,7 +323,5 @@
             });
         })();
     </script>
-
-    <!-- 提示：请确保所有资源文件（图片、音乐）与 index.html 位于同一文件夹内，文件名严格匹配 -->
 </body>
 </html>
