@@ -28,8 +28,8 @@
         /* 书签样式 */
         .clue {
             position: absolute;
-            width: 90px;
-            height: 180px;
+            width: 225px;        /* 原90px * 2.5 ≈ 225px */
+            height: 450px;       /* 原180px * 2.5 = 450px */
             cursor: pointer;
             transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1), filter 0.3s;
             filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
@@ -42,18 +42,50 @@
             filter: drop-shadow(0 15px 20px rgba(255, 180, 60, 0.8));
         }
 
-        /* 书签位置 (向中心聚拢) */
-        .clue1 { top: 12%; left: 8%; }
-        .clue2 { top: 12%; right: 8%; left: auto; }
-        .clue3 { bottom: 12%; left: 8%; top: auto; }
-        .clue4 { bottom: 12%; right: 8%; top: auto; left: auto; }
+        /* 书签新位置：聚集在中间偏上，上下贴紧 */
+        .clue1 {
+            top: 18%;
+            left: 15%;
+        }
+        .clue2 {
+            top: 18%;
+            right: 15%;
+            left: auto;
+        }
+        .clue3 {
+            top: 32%;            /* 与上面仅差14%，非常贴近 */
+            left: 15%;
+            bottom: auto;
+        }
+        .clue4 {
+            top: 32%;
+            right: 15%;
+            left: auto;
+            bottom: auto;
+        }
 
+        /* 超小屏（如 iPhone SE）适当缩小尺寸，避免溢出 */
         @media (max-width: 480px) {
-            .clue { width: 70px; height: 140px; }
-            .clue1 { left: 5%; top: 10%; }
-            .clue2 { right: 5%; top: 10%; }
-            .clue3 { left: 5%; bottom: 10%; }
-            .clue4 { right: 5%; bottom: 10%; }
+            .clue {
+                width: 150px;      /* 缩小以适应小屏 */
+                height: 300px;
+            }
+            .clue1 { left: 5%; top: 15%; }
+            .clue2 { right: 5%; top: 15%; }
+            .clue3 { left: 5%; top: 40%; }   /* 下排稍微下移，保证可见 */
+            .clue4 { right: 5%; top: 40%; }
+        }
+
+        /* 平板适中 */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .clue {
+                width: 200px;
+                height: 400px;
+            }
+            .clue1 { left: 10%; top: 20%; }
+            .clue2 { right: 10%; top: 20%; }
+            .clue3 { left: 10%; top: 38%; }
+            .clue4 { right: 10%; top: 38%; }
         }
 
         /* 弹窗 (亮橙色) */
@@ -186,7 +218,7 @@
     <!-- 背景音乐 (同一目录) -->
     <audio id="bgm" loop src="bgm.mp3" preload="auto"></audio>
 
-    <!-- 书签图片，已改为 dengmi1.png ~ dengmi4.png -->
+    <!-- 书签图片，使用 dengmi1.png ~ dengmi4.png，位置已调整 -->
     <img src="dengmi1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。" alt="灯谜书签">
     <img src="dengmi2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。" alt="灯谜书签">
     <img src="dengmi3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。" alt="灯谜书签">
