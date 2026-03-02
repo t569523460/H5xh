@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>元宵灯谜 · 暖意版</title>
+    <title>元宵灯谜 · 暖橙米白</title>
     <style>
         * {
             margin: 0;
@@ -18,14 +18,14 @@
             font-family: "Microsoft YaHei", "苹方", "PingFang SC", sans-serif;
         }
 
-        /* 背景图 —— 新命名为 yuanxiao.jpg，加一层柔光让书签更突出 */
+        /* 背景：使用 yuanxiao.jpg，并加一层半透明柔光 */
         body {
             background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('yuanxiao.jpg') no-repeat center center;
             background-size: cover;
             position: relative;
         }
 
-        /* 书签公用样式：尺寸适中，柔和阴影 */
+        /* 书签通用样式 */
         .clue {
             position: absolute;
             width: 90px;
@@ -42,214 +42,196 @@
             filter: drop-shadow(0 15px 20px rgba(255, 180, 60, 0.8));
         }
 
-        /* ----- 书签向中间靠拢（四角内收），更适合手机点击 ----- */
+        /* 书签向中心进一步靠拢 (比之前更集中) */
         .clue1 {
-            top: 18%;
-            left: 10%;
+            top: 12%;
+            left: 8%;
         }
-
         .clue2 {
-            top: 18%;
-            right: 10%;
+            top: 12%;
+            right: 8%;
             left: auto;
         }
-
         .clue3 {
-            bottom: 18%;
-            left: 10%;
+            bottom: 12%;
+            left: 8%;
             top: auto;
         }
-
         .clue4 {
-            bottom: 18%;
-            right: 10%;
+            bottom: 12%;
+            right: 8%;
             top: auto;
             left: auto;
         }
 
-        /* 超小屏（如 iPhone SE）再向内收一点 */
+        /* 超小屏 (<=480px) 继续内收，保证不贴边 */
         @media (max-width: 480px) {
             .clue {
                 width: 70px;
                 height: 140px;
             }
-            .clue1 { left: 5%; top: 15%; }
-            .clue2 { right: 5%; top: 15%; }
-            .clue3 { left: 5%; bottom: 15%; }
-            .clue4 { right: 5%; bottom: 15%; }
+            .clue1 { left: 5%; top: 10%; }
+            .clue2 { right: 5%; top: 10%; }
+            .clue3 { left: 5%; bottom: 10%; }
+            .clue4 { right: 5%; bottom: 10%; }
         }
 
-        /* 中等屏（平板）也可保持适中 */
+        /* 平板适中 */
         @media (min-width: 768px) and (max-width: 1024px) {
             .clue {
                 width: 100px;
                 height: 200px;
             }
-            .clue1 { left: 12%; top: 20%; }
-            .clue2 { right: 12%; top: 20%; }
-            .clue3 { left: 12%; bottom: 20%; }
-            .clue4 { right: 12%; bottom: 20%; }
+            .clue1 { left: 10%; top: 15%; }
+            .clue2 { right: 10%; top: 15%; }
+            .clue3 { left: 10%; bottom: 15%; }
+            .clue4 { right: 10%; bottom: 15%; }
         }
 
-        /* ----------------- 弹窗 (全新暖色系 · 无灯笼装饰) ----------------- */
+        /* ---------- 弹窗 (亮橙色背景，米白按钮) ---------- */
         .clue-content {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: min(620px, 88vw);          /* 手机上也够大 */
+            width: min(620px, 88vw);
             min-width: 300px;
-            /* 橙黄红渐变背景，半透明且带模糊，氛围浓 */
-            background: linear-gradient(145deg, rgba(255, 215, 150, 0.96), rgba(255, 140, 80, 0.96));
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 48px 48px 48px 48px;
-            padding: 2.4rem 1.8rem 2.4rem 1.8rem;
-            box-shadow: 0 30px 40px -15px rgba(180, 70, 0, 0.5),
-                        0 0 0 2px rgba(255, 220, 120, 0.7) inset;
+            background: #FF8C42;        /* 亮橙色主调 */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 2.4rem 1.8rem 2.4rem;
+            box-shadow: 0 30px 40px -15px rgba(200, 80, 0, 0.6),
+                        0 0 0 2px #FFB57C inset;
             text-align: center;
             z-index: 100;
             display: none;
-            border: 1px solid #ffb56b;
+            border: 2px solid #FFD5AA;
         }
 
-        /* 灯谜谜面 —— 深色字更清晰 */
+        /* 谜面文字区域 */
         #clue-text {
             font-size: 2.0rem;
             font-weight: 600;
             line-height: 1.5;
-            color: #3b2009;
-            text-shadow: 0 2px 4px rgba(255, 245, 200, 0.8);
-            margin: 1rem 0.2rem 1.2rem 0.2rem;
-            padding: 0.5rem 0.8rem;
-            background: rgba(255, 240, 210, 0.3);
-            border-radius: 30px;
+            color: #3D1F00;
+            text-shadow: 0 2px 5px #FFDDBB;
+            margin: 1rem 0.2rem 1.2rem;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 225, 190, 0.5);
+            border-radius: 40px;
             word-break: break-word;
             letter-spacing: 0.02em;
         }
 
-        /* 显示答案按钮 —— 红橙色系，更大更醒目 */
+        /* 米白色按钮 */
         .show-answer-btn {
-            margin: 2rem 0 1.2rem 0;
+            margin: 2rem 0 1.2rem;
             padding: 1.2rem 3rem;
-            background: linear-gradient(145deg, #f17c1c, #d55f0f);
+            background: #FFF8E7;        /* 米白 */
             border: none;
-            color: white;
+            color: #B14500;
             font-size: 1.8rem;
             font-weight: 700;
             border-radius: 60px;
             cursor: pointer;
-            box-shadow: 0 12px 20px -8px #9a4400, 0 0 0 3px rgba(255, 230, 150, 0.6) inset;
+            box-shadow: 0 8px 16px -6px #914B1A, 0 0 0 2px #FFB069 inset;
             transition: all 0.25s ease;
             letter-spacing: 3px;
-            border: 1px solid #ffb672;
+            border: 1px solid #FFAA66;
         }
 
         .show-answer-btn:hover {
-            background: linear-gradient(145deg, #ff944d, #e66b12);
+            background: #FFF2D0;
             transform: scale(1.02) translateY(-4px);
-            box-shadow: 0 20px 28px -8px #b35000, 0 0 0 4px rgba(255, 200, 100, 0.8) inset;
+            box-shadow: 0 16px 24px -8px #B35600, 0 0 0 3px #FFBD7F inset;
         }
 
         .show-answer-btn:active {
             transform: scale(0.97) translateY(1px);
-            box-shadow: 0 6px 12px -3px #7f3b00;
+            box-shadow: 0 6px 12px -3px #7F3B00;
         }
 
-        /* 答案区域 —— 只显示谜底，暖色底 */
+        /* 答案区域 —— 纯谜底，无灯笼符号 */
         .answer {
             margin: 1.8rem 0.5rem 0.8rem;
             font-size: 2.6rem;
             font-weight: 800;
-            color: #a63c06;
-            background: rgba(255, 225, 160, 0.9);
+            color: #5D2E00;
+            background: rgba(255, 235, 200, 0.9);
             padding: 1rem 1.5rem;
             border-radius: 50px;
             display: none;
-            border: 3px solid #ff9248;
-            text-shadow: 1px 1px 0 #fff7d0;
+            border: 3px solid #FF9933;
+            text-shadow: 1px 1px 0 #FFEEDD;
             word-break: break-word;
             line-height: 1.3;
             letter-spacing: 2px;
         }
 
-        /* 右上角关闭按钮 —— 圆形，自然融入暖色背景 */
+        /* 关闭按钮 (自然圆形) */
         .close-btn {
             position: absolute;
             top: 16px;
             right: 20px;
             width: 44px;
             height: 44px;
-            background-color: rgba(230, 120, 60, 0.35);
+            background-color: rgba(230, 140, 70, 0.4);
             border-radius: 50%;
             font-size: 38px;
             font-weight: 300;
             line-height: 42px;
             text-align: center;
-            color: #6b3100;
+            color: #4F2C0C;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.2s, color 0.2s;
+            transition: background-color 0.2s, transform 0.2s;
             backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 190, 110, 0.9);
-            box-shadow: 0 4px 10px rgba(180, 70, 0, 0.3);
+            border: 1px solid #FFB681;
+            box-shadow: 0 4px 10px rgba(150, 60, 0, 0.3);
             user-select: none;
         }
 
         .close-btn:hover {
-            background-color: rgba(240, 140, 70, 0.7);
-            color: #341a06;
+            background-color: rgba(240, 150, 80, 0.7);
+            color: #2C1705;
             transform: rotate(90deg) scale(1.1);
-            border-color: #ffa748;
         }
-
         .close-btn:active {
             transform: rotate(90deg) scale(0.9);
-            background-color: #c96a2e;
+            background-color: #C96A2E;
             color: white;
         }
 
-        /* 弹窗出现时的淡入动画 */
+        /* 弹窗出现动画 */
         .clue-content[style*="display: block"] {
-            animation: warmPopup 0.3s ease-out;
+            animation: popFade 0.3s ease-out;
         }
-
-        @keyframes warmPopup {
+        @keyframes popFade {
             0% { opacity: 0; transform: translate(-50%, -35%) scale(0.9); }
             100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
 
-        /* 手机小屏进一步优化字体 */
+        /* 手机小屏文字适配 */
         @media (max-width: 480px) {
-            #clue-text {
-                font-size: 1.8rem;
-            }
-            .show-answer-btn {
-                font-size: 1.6rem;
-                padding: 1rem 2rem;
-            }
-            .answer {
-                font-size: 2.2rem;
-            }
-            .close-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 32px;
-                line-height: 36px;
-                top: 12px;
-                right: 16px;
-            }
+            #clue-text { font-size: 1.8rem; }
+            .show-answer-btn { font-size: 1.6rem; padding: 1rem 2rem; }
+            .answer { font-size: 2.2rem; }
+            .close-btn { width: 38px; height: 38px; font-size: 32px; line-height: 36px; top: 12px; right: 16px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 四枚书签，图片名已改为 shuqian1.png ~ shuqian4.png -->
+    <!-- 背景音乐：打开自动播放 (浏览器可能限制，通过JS辅助) -->
+    <audio id="bgm" loop src="bgm.mp3" preload="auto"></audio>
+
+    <!-- 四枚书签，命名 shuqian1.png ~ shuqian4.png -->
     <img src="shuqian1.png" class="clue clue1" data-clue="白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。" alt="灯谜书签">
     <img src="shuqian2.png" class="clue clue2" data-clue="一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。" alt="灯谜书签">
     <img src="shuqian3.png" class="clue clue3" data-clue="千根线来万根线，落到水里看不见，风儿吹来它起舞，雨过天晴彩虹现。" alt="灯谜书签">
     <img src="shuqian4.png" class="clue clue4" data-clue="日落西山并列明，二人肩并肩。" alt="灯谜书签">
 
-    <!-- 灯谜展示卡 (无顶部灯笼图标) -->
+    <!-- 灯谜展示卡 (无顶部装饰) -->
     <div class="clue-content" id="clue-content">
         <div id="clue-text"></div>
         <button class="show-answer-btn" id="show-answer-btn">谜底</button>
@@ -259,14 +241,16 @@
 
     <script>
         (function() {
+            // 获取元素
             const clues = document.querySelectorAll('.clue');
             const clueContent = document.getElementById('clue-content');
             const clueText = document.getElementById('clue-text');
             const showAnswerBtn = document.getElementById('show-answer-btn');
             const answerDiv = document.getElementById('answer');
             const closeBtn = document.getElementById('close-btn');
+            const bgm = document.getElementById('bgm');
 
-            // 灯谜数据 —— 只保留纯谜底（已删解析）
+            // 谜底数据（只有纯谜底，无解析）
             const cluesData = {
                 "白日藏山后，星子落满头，伸手摸不着，眨眼亮如昼。": "闪电",
                 "一横一竖框天地，中间藏着日和月，春夏秋冬轮流转，四季风光它都见。": "田",
@@ -275,35 +259,77 @@
             };
 
             let currentClueText = '';
+            let bgmStarted = false;   // 标记音乐是否已开始播放
 
+            // ---------- 背景音乐自动播放 ----------
+            function attemptAutoPlay() {
+                bgm.play()
+                    .then(() => {
+                        bgmStarted = true;
+                        console.log('BGM 自动播放成功');
+                    })
+                    .catch(error => {
+                        console.log('自动播放被浏览器阻止，等待用户首次点击书签时播放', error);
+                        // 不设置标志，等待用户交互
+                    });
+            }
+
+            // 页面加载后立即尝试播放
+            window.addEventListener('load', attemptAutoPlay);
+
+            // 如果自动播放失败，则在第一次点击书签时播放音乐（无额外开关）
+            function tryStartBGM() {
+                if (!bgmStarted) {
+                    bgm.play()
+                        .then(() => {
+                            bgmStarted = true;
+                            console.log('BGM 通过点击书签播放成功');
+                        })
+                        .catch(e => console.warn('BGM 播放失败', e));
+                }
+            }
+
+            // ---------- 书签点击事件 ----------
             clues.forEach(clue => {
                 clue.addEventListener('click', (e) => {
+                    // 先尝试启动音乐（如果尚未启动）
+                    tryStartBGM();
+
+                    // 显示对应的灯谜
                     const clueTextContent = e.target.getAttribute('data-clue');
                     clueText.innerText = clueTextContent;
                     answerDiv.style.display = 'none';
-                    answerDiv.innerText = '';
+                    answerDiv.innerText = '';          // 清空旧答案
                     clueContent.style.display = 'block';
                     currentClueText = clueTextContent;
                 });
             });
 
+            // 显示答案：只显示纯谜底，无灯笼符号
             showAnswerBtn.addEventListener('click', () => {
                 const answerText = cluesData[currentClueText];
                 if (answerText) {
-                    // 使用灯笼符号点缀，但依然只显示谜底词（符号仅作装饰）
-                    answerDiv.innerText = `🏮 ${answerText} 🏮`;
+                    answerDiv.innerText = answerText;   // 纯文本，无装饰
                 } else {
-                    answerDiv.innerText = '🏮 喜乐元宵 🏮';
+                    answerDiv.innerText = '喜乐元宵';
                 }
                 answerDiv.style.display = 'block';
             });
 
+            // 关闭弹窗
             closeBtn.addEventListener('click', () => {
                 clueContent.style.display = 'none';
             });
 
-            // 可选：点击弹窗外空白区域不关闭，仅X关闭，符合习惯
+            // 可选：点击弹窗外区域不关闭，仅X关闭
         })();
     </script>
+
+    <!-- 提醒用户放置正确的资源文件（不影响运行） -->
+    <!-- 
+        请将背景图片命名为 yuanxiao.jpg 并放在与本HTML相同的文件夹内。
+        将四个书签图片分别命名为 shuqian1.png, shuqian2.png, shuqian3.png, shuqian4.png。
+        将背景音乐命名为 bgm.mp3 并放在同一文件夹（浏览器可能限制自动播放，但代码已做兼容处理）。
+    -->
 </body>
 </html>
