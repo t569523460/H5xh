@@ -1,1 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>惊蛰 · 春雷启蛰</title>
 
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    background:url("背景.jpg") no-repeat center center;
+    background-size:cover;
+    color:#000;
+}
+
+/* 雨丝画布保持不变 */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:0;
+}
+
+/* 主体 */
+.container{
+    position:relative;
+    z-index:2;
+    height:100%;
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.title{
+    font-size:30px;
+    letter-spacing:6px;
+    font-weight:bold;
+}
+.subtitle{
+    font-size:14px;
+    margin-top:8px;
+    margin-bottom:40px;
+}
+
+/* 卡片网格 2x2 */
+.card-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+    width:100%;
+    max-width:420px;
+}
+
+.card{
+    background:rgba(255,255,255,0.7);
+    border-radius:18px;
+    padding:25px 10px;
+    font-size:15px;
+    font-weight:bold;
+    color:#000;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+    transition:0.3s;
+}
+.card:active{
+    transform:scale(0.95);
+}
+
+/* 弹窗 */
+.modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:5;
+}
+
+.modal-content{
+    width:85%;
+    max-width:420px;
+    padding:30px 25px;
+    background:url("文本框.jpg") no-repeat center center;
+    background-size:cover;
+    border-radius:20px;
+    animation:fadeIn 0.3s ease;
+    color:#000;
+}
+
+.modal-content h2{
+    margin-bottom:15px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.modal-content p{
+    font-size:15px;
+    line-height:1.9;
+    color:#000;
+}
+
+/* 强调惊蛰 */
+.highlight{
+    font-size:24px;
+    color:#1b7f3c;
+    font-weight:bold;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:scale(0.8);}
+    to{opacity:1;transform:scale(1);}
+}
+
+/* 音乐按钮 */
+.music{
+    position:fixed;
+    top:20px;
+    right:20px;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:6;
+    font-size:18px;
+    color:#000;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" src="jingzhebgm.mp3" autoplay loop></audio>
+
+<div class="music" onclick="toggleMusic()">♫</div>
+
+<canvas id="rain"></canvas>
+
+<div class="container">
+    <div class="title">惊 蛰</div>
+    <div class="subtitle">春雷乍响 · 草木萌动</div>
+
+    <div class="card-grid">
+        <div class="card" onclick="openModal(0)">气候特征</div>
+        <div class="card" onclick="openModal(1)">传统习俗</div>
+        <div class="card" onclick="openModal(2)">农事活动</div>
+        <div class="card" onclick="openModal(3)">养生指南</div>
+    </div>
+</div>
+
+<!-- 弹窗 -->
+<div class="modal" id="modal" onclick="closeModal(event)">
+    <div class="modal-content">
+        <h2 id="modalTitle"></h2>
+        <p id="modalText"></p>
+    </div>
+</div>
+
+<script>
+// 自动播放兼容
+document.addEventListener("click",function(){
+    document.getElementById("bgm").play();
+});
+function toggleMusic(){
+    let audio=document.getElementById("bgm");
+    audio.paused?audio.play():audio.pause();
+}
+
+// 数据
+const data=[
+{
+title:"气候特征",
+text:"<span class='highlight'>惊蛰</span>时节，气温迅速回升，春雷渐起，雨水频繁。冷暖空气交汇，使天空时有阴云翻涌。雷声唤醒沉睡的土地，空气中弥漫湿润气息，万物开始加速生长。"
+},
+{
+title:"传统习俗",
+text:"在<span class='highlight'>惊蛰</span>这一天，民间流传着‘打小人’、‘祭白虎’等习俗，寓意驱散霉运与邪气。一些地区会食梨润燥，象征清除体内火气，也寄托对健康平安的期盼。"
+},
+{
+title:"农事活动",
+text:"‘到了<span class='highlight'>惊蛰</span>节，锄头不停歇。’此时春耕陆续展开，农民翻土、施肥、播种，为全年收成打下基础。土地在雷雨滋养中焕发生机。"
+},
+{
+title:"养生指南",
+text:"顺应<span class='highlight'>惊蛰</span>阳气升发之势，应早睡早起，舒展筋骨。饮食宜清淡，多蔬果，少油腻辛辣。保持心境开阔，与自然节律同频。"
+}
+];
+
+function openModal(index){
+    document.getElementById("modalTitle").innerHTML=data[index].title;
+    document.getElementById("modalText").innerHTML=data[index].text;
+    document.getElementById("modal").style.display="flex";
+}
+
+function closeModal(e){
+    if(e.target.id==="modal"){
+        document.getElementById("modal").style.display="none";
+    }
+}
+
+/* 雨丝效果（未改动逻辑） */
+const canvas=document.getElementById("rain");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let rain=[];
+for(let i=0;i<160;i++){
+    rain.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        l:Math.random()*20+10,
+        s:Math.random()*4+2
+    });
+}
+
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle="rgba(0,0,0,0.15)";
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    for(let i=0;i<rain.length;i++){
+        ctx.moveTo(rain[i].x,rain[i].y);
+        ctx.lineTo(rain[i].x,rain[i].y+rain[i].l);
+    }
+    ctx.stroke();
+    for(let i=0;i<rain.length;i++){
+        rain[i].y+=rain[i].s;
+        if(rain[i].y>canvas.height){
+            rain[i].y=0;
+        }
+    }
+}
+setInterval(draw,30);
+</script>
+
+</body>
+</html>
