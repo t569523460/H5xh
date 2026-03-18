@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>春分 · 万物生长</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>春分</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -11,9 +11,9 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    font-family:Arial;
     background:url("背景.jpg") no-repeat center;
     background-size:cover;
+    font-family:Arial;
     color:#000;
 }
 
@@ -23,51 +23,68 @@ html,body{
     width:100%;
     height:100%;
     display:none;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
 }
-.active{display:flex;}
+.active{display:block;}
 
-/* 标题 */
+/* 顶部标题 */
+.header{
+    position:absolute;
+    top:40px;
+    width:100%;
+    text-align:center;
+}
 .title{
-    font-size:30px;
+    font-size:28px;
     font-weight:bold;
-    margin-bottom:10px;
 }
 .subtitle{
     font-size:14px;
-    margin-bottom:30px;
+    margin-top:5px;
 }
 
-/* 按钮 */
+/* 中间内容 */
+.content{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:92%;
+    display:flex;
+    justify-content:center;
+}
+
+/* 文本框 */
+.card{
+    width:100%;
+    max-width:420px;
+    padding:25px;
+    background:url("文本框.png") no-repeat center;
+    background-size:100% 100%; /* 修复裁切 */
+    border-radius:20px;
+    font-size:15px;
+    line-height:1.7;
+}
+
+/* 底部按钮 */
+.footer{
+    position:absolute;
+    bottom:40px;
+    width:100%;
+    text-align:center;
+}
 .btn{
     padding:10px 20px;
     border-radius:25px;
     background:#6bbf59;
     color:#fff;
     border:none;
-    margin:8px;
+    margin:5px;
 }
 
-/* 卡片统一 */
-.card{
-    width:85%;
-    max-width:380px;
-    padding:22px;
-    background:url("文本框.png") no-repeat center;
-    background-size:cover;
-    border-radius:20px;
-    text-align:left;
-    line-height:1.9;
-    font-size:15px;
-}
-
-/* 翻转卡 */
+/* 翻卡 */
 .flip{
-    width:220px;
-    height:160px;
+    width:240px;
+    height:180px;
     perspective:1000px;
 }
 .flip-inner{
@@ -84,14 +101,13 @@ html,body{
     position:absolute;
     width:100%;
     height:100%;
-    backface-visibility:hidden;
-    background:url("文本框.png") center/cover;
-    border-radius:15px;
+    background:url("文本框.png") center/100% 100%;
+    border-radius:20px;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:15px;
     text-align:center;
+    padding:15px;
 }
 .flip-back{
     transform:rotateY(180deg);
@@ -113,11 +129,10 @@ html,body{
     position:fixed;
     top:20px;
     right:20px;
-    z-index:10;
-    background:#fff;
-    border-radius:50%;
     width:40px;
     height:40px;
+    border-radius:50%;
+    background:#fff;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -144,57 +159,77 @@ for(let i=0;i<15;i++){
 
 <!-- 首页 -->
 <div class="page active" id="p1">
-    <div class="title">春分</div>
-    <div class="subtitle">昼夜均分 · 万物生长</div>
-    <button class="btn" onclick="next(2)">开启春日之旅</button>
+    <div class="header">
+        <div class="title">春分</div>
+        <div class="subtitle">昼夜均分 · 万物生长</div>
+    </div>
+    <div class="footer">
+        <button class="btn" onclick="next(2)">开启春日之旅</button>
+    </div>
 </div>
 
-<!-- 页面2 节气知识 -->
+<!-- 节气知识 -->
 <div class="page" id="p2">
-    <div class="title">节气知识</div>
-    <div class="card" id="cardText">
-        春分，是二十四节气中的第四个节气，也是春季的中点。
-        此时太阳直射赤道，昼夜几乎相等，寒暑趋于平衡。
-        随着气温持续回升，大地逐渐摆脱冬日的沉寂，
-        草木萌发、百花渐开，自然界进入一年中最富生命力的阶段。
+    <div class="header">
+        <div class="title">节气知识</div>
     </div>
-    <button class="btn" onclick="changeCard()">换一条</button>
-    <div>
+
+    <div class="content">
+        <div class="card" id="cardText">
+            春分是春季的中点，此时昼夜几乎相等，寒暑平衡。
+            气温持续回升，大地逐渐复苏，草木萌发、百花初绽，
+            自然界呈现出一派生机盎然的景象。
+        </div>
+    </div>
+
+    <div class="footer">
+        <button class="btn" onclick="changeCard()">换一条</button><br>
         <button class="btn" onclick="next(1)">上一页</button>
         <button class="btn" onclick="next(3)">下一页</button>
     </div>
 </div>
 
-<!-- 页面3 习俗 -->
+<!-- 习俗 -->
 <div class="page" id="p3">
-    <div class="title">春分习俗</div>
-    <div class="flip" onclick="flipCard(this)">
-        <div class="flip-inner">
-            <div class="flip-front">点击查看习俗</div>
-            <div class="flip-back">
-                立蛋、踏青、放风筝<br>
-                在这一天，人们走向自然，<br>
-                感受春光与生机。
+    <div class="header">
+        <div class="title">春分习俗</div>
+    </div>
+
+    <div class="content">
+        <div class="flip" onclick="flipCard(this)">
+            <div class="flip-inner">
+                <div class="flip-front">点击查看春分习俗</div>
+                <div class="flip-back">
+                    立蛋、踏青、放风筝<br>
+                    人们走进自然，感受春光与生机
+                </div>
             </div>
         </div>
     </div>
-    <div>
+
+    <div class="footer">
         <button class="btn" onclick="next(2)">上一页</button>
         <button class="btn" onclick="next(4)">下一页</button>
     </div>
 </div>
 
-<!-- 页面4 诗意 -->
+<!-- 诗意 -->
 <div class="page" id="p4">
-    <div class="title">诗意春分</div>
-    <div class="card">
-        春分雨脚落声微，柳岸斜风带客归。<br><br>
-        此时天地平衡，万物舒展，<br>
-        一半是温柔春光，一半是盎然生机。<br><br>
-        在春分的时节里，时间仿佛变得缓慢而温和，
-        让人沉浸在自然与诗意的交织之中。
+    <div class="header">
+        <div class="title">诗意春分</div>
     </div>
-    <button class="btn" onclick="next(3)">上一页</button>
+
+    <div class="content">
+        <div class="card">
+            春分雨脚落声微，柳岸斜风带客归。<br>
+            万物在此刻舒展生长，一半春光，一半温柔。<br>
+            时间仿佛也慢了下来，让人沉浸在春日的气息之中。
+        </div>
+    </div>
+
+    <div class="footer">
+        <button class="btn" onclick="next(3)">上一页</button>
+    </div>
 </div>
 
 <script>
@@ -213,11 +248,11 @@ function next(n){
     document.getElementById("p"+n).classList.add("active");
 }
 
-// 卡片内容（已扩写）
+// 内容切换
 const texts=[
-"春分不仅是时间上的中点，更象征着自然界阴阳平衡的状态。此时阳光温和而不炽烈，气候宜人，是一年中最舒适的时段之一。",
-"在春分前后，农田进入繁忙阶段。农民开始大规模播种与管理作物，大地在此刻展现出强大的生命力与生产力。",
-"从生态角度看，春分意味着生物活动显著增强，昆虫、鸟类与植物都进入活跃期，形成完整而生动的春日生态画卷。"
+"春分象征昼夜平衡，是自然界阴阳调和的重要节点，此时气候温和宜人。",
+"春分前后农事繁忙，大量作物进入播种期，是农业生产的重要阶段。",
+"生态系统逐渐活跃，动植物开始繁衍生长，形成完整的春日景象。"
 ];
 let i=0;
 function changeCard(){
