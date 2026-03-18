@@ -13,19 +13,21 @@ body{
     overflow:hidden;
 }
 
-/* 页面 */
+/* 页面容器 */
 .page{
     width:100%;
     height:100vh;
     position:absolute;
+    top:0;
+    left:0;
     background:url("bg-main.jpg") no-repeat center/cover;
     display:flex;
     flex-direction:column;
+    justify-content:center;
     align-items:center;
     transition:transform 0.6s;
 }
 
-/* 遮罩 */
 .overlay{
     position:absolute;
     width:100%;
@@ -33,67 +35,55 @@ body{
     background:rgba(0,0,0,0.4);
 }
 
-/* 内容 */
-.content{
-    position:relative;
-    color:#fff;
-    text-align:center;
-    padding:20px;
+/* 上半部分 */
+.top{
+    position:absolute;
+    top:15%;
     width:100%;
+    text-align:center;
+    color:#fff;
+    padding:0 20px;
+}
+
+/* 下半部分 */
+.bottom{
+    position:absolute;
+    bottom:10%;
+    width:100%;
+    display:flex;
+    justify-content:center;
+}
+
+.bottom img{
+    width:70%;
+    border-radius:12px;
 }
 
 /* 标题 */
-h1{
-    margin-top:120px;
-    font-size:34px;
-}
-
-/* 文本卡片（上移） */
-.card{
-    margin-top:80px;
-    background:rgba(0,0,0,0.5);
-    padding:18px;
-    border-radius:12px;
-    width:80%;
-}
-
-/* 情景图（下半部分） */
-.scene{
-    position:absolute;
-    bottom:40px;
-    width:80%;
-    border-radius:12px;
-}
-
-/* 抽签提示（固定顶部） */
-.tip{
-    position:absolute;
-    top:80px;
-    color:#fff;
-    font-size:16px;
-}
+h1{font-size:32px;margin-bottom:10px;}
+p{font-size:16px;line-height:1.8;}
 
 /* 抽签盒 */
 .box{
     width:160px;
-    margin-top:200px;
+    cursor:pointer;
 }
 
-/* 强烈晃动 */
+/* 强化晃动 */
 .shake{
     animation:shake 0.8s ease;
 }
 
 @keyframes shake{
     0%{transform:translateY(0)}
-    20%{transform:translateY(-25px)}
+    20%{transform:translateY(-20px)}
     40%{transform:translateY(15px)}
-    60%{transform:translateY(-20px)}
+    60%{transform:translateY(-15px)}
     80%{transform:translateY(10px)}
     100%{transform:translateY(0)}
 }
 
-/* 签 */
+/* 抽签结果 */
 .result{
     position:fixed;
     top:0;
@@ -103,7 +93,7 @@ h1{
     display:none;
     justify-content:center;
     align-items:center;
-    background:rgba(0,0,0,0.75);
+    background:rgba(0,0,0,0.7);
 }
 
 .paper{
@@ -111,7 +101,7 @@ h1{
     position:relative;
 }
 
-/* 左右排布 */
+/* 对联排版 */
 .words{
     position:absolute;
     top:50%;
@@ -125,58 +115,53 @@ h1{
 .col{
     display:flex;
     flex-direction:column;
-    gap:6px;
+    align-items:center;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 页面1 -->
+<!-- 页面 -->
 <div class="page" style="transform:translateY(0)">
 <div class="overlay"></div>
-<div class="content">
+<div class="top">
 <h1>二月二 · 龙抬头</h1>
-<p style="margin-top:20px;">春启万物 万象更新</p>
+<p>春回大地 万物生长 一切从头开始</p>
 </div>
 </div>
 
-<!-- 页面2 -->
 <div class="page" style="transform:translateY(100%)">
 <div class="overlay"></div>
-<div class="content">
-<div class="card">
-龙抬头源于星宿变化，<br>
-象征春回大地，<br>
-农耕时序由此开启。
+<div class="top">
+<p>龙抬头源于星宿运行，象征苍龙抬首<br>主降雨水，万物复苏</p>
 </div>
-<img src="scene1.jpg" class="scene">
+<div class="bottom">
+<img src="img1.jpg">
 </div>
 </div>
 
-<!-- 页面3 -->
 <div class="page" style="transform:translateY(200%)">
 <div class="overlay"></div>
-<div class="content">
-<div class="card">
-剃头、吃龙食，<br>
-寓意鸿运当头，<br>
-祈愿一年顺遂安康。
+<div class="top">
+<p>民间有剃头、吃龙食习俗<br>寓意鸿运当头、福气降临</p>
 </div>
-<img src="scene2.jpg" class="scene">
+<div class="bottom">
+<img src="img2.jpg">
 </div>
 </div>
 
-<!-- 页面4 -->
 <div class="page" style="transform:translateY(300%)">
 <div class="overlay"></div>
-<div class="content">
-<div class="tip">点击抽取今日运势</div>
+<div class="top">
+<p>点击抽取今日运势</p>
+</div>
+<div class="bottom" style="bottom:30%">
 <img src="lottery-box.png" class="box" id="box">
 </div>
 </div>
 
-<!-- 抽签 -->
+<!-- 抽签结果 -->
 <div class="result" id="result">
     <div>
         <img src="lottery-paper.png" class="paper">
@@ -185,63 +170,54 @@ h1{
 </div>
 
 <script>
-let current=0;
 let pages=document.querySelectorAll(".page");
+let current=0;
 
-/* 手机滑动 */
-let startY=0;
-
-document.addEventListener("touchstart",e=>{
-    startY=e.touches[0].clientY;
-});
-
-document.addEventListener("touchend",e=>{
-    let endY=e.changedTouches[0].clientY;
-    handleMove(startY,endY);
-});
-
-/* 电脑拖动 */
-let mouseDown=false;
-let startMouseY=0;
-
-document.addEventListener("mousedown",e=>{
-    mouseDown=true;
-    startMouseY=e.clientY;
-});
-
-document.addEventListener("mouseup",e=>{
-    if(!mouseDown) return;
-    mouseDown=false;
-    handleMove(startMouseY,e.clientY);
-});
-
-/* 统一处理 */
-function handleMove(start,end){
-    let diff=start-end;
-
-    if(diff>50 && current<pages.length-1){
-        current++;
-    }else if(diff<-50 && current>0){
-        current--;
-    }
-
-    update();
-}
-
+/* 更新位置 */
 function update(){
     pages.forEach((p,i)=>{
         p.style.transform=`translateY(${(i-current)*100}%)`;
     });
 }
 
+/* 手机滑动 */
+let startY=0;
+document.addEventListener("touchstart",e=>{
+    startY=e.touches[0].clientY;
+});
+document.addEventListener("touchend",e=>{
+    let diff=startY-e.changedTouches[0].clientY;
+    handleMove(diff);
+});
+
+/* 电脑拖拽 */
+let isDown=false;
+let mouseStart=0;
+
+document.addEventListener("mousedown",e=>{
+    isDown=true;
+    mouseStart=e.clientY;
+});
+document.addEventListener("mouseup",e=>{
+    if(!isDown) return;
+    let diff=mouseStart-e.clientY;
+    handleMove(diff);
+    isDown=false;
+});
+
+/* 统一处理 */
+function handleMove(diff){
+    if(diff>50 && current<pages.length-1) current++;
+    else if(diff<-50 && current>0) current--;
+    update();
+}
+
 /* 抽签 */
 const texts=[
-["万事","顺遂"],
-["鸿运","当头"],
-["平安","喜乐"],
-["顺风","顺水"],
-["心想","事成"],
-["吉星","高照"]
+["万事顺遂","好运常在"],
+["鸿运当头","福气满满"],
+["平安喜乐","顺遂无忧"],
+["吉星高照","诸事皆宜"]
 ];
 
 let box=document.getElementById("box");
@@ -256,21 +232,16 @@ box.onclick=()=>{
 
         let t=texts[Math.floor(Math.random()*texts.length)];
 
-        // 生成左右两列
         words.innerHTML=`
-            <div class="col">
-                ${t[0].split("").map(i=>`<span>${i}</span>`).join("")}
-            </div>
-            <div class="col">
-                ${t[1].split("").map(i=>`<span>${i}</span>`).join("")}
-            </div>
+        <div class="col">${t[0].split("").map(i=>`<span>${i}</span>`).join("")}</div>
+        <div class="col">${t[1].split("").map(i=>`<span>${i}</span>`).join("")}</div>
         `;
 
         result.style.display="flex";
     },800);
 };
 
-/* 关闭 */
+/* 点击关闭 */
 result.onclick=()=>{
     result.style.display="none";
 };
