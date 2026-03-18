@@ -26,23 +26,17 @@ html,body{
 }
 .active{display:block;}
 
-/* 顶部标题 */
+/* 标题 */
 .header{
     position:absolute;
     top:40px;
     width:100%;
     text-align:center;
 }
-.title{
-    font-size:28px;
-    font-weight:bold;
-}
-.subtitle{
-    font-size:14px;
-    margin-top:5px;
-}
+.title{font-size:28px;font-weight:bold;}
+.subtitle{font-size:14px;margin-top:5px;}
 
-/* 中间内容 */
+/* 内容 */
 .content{
     position:absolute;
     top:50%;
@@ -57,12 +51,22 @@ html,body{
 .card{
     width:100%;
     max-width:420px;
-    padding:25px;
+    padding:25px 20px 25px 40px; /* 关键：左偏移 */
     background:url("文本框.png") no-repeat center;
-    background-size:100% 100%; /* 修复裁切 */
+    background-size:100% 100%;
     border-radius:20px;
     font-size:15px;
     line-height:1.7;
+}
+
+/* 节气知识专用（控制每行字数） */
+.narrow-text{
+    max-width:15em;
+}
+
+/* 诗意页加宽 */
+.wide{
+    max-width:460px;
 }
 
 /* 底部按钮 */
@@ -84,7 +88,7 @@ html,body{
 /* 翻卡 */
 .flip{
     width:240px;
-    height:180px;
+    height:220px; /* 变高 */
     perspective:1000px;
 }
 .flip-inner{
@@ -107,7 +111,10 @@ html,body{
     align-items:center;
     justify-content:center;
     text-align:center;
-    padding:15px;
+    padding:20px;
+}
+.flip-front{
+    z-index:2;
 }
 .flip-back{
     transform:rotateY(180deg);
@@ -145,7 +152,6 @@ html,body{
 <audio id="bgm" src="chunfenbgm.mp3" autoplay loop></audio>
 <div class="music" onclick="toggleMusic()">♫</div>
 
-<!-- 花瓣 -->
 <script>
 for(let i=0;i<15;i++){
     let p=document.createElement("img");
@@ -170,15 +176,13 @@ for(let i=0;i<15;i++){
 
 <!-- 节气知识 -->
 <div class="page" id="p2">
-    <div class="header">
-        <div class="title">节气知识</div>
-    </div>
+    <div class="header"><div class="title">节气知识</div></div>
 
     <div class="content">
-        <div class="card" id="cardText">
-            春分是春季的中点，此时昼夜几乎相等，寒暑平衡。
-            气温持续回升，大地逐渐复苏，草木萌发、百花初绽，
-            自然界呈现出一派生机盎然的景象。
+        <div class="card narrow-text" id="cardText">
+            春分是春季的中点，昼夜平分寒暑均衡，
+            气温逐渐回升，大地复苏，草木萌发，
+            万物在此时展现出蓬勃生机与活力。
         </div>
     </div>
 
@@ -191,9 +195,7 @@ for(let i=0;i<15;i++){
 
 <!-- 习俗 -->
 <div class="page" id="p3">
-    <div class="header">
-        <div class="title">春分习俗</div>
-    </div>
+    <div class="header"><div class="title">春分习俗</div></div>
 
     <div class="content">
         <div class="flip" onclick="flipCard(this)">
@@ -201,7 +203,7 @@ for(let i=0;i<15;i++){
                 <div class="flip-front">点击查看春分习俗</div>
                 <div class="flip-back">
                     立蛋、踏青、放风筝<br>
-                    人们走进自然，感受春光与生机
+                    感受春光与自然气息
                 </div>
             </div>
         </div>
@@ -215,15 +217,13 @@ for(let i=0;i<15;i++){
 
 <!-- 诗意 -->
 <div class="page" id="p4">
-    <div class="header">
-        <div class="title">诗意春分</div>
-    </div>
+    <div class="header"><div class="title">诗意春分</div></div>
 
     <div class="content">
-        <div class="card">
+        <div class="card wide">
             春分雨脚落声微，柳岸斜风带客归。<br>
-            万物在此刻舒展生长，一半春光，一半温柔。<br>
-            时间仿佛也慢了下来，让人沉浸在春日的气息之中。
+            万物舒展生长，一半春光，一半温柔。<br>
+            时光缓慢流淌，天地之间尽是生机。
         </div>
     </div>
 
@@ -233,7 +233,6 @@ for(let i=0;i<15;i++){
 </div>
 
 <script>
-// 音乐
 document.addEventListener("click",()=>{
     document.getElementById("bgm").play();
 });
@@ -241,26 +240,20 @@ function toggleMusic(){
     let a=document.getElementById("bgm");
     a.paused?a.play():a.pause();
 }
-
-// 翻页
 function next(n){
     document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
     document.getElementById("p"+n).classList.add("active");
 }
-
-// 内容切换
 const texts=[
-"春分象征昼夜平衡，是自然界阴阳调和的重要节点，此时气候温和宜人。",
-"春分前后农事繁忙，大量作物进入播种期，是农业生产的重要阶段。",
-"生态系统逐渐活跃，动植物开始繁衍生长，形成完整的春日景象。"
+"春分象征阴阳平衡，昼夜相等气候温和，万物进入生长旺盛阶段。",
+"此时农事繁忙，大量作物开始播种，田野充满生命气息。",
+"动植物活动增强，自然界呈现完整而活跃的生态景象。"
 ];
 let i=0;
 function changeCard(){
     i=(i+1)%texts.length;
     document.getElementById("cardText").innerText=texts[i];
 }
-
-// 翻卡
 function flipCard(el){
     el.classList.toggle("active");
 }
