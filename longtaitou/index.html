@@ -140,6 +140,26 @@ p{font-size:16px;line-height:1.9;}
 .word:nth-child(4){
     margin-bottom:12px;
 }
+
+/* 音乐按钮 */
+#audioBtn{
+    position:fixed;
+    top:20px;
+    right:20px;
+    width:40px;
+    height:40px;
+    background:rgba(255,255,255,0.5);
+    border-radius:50%;
+    text-align:center;
+    line-height:40px;
+    font-size:20px;
+    color:#000;
+    cursor:pointer;
+    z-index:999;
+}
+#audioBtn.playing{
+    background:rgba(255,255,255,0.9);
+}
 </style>
 </head>
 
@@ -212,6 +232,10 @@ p{font-size:16px;line-height:1.9;}
 </div>
 </div>
 
+<!-- 背景音乐 -->
+<audio id="bgm" src="long.mp3" loop autoplay></audio>
+<div id="audioBtn">🎵</div>
+
 <script>
 let pages=document.querySelectorAll(".page");
 let current=0;
@@ -224,19 +248,12 @@ function update(){
 
 /* 滑动 */
 let startY=0;
-document.addEventListener("touchstart",e=>{
-    startY=e.touches[0].clientY;
-});
-document.addEventListener("touchend",e=>{
-    handleMove(startY-e.changedTouches[0].clientY);
-});
+document.addEventListener("touchstart",e=>{ startY=e.touches[0].clientY; });
+document.addEventListener("touchend",e=>{ handleMove(startY-e.changedTouches[0].clientY); });
 
-/* 电脑 */
+/* 电脑拖拽 */
 let isDown=false,start=0;
-document.addEventListener("mousedown",e=>{
-    isDown=true;
-    start=e.clientY;
-});
+document.addEventListener("mousedown",e=>{ isDown=true; start=e.clientY; });
 document.addEventListener("mouseup",e=>{
     if(!isDown) return;
     handleMove(start-e.clientY);
@@ -263,19 +280,26 @@ let words=document.getElementById("words");
 
 box.onclick=()=>{
     box.classList.add("shake");
-
     setTimeout(()=>{
         box.classList.remove("shake");
-
         let t=texts[Math.floor(Math.random()*texts.length)];
         words.innerHTML = t.split("").map(c=>`<div class="word">${c}</div>`).join("");
-
         result.style.display="flex";
     },800);
 };
+result.onclick=()=>{ result.style.display="none"; };
 
-result.onclick=()=>{
-    result.style.display="none";
+/* 音乐控制 */
+const bgm=document.getElementById("bgm");
+const audioBtn=document.getElementById("audioBtn");
+audioBtn.onclick=()=>{
+    if(bgm.paused){
+        bgm.play();
+        audioBtn.classList.add("playing");
+    }else{
+        bgm.pause();
+        audioBtn.classList.remove("playing");
+    }
 };
 </script>
 
