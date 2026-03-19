@@ -13,7 +13,7 @@ body{
     overflow:hidden;
 }
 
-/* 页面容器 */
+/* 页面 */
 .page{
     width:100%;
     height:100vh;
@@ -21,13 +21,10 @@ body{
     top:0;
     left:0;
     background:url("bg-main.jpg") no-repeat center/cover;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
     transition:transform 0.6s;
 }
 
+/* 遮罩 */
 .overlay{
     position:absolute;
     width:100%;
@@ -42,13 +39,15 @@ body{
     width:100%;
     text-align:center;
     color:#fff;
-    padding:0 20px;
+    padding:0 30px;
 }
 
-/* 下半部分 */
+/* 下半部分（强制水平居中） */
 .bottom{
     position:absolute;
     bottom:10%;
+    left:50%;
+    transform:translateX(-50%);
     width:100%;
     display:flex;
     justify-content:center;
@@ -56,20 +55,25 @@ body{
 
 .bottom img{
     width:70%;
+    max-width:320px;
     border-radius:12px;
+    display:block;
+    margin:0 auto;
 }
 
 /* 标题 */
 h1{font-size:32px;margin-bottom:10px;}
-p{font-size:16px;line-height:1.8;}
+p{font-size:16px;line-height:1.9;}
 
 /* 抽签盒 */
 .box{
     width:160px;
+    display:block;
+    margin:0 auto;
     cursor:pointer;
 }
 
-/* 强化晃动 */
+/* 晃动 */
 .shake{
     animation:shake 0.8s ease;
 }
@@ -108,7 +112,7 @@ p{font-size:16px;line-height:1.8;}
     left:50%;
     transform:translate(-50%,-50%);
     display:flex;
-    gap:20px;
+    gap:25px;
     font-size:20px;
 }
 
@@ -122,90 +126,103 @@ p{font-size:16px;line-height:1.8;}
 
 <body>
 
-<!-- 页面 -->
+<!-- 第1页 -->
 <div class="page" style="transform:translateY(0)">
 <div class="overlay"></div>
 <div class="top">
 <h1>二月二 · 龙抬头</h1>
-<p>春回大地 万物生长 一切从头开始</p>
+<p>春回大地 万物生长<br>一切从头开始</p>
 </div>
 </div>
 
+<!-- 第2页 -->
 <div class="page" style="transform:translateY(100%)">
 <div class="overlay"></div>
 <div class="top">
-<p>龙抬头源于星宿运行，象征苍龙抬首<br>主降雨水，万物复苏</p>
+<p>
+龙抬头源于古代天文星象的变化，<br>
+东方苍龙七宿在此时逐渐显现于夜空，<br>
+被视为“龙抬头”之象。<br><br>
+古人据此判断节气更替，<br>
+认为此日之后雨水渐多，万物复苏，<br>
+象征春耕的开始与自然的苏醒。
+</p>
 </div>
 <div class="bottom">
 <img src="img1.jpg">
 </div>
 </div>
 
+<!-- 第3页 -->
 <div class="page" style="transform:translateY(200%)">
 <div class="overlay"></div>
 <div class="top">
-<p>民间有剃头、吃龙食习俗<br>寓意鸿运当头、福气降临</p>
+<p>
+在民间习俗中，二月二寓意吉祥开端。<br>
+人们会在这一天理发，称为“剃龙头”，<br>
+寄托鸿运当头的美好愿望。<br><br>
+此外，还有吃龙须面、春饼等习俗，<br>
+象征纳福迎祥、风调雨顺，<br>
+表达对新一年生活的期许。
+</p>
 </div>
 <div class="bottom">
 <img src="img2.jpg">
 </div>
 </div>
 
+<!-- 第4页 抽签 -->
 <div class="page" style="transform:translateY(300%)">
 <div class="overlay"></div>
 <div class="top">
 <p>点击抽取今日运势</p>
 </div>
-<div class="bottom" style="bottom:30%">
+<div class="bottom" style="bottom:30%;">
 <img src="lottery-box.png" class="box" id="box">
 </div>
 </div>
 
 <!-- 抽签结果 -->
 <div class="result" id="result">
-    <div>
-        <img src="lottery-paper.png" class="paper">
-        <div class="words" id="words"></div>
-    </div>
+<div>
+<img src="lottery-paper.png" class="paper">
+<div class="words" id="words"></div>
+</div>
 </div>
 
 <script>
 let pages=document.querySelectorAll(".page");
 let current=0;
 
-/* 更新位置 */
+/* 更新 */
 function update(){
     pages.forEach((p,i)=>{
         p.style.transform=`translateY(${(i-current)*100}%)`;
     });
 }
 
-/* 手机滑动 */
+/* 手机 */
 let startY=0;
 document.addEventListener("touchstart",e=>{
     startY=e.touches[0].clientY;
 });
 document.addEventListener("touchend",e=>{
-    let diff=startY-e.changedTouches[0].clientY;
-    handleMove(diff);
+    handleMove(startY-e.changedTouches[0].clientY);
 });
 
-/* 电脑拖拽 */
-let isDown=false;
-let mouseStart=0;
-
+/* 电脑 */
+let isDown=false,start=0;
 document.addEventListener("mousedown",e=>{
     isDown=true;
-    mouseStart=e.clientY;
+    start=e.clientY;
 });
 document.addEventListener("mouseup",e=>{
     if(!isDown) return;
-    let diff=mouseStart-e.clientY;
-    handleMove(diff);
+    handleMove(start-e.clientY);
     isDown=false;
 });
 
-/* 统一处理 */
+/* 切换 */
 function handleMove(diff){
     if(diff>50 && current<pages.length-1) current++;
     else if(diff<-50 && current>0) current--;
@@ -241,7 +258,6 @@ box.onclick=()=>{
     },800);
 };
 
-/* 点击关闭 */
 result.onclick=()=>{
     result.style.display="none";
 };
