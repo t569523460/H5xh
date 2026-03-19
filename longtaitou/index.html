@@ -32,17 +32,17 @@ body{
     background:rgba(0,0,0,0.4);
 }
 
-/* 上半部分 */
+/* 上半部分（整体上移） */
 .top{
     position:absolute;
-    top:15%;
+    top:10%;
     width:100%;
     text-align:center;
     color:#fff;
     padding:0 30px;
 }
 
-/* 下半部分（强制水平居中） */
+/* 下半部分（居中） */
 .bottom{
     position:absolute;
     bottom:10%;
@@ -53,21 +53,20 @@ body{
     justify-content:center;
 }
 
+/* 图片 */
 .bottom img{
     width:70%;
     max-width:320px;
     border-radius:12px;
-    display:block;
-    margin:0 auto;
 }
 
 /* 标题 */
 h1{font-size:32px;margin-bottom:10px;}
 p{font-size:16px;line-height:1.9;}
 
-/* 抽签盒 */
+/* 抽签盒（缩小+下移） */
 .box{
-    width:160px;
+    width:130px;
     display:block;
     margin:0 auto;
     cursor:pointer;
@@ -105,21 +104,26 @@ p{font-size:16px;line-height:1.9;}
     position:relative;
 }
 
-/* 对联排版 */
+/* 竖排单列 */
 .words{
     position:absolute;
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
     display:flex;
-    gap:25px;
-    font-size:20px;
-}
-
-.col{
-    display:flex;
     flex-direction:column;
     align-items:center;
+    font-size:22px;
+}
+
+/* 每个字 */
+.word{
+    margin:2px 0;
+}
+
+/* 中间留白（前四后四） */
+.gap{
+    height:12px;
 }
 </style>
 </head>
@@ -131,7 +135,7 @@ p{font-size:16px;line-height:1.9;}
 <div class="overlay"></div>
 <div class="top">
 <h1>二月二 · 龙抬头</h1>
-<p>春回大地 万物生长<br>一切从头开始</p>
+<p>春回大地 万物生长<br>一切从头开始</p >
 </div>
 </div>
 
@@ -144,12 +148,12 @@ p{font-size:16px;line-height:1.9;}
 东方苍龙七宿在此时逐渐显现于夜空，<br>
 被视为“龙抬头”之象。<br><br>
 古人据此判断节气更替，<br>
-认为此日之后雨水渐多，万物复苏，<br>
-象征春耕的开始与自然的苏醒。
-</p>
+认为此后雨水渐多，万物复苏，<br>
+象征春耕开启与自然苏醒。
+</p >
 </div>
 <div class="bottom">
-<img src="img1.jpg">
+< img src="img1.jpg">
 </div>
 </div>
 
@@ -158,34 +162,34 @@ p{font-size:16px;line-height:1.9;}
 <div class="overlay"></div>
 <div class="top">
 <p>
-在民间习俗中，二月二寓意吉祥开端。<br>
-人们会在这一天理发，称为“剃龙头”，<br>
+二月二在民间寓意吉祥开端，<br>
+人们会理发“剃龙头”，<br>
 寄托鸿运当头的美好愿望。<br><br>
-此外，还有吃龙须面、春饼等习俗，<br>
+同时还有吃龙须面、春饼等习俗，<br>
 象征纳福迎祥、风调雨顺，<br>
 表达对新一年生活的期许。
-</p>
+</p >
 </div>
 <div class="bottom">
-<img src="img2.jpg">
+< img src="img2.jpg">
 </div>
 </div>
 
-<!-- 第4页 抽签 -->
+<!-- 第4页 -->
 <div class="page" style="transform:translateY(300%)">
 <div class="overlay"></div>
 <div class="top">
-<p>点击抽取今日运势</p>
+<p>点击抽取今日运势</p >
 </div>
-<div class="bottom" style="bottom:30%;">
-<img src="lottery-box.png" class="box" id="box">
+<div class="bottom" style="bottom:20%;">
+< img src="lottery-box.png" class="box" id="box">
 </div>
 </div>
 
 <!-- 抽签结果 -->
 <div class="result" id="result">
 <div>
-<img src="lottery-paper.png" class="paper">
+< img src="lottery-paper.png" class="paper">
 <div class="words" id="words"></div>
 </div>
 </div>
@@ -194,7 +198,6 @@ p{font-size:16px;line-height:1.9;}
 let pages=document.querySelectorAll(".page");
 let current=0;
 
-/* 更新 */
 function update(){
     pages.forEach((p,i)=>{
         p.style.transform=`translateY(${(i-current)*100}%)`;
@@ -222,7 +225,6 @@ document.addEventListener("mouseup",e=>{
     isDown=false;
 });
 
-/* 切换 */
 function handleMove(diff){
     if(diff>50 && current<pages.length-1) current++;
     else if(diff<-50 && current>0) current--;
@@ -248,12 +250,15 @@ box.onclick=()=>{
         box.classList.remove("shake");
 
         let t=texts[Math.floor(Math.random()*texts.length)];
+        let full = t[0] + t[1];
 
-        words.innerHTML=`
-        <div class="col">${t[0].split("").map(i=>`<span>${i}</span>`).join("")}</div>
-        <div class="col">${t[1].split("").map(i=>`<span>${i}</span>`).join("")}</div>
-        `;
+        let html="";
+        full.split("").forEach((c,i)=>{
+            if(i===4) html+=`<div class="gap"></div>`;
+            html+=`<div class="word">${c}</div>`;
+        });
 
+        words.innerHTML=html;
         result.style.display="flex";
     },800);
 };
