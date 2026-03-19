@@ -32,7 +32,7 @@ body{
     background:rgba(0,0,0,0.4);
 }
 
-/* 上半部分（上移） */
+/* 上半部分 */
 .top{
     position:absolute;
     top:12%;
@@ -42,10 +42,10 @@ body{
     padding:0 30px;
 }
 
-/* 下半部分 */
+/* 下半部分（图片上移） */
 .bottom{
     position:absolute;
-    bottom:10%;
+    bottom:14%;
     left:50%;
     transform:translateX(-50%);
     width:100%;
@@ -63,7 +63,25 @@ body{
 h1{font-size:32px;margin-bottom:10px;}
 p{font-size:16px;line-height:1.9;}
 
-/* 抽签盒（缩小+下移） */
+/* 滑动提示 */
+.tip{
+    position:absolute;
+    bottom:5%;
+    width:100%;
+    text-align:center;
+    color:#fff;
+    font-size:12px;
+    opacity:0.7;
+    animation:move 1.5s infinite;
+}
+
+@keyframes move{
+    0%{transform:translateY(0)}
+    50%{transform:translateY(8px)}
+    100%{transform:translateY(0)}
+}
+
+/* 抽签盒 */
 .box{
     width:130px;
     margin-top:40px;
@@ -102,7 +120,7 @@ p{font-size:16px;line-height:1.9;}
     position:relative;
 }
 
-/* 单列竖排 */
+/* 签文竖排 */
 .words{
     position:absolute;
     top:50%;
@@ -114,12 +132,10 @@ p{font-size:16px;line-height:1.9;}
     font-size:22px;
 }
 
-/* 每个字 */
 .word{
     margin:2px 0;
 }
 
-/* 第4个字后加间距 */
 .word:nth-child(4){
     margin-bottom:12px;
 }
@@ -133,8 +149,9 @@ p{font-size:16px;line-height:1.9;}
 <div class="overlay"></div>
 <div class="top">
 <h1>二月二 · 龙抬头</h1>
-<p>春回大地 万物生长<br>一切从头开始</p>
+<p>春回大地 万物生长</p>
 </div>
+<div class="tip">↓ 向下滑动</div>
 </div>
 
 <!-- 第2页 -->
@@ -153,6 +170,7 @@ p{font-size:16px;line-height:1.9;}
 <div class="bottom">
 <img src="img1.jpg">
 </div>
+<div class="tip">↓ 向下滑动</div>
 </div>
 
 <!-- 第3页 -->
@@ -171,6 +189,7 @@ p{font-size:16px;line-height:1.9;}
 <div class="bottom">
 <img src="img2.jpg">
 </div>
+<div class="tip">↓ 向下滑动</div>
 </div>
 
 <!-- 第4页 -->
@@ -211,7 +230,7 @@ document.addEventListener("touchend",e=>{
     handleMove(startY-e.changedTouches[0].clientY);
 });
 
-/* 电脑拖拽 */
+/* 电脑 */
 let isDown=false,start=0;
 document.addEventListener("mousedown",e=>{
     isDown=true;
