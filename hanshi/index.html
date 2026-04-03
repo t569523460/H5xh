@@ -43,7 +43,7 @@ html, body {
     position: absolute;
     left: 10%;
     width: 80%;
-    color: #000; /* 改为黑色 */
+    color: #000;
     line-height: 1.6;
 }
 
@@ -61,7 +61,7 @@ html, body {
     font-size: 16px;
 }
 
-/* CSS箭头 */
+/* 箭头 */
 .arrow {
     position: absolute;
     bottom: 30px;
@@ -80,7 +80,7 @@ html, body {
     100% { transform: translate(-50%, 0) rotate(-45deg); opacity: 0.5;}
 }
 
-/* 淡入动画 */
+/* 淡入 */
 .fadeIn {
     animation: fadeIn 1s ease forwards;
 }
@@ -96,7 +96,6 @@ html, body {
 
 <div class="container">
 
-    <!-- 页面1 -->
     <div class="page active" style="background-image:url('bg1.jpg')">
         <div class="text-box title fadeIn">
             寒食节<br>春火未燃
@@ -104,7 +103,6 @@ html, body {
         <div class="arrow"></div>
     </div>
 
-    <!-- 页面2 -->
     <div class="page" style="background-image:url('bg2.jpg')">
         <div class="text-box content">
             寒食节源于春秋时期<br><br>
@@ -116,7 +114,6 @@ html, body {
         <div class="arrow"></div>
     </div>
 
-    <!-- 页面3 -->
     <div class="page" style="background-image:url('bg3.jpg')">
         <div class="text-box content">
             寒食之日，不生明火<br><br>
@@ -128,7 +125,6 @@ html, body {
         <div class="arrow"></div>
     </div>
 
-    <!-- 页面4 -->
     <div class="page" style="background-image:url('bg4.jpg')">
         <div class="text-box content">
             春城无处不飞花<br>
@@ -140,7 +136,6 @@ html, body {
         <div class="arrow"></div>
     </div>
 
-    <!-- 页面5 -->
     <div class="page" style="background-image:url('bg5.jpg')">
         <div class="text-box content" style="text-align:center;">
             一盏冷食，一缕春风<br><br>
@@ -151,19 +146,28 @@ html, body {
 
 </div>
 
-<!-- 背景音乐 -->
 <audio id="bgm" src="han.mp3" loop></audio>
 
 <script>
 let pages = document.querySelectorAll('.page');
 let current = 0;
 
-// 音乐播放（移动端）
-document.addEventListener("touchstart", function () {
-    document.getElementById('bgm').play();
-}, { once: true });
+const bgm = document.getElementById('bgm');
 
-// ===== 手机触摸 =====
+// ===== 音乐播放（全兼容）=====
+function playMusic() {
+    bgm.play().catch(() => {});
+}
+
+document.addEventListener("touchstart", playMusic, { once: true });
+document.addEventListener("click", playMusic, { once: true });
+document.addEventListener("WeixinJSBridgeReady", playMusic, false);
+
+window.addEventListener("load", () => {
+    playMusic();
+});
+
+// ===== 手机滑动 =====
 let startY = 0;
 
 document.addEventListener("touchstart", e => {
@@ -181,7 +185,7 @@ document.addEventListener("touchend", e => {
     }
 });
 
-// ===== 电脑鼠标拖动 =====
+// ===== 电脑拖动 =====
 let mouseStartY = 0;
 let isDown = false;
 
@@ -192,6 +196,7 @@ document.addEventListener("mousedown", e => {
 
 document.addEventListener("mouseup", e => {
     if(!isDown) return;
+
     let diff = mouseStartY - e.clientY;
 
     if(diff > 50){
