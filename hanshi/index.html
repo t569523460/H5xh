@@ -38,14 +38,13 @@ html, body {
     display: block;
 }
 
-/* 文字通用 */
+/* 文字 */
 .text-box {
     position: absolute;
     left: 10%;
     width: 80%;
-    color: #fff;
+    color: #000; /* 改为黑色 */
     line-height: 1.6;
-    text-shadow: 0 0 6px rgba(0,0,0,0.5);
 }
 
 /* 标题 */
@@ -62,20 +61,23 @@ html, body {
     font-size: 16px;
 }
 
-/* 箭头 */
+/* CSS箭头 */
 .arrow {
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 50%;
-    width: 25px;
-    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border-left: 3px solid #000;
+    border-bottom: 3px solid #000;
+    transform: translateX(-50%) rotate(-45deg);
     animation: upDown 1.5s infinite;
 }
 
 @keyframes upDown {
-    0% { transform: translate(-50%, 0); opacity: 0.5;}
-    50% { transform: translate(-50%, 10px); opacity: 1;}
-    100% { transform: translate(-50%, 0); opacity: 0.5;}
+    0% { transform: translate(-50%, 0) rotate(-45deg); opacity: 0.5;}
+    50% { transform: translate(-50%, 10px) rotate(-45deg); opacity: 1;}
+    100% { transform: translate(-50%, 0) rotate(-45deg); opacity: 0.5;}
 }
 
 /* 淡入动画 */
@@ -99,7 +101,7 @@ html, body {
         <div class="text-box title fadeIn">
             寒食节<br>春火未燃
         </div>
-        <img src="arrow.png" class="arrow">
+        <div class="arrow"></div>
     </div>
 
     <!-- 页面2 -->
@@ -111,7 +113,7 @@ html, body {
             山林寂静，烟火不生<br>
             只余清风与思念
         </div>
-        <img src="arrow.png" class="arrow">
+        <div class="arrow"></div>
     </div>
 
     <!-- 页面3 -->
@@ -123,7 +125,7 @@ html, body {
             在清冷中<br>
             感受春的气息
         </div>
-        <img src="arrow.png" class="arrow">
+        <div class="arrow"></div>
     </div>
 
     <!-- 页面4 -->
@@ -135,7 +137,7 @@ html, body {
             烟柳与春风<br>
             写尽人间清明前夕
         </div>
-        <img src="arrow.png" class="arrow">
+        <div class="arrow"></div>
     </div>
 
     <!-- 页面5 -->
@@ -156,12 +158,12 @@ html, body {
 let pages = document.querySelectorAll('.page');
 let current = 0;
 
-// 自动播放音乐（兼容微信/移动端）
+// 音乐播放（移动端）
 document.addEventListener("touchstart", function () {
     document.getElementById('bgm').play();
 }, { once: true });
 
-// 滑动逻辑
+// ===== 手机触摸 =====
 let startY = 0;
 
 document.addEventListener("touchstart", e => {
@@ -170,16 +172,50 @@ document.addEventListener("touchstart", e => {
 
 document.addEventListener("touchend", e => {
     let endY = e.changedTouches[0].clientY;
+    let diff = startY - endY;
 
-    if(startY - endY > 50){
+    if(diff > 50){
         nextPage();
+    } else if(diff < -50){
+        prevPage();
     }
 });
 
+// ===== 电脑鼠标拖动 =====
+let mouseStartY = 0;
+let isDown = false;
+
+document.addEventListener("mousedown", e => {
+    isDown = true;
+    mouseStartY = e.clientY;
+});
+
+document.addEventListener("mouseup", e => {
+    if(!isDown) return;
+    let diff = mouseStartY - e.clientY;
+
+    if(diff > 50){
+        nextPage();
+    } else if(diff < -50){
+        prevPage();
+    }
+
+    isDown = false;
+});
+
+// ===== 页面切换 =====
 function nextPage(){
     if(current < pages.length - 1){
         pages[current].classList.remove("active");
         current++;
+        pages[current].classList.add("active");
+    }
+}
+
+function prevPage(){
+    if(current > 0){
+        pages[current].classList.remove("active");
+        current--;
         pages[current].classList.add("active");
     }
 }
