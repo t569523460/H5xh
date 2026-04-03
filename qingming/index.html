@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>清明节知识问答</title>
+
+<style>
+body,html{
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    font-family:"微软雅黑";
+}
+
+.container{
+    width:100vw;
+    height:100vh;
+    display:flex;
+    transition:transform 0.5s ease;
+}
+
+.page{
+    width:100vw;
+    height:100vh;
+    flex-shrink:0;
+    background:url("bg.jpg") no-repeat center/cover;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:#000;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+.question{
+    font-size:20px;
+    margin-bottom:20px;
+    text-align:center;
+}
+
+.option{
+    width:80%;
+    padding:10px;
+    margin:8px 0;
+    background:rgba(255,255,255,0.8);
+    border-radius:8px;
+    text-align:center;
+}
+
+.option:active{
+    background:#ddd;
+}
+
+.btn{
+    position:absolute;
+    bottom:30px;
+    padding:8px 20px;
+    background:#fff;
+    border-radius:20px;
+}
+
+.prev{
+    left:20px;
+}
+
+/* 成绩弹窗 */
+.result{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+
+.box{
+    background:#fff;
+    padding:30px;
+    border-radius:10px;
+    text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" src="qingming.mp3" autoplay loop></audio>
+
+<div class="container" id="container"></div>
+
+<div class="result" id="resultBox">
+    <div class="box">
+        <h2>你的得分</h2>
+        <p id="scoreText"></p>
+        <button onclick="restart()">重新答题</button>
+    </div>
+</div>
+
+<script>
+const questions = [
+{q:"清明节通常在什么时候？",
+ o:["4月4日或5日","5月1日","3月1日","6月1日"],a:0},
+
+{q:"清明节主要习俗是什么？",
+ o:["扫墓祭祖","吃月饼","放鞭炮","贴春联"],a:0},
+
+{q:"清明节又称什么节？",
+ o:["踏青节","端午节","中秋节","重阳节"],a:0},
+
+{q:"清明节与哪个节气有关？",
+ o:["清明","立春","大寒","小雪"],a:0},
+
+{q:"以下哪项是清明传统食物？",
+ o:["青团","粽子","汤圆","饺子"],a:0},
+
+{q:"清明踏青的意义是？",
+ o:["亲近自然","避暑","祈雨","庆丰收"],a:0},
+
+{q:"清明节起源于哪个传统？",
+ o:["寒食节","春节","七夕","元宵"],a:0},
+
+{q:"清明节常见活动不包括？",
+ o:["赛龙舟","扫墓","踏青","祭祖"],a:0},
+
+{q:"“清明时节雨纷纷”出自谁？",
+ o:["杜牧","李白","白居易","苏轼"],a:0},
+
+{q:"清明节表达的情感是？",
+ o:["缅怀先人","欢庆丰收","迎接新年","爱情表达"],a:0}
+];
+
+let current=0;
+let score=0;
+let answers=new Array(questions.length).fill(null);
+
+const container=document.getElementById("container");
+
+//生成页面
+questions.forEach((item,i)=>{
+    const page=document.createElement("div");
+    page.className="page";
+
+    page.innerHTML=`
+    <div class="question">${i+1}. ${item.q}</div>
+    ${item.o.map((op,idx)=>`<div class="option" onclick="select(${i},${idx})">${op}</div>`).join("")}
+    ${i>0?'<div class="btn prev" onclick="prev()">上一题</div>':''}
+    `;
+
+    container.appendChild(page);
+});
+
+//选择答案
+function select(qIndex,optionIndex){
+    answers[qIndex]=optionIndex;
+
+    if(optionIndex===questions[qIndex].a){
+        score+=10;
+    }
+
+    if(qIndex<questions.length-1){
+        next();
+    }else{
+        showResult();
+    }
+}
+
+//下一题
+function next(){
+    current++;
+    update();
+}
+
+//上一题
+function prev(){
+    current--;
+    update();
+}
+
+//更新位置
+function update(){
+    container.style.transform=`translateX(-${current*100}vw)`;
+}
+
+//显示结果
+function showResult(){
+    document.getElementById("scoreText").innerText=score+"分";
+    document.getElementById("resultBox").style.display="flex";
+}
+
+//重新开始
+function restart(){
+    location.reload();
+}
+
+//解决部分浏览器自动播放限制
+document.addEventListener("click",()=>{
+    document.getElementById("bgm").play();
+});
+</script>
+
+</body>
+</html>
