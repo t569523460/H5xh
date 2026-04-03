@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>寒食节 · 春火未燃</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "微软雅黑", sans-serif;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.page {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* 文字通用 */
+.text-box {
+    position: absolute;
+    left: 10%;
+    width: 80%;
+    color: #fff;
+    line-height: 1.6;
+    text-shadow: 0 0 6px rgba(0,0,0,0.5);
+}
+
+/* 标题 */
+.title {
+    top: 30%;
+    text-align: center;
+    font-size: 30px;
+    letter-spacing: 3px;
+}
+
+/* 内容 */
+.content {
+    top: 45%;
+    font-size: 16px;
+}
+
+/* 箭头 */
+.arrow {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    width: 25px;
+    transform: translateX(-50%);
+    animation: upDown 1.5s infinite;
+}
+
+@keyframes upDown {
+    0% { transform: translate(-50%, 0); opacity: 0.5;}
+    50% { transform: translate(-50%, 10px); opacity: 1;}
+    100% { transform: translate(-50%, 0); opacity: 0.5;}
+}
+
+/* 淡入动画 */
+.fadeIn {
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- 页面1 -->
+    <div class="page active" style="background-image:url('bg1.jpg')">
+        <div class="text-box title fadeIn">
+            寒食节<br>春火未燃
+        </div>
+        <img src="arrow.png" class="arrow">
+    </div>
+
+    <!-- 页面2 -->
+    <div class="page" style="background-image:url('bg2.jpg')">
+        <div class="text-box content">
+            寒食节源于春秋时期<br><br>
+            晋文公为纪念忠臣介子推<br>
+            下令禁火寒食三日<br><br>
+            山林寂静，烟火不生<br>
+            只余清风与思念
+        </div>
+        <img src="arrow.png" class="arrow">
+    </div>
+
+    <!-- 页面3 -->
+    <div class="page" style="background-image:url('bg3.jpg')">
+        <div class="text-box content">
+            寒食之日，不生明火<br><br>
+            人们以冷食充饥<br>
+            青团、寒食粥、冷面<br><br>
+            在清冷中<br>
+            感受春的气息
+        </div>
+        <img src="arrow.png" class="arrow">
+    </div>
+
+    <!-- 页面4 -->
+    <div class="page" style="background-image:url('bg4.jpg')">
+        <div class="text-box content">
+            春城无处不飞花<br>
+            寒食东风御柳斜<br><br>
+            ——韩翃《寒食》<br><br>
+            烟柳与春风<br>
+            写尽人间清明前夕
+        </div>
+        <img src="arrow.png" class="arrow">
+    </div>
+
+    <!-- 页面5 -->
+    <div class="page" style="background-image:url('bg5.jpg')">
+        <div class="text-box content" style="text-align:center;">
+            一盏冷食，一缕春风<br><br>
+            寒食虽冷<br>
+            春意已浓
+        </div>
+    </div>
+
+</div>
+
+<!-- 背景音乐 -->
+<audio id="bgm" src="han.mp3" loop></audio>
+
+<script>
+let pages = document.querySelectorAll('.page');
+let current = 0;
+
+// 自动播放音乐（兼容微信/移动端）
+document.addEventListener("touchstart", function () {
+    document.getElementById('bgm').play();
+}, { once: true });
+
+// 滑动逻辑
+let startY = 0;
+
+document.addEventListener("touchstart", e => {
+    startY = e.touches[0].clientY;
+});
+
+document.addEventListener("touchend", e => {
+    let endY = e.changedTouches[0].clientY;
+
+    if(startY - endY > 50){
+        nextPage();
+    }
+});
+
+function nextPage(){
+    if(current < pages.length - 1){
+        pages[current].classList.remove("active");
+        current++;
+        pages[current].classList.add("active");
+    }
+}
+</script>
+
+</body>
+</html>
