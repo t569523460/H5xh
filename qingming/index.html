@@ -20,46 +20,33 @@ body,html{
     transition:transform 0.5s ease;
 }
 
-/* 页面 */
 .page{
     width:100vw;
     height:100vh;
     flex-shrink:0;
     background:url("bg.jpg") no-repeat center/cover;
-    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
     color:#000;
-    padding:30px 20px;
+    padding:20px;
     box-sizing:border-box;
 }
 
-/* 雨丝动画 */
-.rain{
-    position:absolute;
-    width:2px;
-    height:80px;
-    background:rgba(255,255,255,0.4);
-    animation:rain 1s linear infinite;
-}
-
-@keyframes rain{
-    from{transform:translateY(-100px);}
-    to{transform:translateY(100vh);}
-}
-
-/* 内容左对齐 */
 .question{
     font-size:20px;
     margin-bottom:20px;
-    text-align:left;
+    text-align:center;
 }
 
 .option{
-    width:90%;
-    padding:12px;
-    margin:10px 0;
-    background:rgba(255,255,255,0.85);
+    width:80%;
+    padding:10px;
+    margin:8px 0;
+    background:rgba(255,255,255,0.8);
     border-radius:8px;
-    text-align:left;
+    text-align:center;
 }
 
 .option:active{
@@ -116,53 +103,39 @@ body,html{
 
 <script>
 const questions = [
-{q:"清明节对应农历大约在什么时候？",
- o:["农历二月末至三月初","农历正月初一","农历五月初五","农历八月十五"],a:0},
+{q:"清明节通常在什么时候？",
+ o:["4月4日或5日","5月1日","3月1日","6月1日"],a:0},
 
 {q:"清明节主要习俗是什么？",
- o:["扫墓祭祖","吃月饼","贴春联","赛龙舟"],a:0},
+ o:["扫墓祭祖","吃月饼","放鞭炮","贴春联"],a:0},
 
-{q:"清明节又被称为？",
- o:["踏青节","中秋节","重阳节","元宵节"],a:0},
+{q:"清明节又称什么节？",
+ o:["踏青节","端午节","中秋节","重阳节"],a:0},
 
-{q:"清明节在传统体系中属于？",
- o:["节气与节日结合","纯节气","纯节日","西方节日"],a:0},
+{q:"清明节与哪个节气有关？",
+ o:["清明","立春","大寒","小雪"],a:0},
 
 {q:"以下哪项是清明传统食物？",
- o:["青团","粽子","汤圆","面条"],a:0},
+ o:["青团","粽子","汤圆","饺子"],a:0},
 
 {q:"清明踏青的意义是？",
- o:["亲近自然","避暑降温","庆祝丰收","祈求下雪"],a:0},
+ o:["亲近自然","避暑","祈雨","庆丰收"],a:0},
 
-{q:"清明节起源与哪个传统有关？",
- o:["寒食节","元宵节","七夕节","春节"],a:0},
+{q:"清明节起源于哪个传统？",
+ o:["寒食节","春节","七夕","元宵"],a:0},
 
-{q:"以下哪项不是清明活动？",
+{q:"清明节常见活动不包括？",
  o:["赛龙舟","扫墓","踏青","祭祖"],a:0},
 
 {q:"“清明时节雨纷纷”出自谁？",
- o:["杜牧","李白","苏轼","王维"],a:0},
+ o:["杜牧","李白","白居易","苏轼"],a:0},
 
-{q:"清明节主要表达什么情感？",
- o:["缅怀先人","欢庆丰收","迎接新年","表达爱情"],a:0}
+{q:"清明节表达的情感是？",
+ o:["缅怀先人","欢庆丰收","迎接新年","爱情表达"],a:0}
 ];
 
-// 打乱答案顺序函数
-function shuffle(array){
-    for(let i=array.length-1;i>0;i--){
-        let j=Math.floor(Math.random()*(i+1));
-        [array[i],array[j]]=[array[j],array[i]];
-    }
-}
-
-// 初始化打乱
-questions.forEach(q=>{
-    let correct=q.o[q.a];
-    shuffle(q.o);
-    q.a=q.o.indexOf(correct);
-});
-
 let current=0;
+let score=0;
 let answers=new Array(questions.length).fill(null);
 
 const container=document.getElementById("container");
@@ -172,20 +145,9 @@ questions.forEach((item,i)=>{
     const page=document.createElement("div");
     page.className="page";
 
-    //生成雨丝
-    for(let r=0;r<20;r++){
-        let rain=document.createElement("div");
-        rain.className="rain";
-        rain.style.left=Math.random()*100+"%";
-        rain.style.animationDuration=(0.5+Math.random())+"s";
-        page.appendChild(rain);
-    }
-
-    const labels=["A.","B.","C.","D."];
-
-    page.innerHTML += `
+    page.innerHTML=`
     <div class="question">${i+1}. ${item.q}</div>
-    ${item.o.map((op,idx)=>`<div class="option" onclick="select(${i},${idx})">${labels[idx]} ${op}</div>`).join("")}
+    ${item.o.map((op,idx)=>`<div class="option" onclick="select(${i},${idx})">${op}</div>`).join("")}
     ${i>0?'<div class="btn prev" onclick="prev()">上一题</div>':''}
     `;
 
@@ -195,6 +157,10 @@ questions.forEach((item,i)=>{
 //选择答案
 function select(qIndex,optionIndex){
     answers[qIndex]=optionIndex;
+
+    if(optionIndex===questions[qIndex].a){
+        score+=10;
+    }
 
     if(qIndex<questions.length-1){
         next();
@@ -220,20 +186,8 @@ function update(){
     container.style.transform=`translateX(-${current*100}vw)`;
 }
 
-//计算分数
-function calcScore(){
-    let score=0;
-    questions.forEach((q,i)=>{
-        if(answers[i]===q.a){
-            score+=10;
-        }
-    });
-    return score;
-}
-
 //显示结果
 function showResult(){
-    let score=calcScore();
     document.getElementById("scoreText").innerText=score+"分";
     document.getElementById("resultBox").style.display="flex";
 }
@@ -243,7 +197,7 @@ function restart(){
     location.reload();
 }
 
-//解决自动播放
+//解决部分浏览器自动播放限制
 document.addEventListener("click",()=>{
     document.getElementById("bgm").play();
 });
