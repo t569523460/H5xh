@@ -10,6 +10,7 @@ body,html{
     padding:0;
     overflow:hidden;
     font-family:"微软雅黑";
+    background:#000;
 }
 
 .container{
@@ -33,6 +34,7 @@ body,html{
     color:#1f2f1f;
 }
 
+/* 雨丝canvas */
 #rainCanvas{
     position:fixed;
     top:0;
@@ -42,12 +44,14 @@ body,html{
     pointer-events:none;
 }
 
+/* 题目 */
 .question{
     font-size:26px;
     line-height:1.6;
     text-align:left;
 }
 
+/* 选项 */
 .options{
     margin-top:20px;
 }
@@ -60,6 +64,7 @@ body,html{
     border-radius:10px;
 }
 
+/* 底部按钮 */
 .bottomBtn{
     width:160px;
     margin:0 auto 30px;
@@ -70,6 +75,7 @@ body,html{
     font-size:20px;
 }
 
+/* 提示弹窗 */
 .tipOverlay{
     position:fixed;
     top:0;
@@ -80,7 +86,6 @@ body,html{
     display:none;
     justify-content:center;
     align-items:center;
-    z-index:100;
 }
 
 .tip{
@@ -90,9 +95,9 @@ body,html{
     font-size:22px;
     text-align:center;
     max-width:80%;
-    word-break:keep-all;
 }
 
+/* 成绩弹窗 */
 .resultOverlay{
     position:fixed;
     width:100%;
@@ -101,7 +106,6 @@ body,html{
     display:none;
     justify-content:center;
     align-items:center;
-    z-index:100;
 }
 
 .resultBox{
@@ -134,10 +138,12 @@ body,html{
 
 <div class="container" id="container"></div>
 
+<!-- 答题弹窗 -->
 <div class="tipOverlay" id="tipOverlay">
     <div class="tip" id="tip"></div>
 </div>
 
+<!-- 成绩弹窗 -->
 <div class="resultOverlay" id="resultOverlay">
     <div class="resultBox">
         <h2>答题完成</h2>
@@ -224,31 +230,30 @@ function showResult(){
         if(answers[i]===questions[i].a) score+=10;
     }
     document.getElementById("scoreText").innerText=`得分：${score} / 100`;
-    document.getElementById("resultOverlay").style.display="flex";
-    document.getElementById("resultOverlay").addEventListener("click",()=>{
-        document.getElementById("resultOverlay").style.display="none";
-    });
+    const overlay=document.getElementById("resultOverlay");
+    overlay.style.display="flex";
+    overlay.addEventListener("click",()=>{overlay.style.display="none";});
 }
 
 function restart(){
     location.reload();
 }
 
-//雨丝动画（同一方向）
+//雨丝动画
 const canvas=document.getElementById("rainCanvas");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
 let rain=[];
-const rainCount=150;
+const rainCount=200;
 for(let i=0;i<rainCount;i++){
     rain.push({
         x:Math.random()*canvas.width,
         y:Math.random()*canvas.height,
-        l:Math.random()*15+10,
-        xs:2,   //倾斜速度X
-        ys:6    //下降速度Y
+        l:Math.random()*20+10,
+        xs:Math.random()*1.5+0.5,
+        ys:Math.random()*4+4
     });
 }
 
@@ -280,7 +285,7 @@ function moveRain(){
 }
 drawRain();
 
-//自动播放音乐
+//解决自动播放限制
 document.addEventListener("click",()=>{
     document.getElementById("bgm").play();
 });
