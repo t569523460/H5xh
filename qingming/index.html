@@ -270,4 +270,20 @@ function moveRain(){
     for(let i=0;i<rainCount;i++){
         let r=rain[i];
         r.x += r.xs;
-        r
+        r.y += r.ys;
+        if(r.y>canvas.height || r.x>canvas.width){
+            r.x=Math.random()*canvas.width;
+            r.y=-20;
+        }
+    }
+    requestAnimationFrame(drawRain);
+}
+drawRain();
+
+//自动播放音乐
+document.addEventListener("click",()=>{
+    document.getElementById("bgm").play();
+});
+</script>
+</body>
+</html>
