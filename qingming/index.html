@@ -10,7 +10,6 @@ body,html{
     padding:0;
     overflow:hidden;
     font-family:"微软雅黑";
-    background:#000;
 }
 
 .container{
@@ -34,7 +33,6 @@ body,html{
     color:#1f2f1f;
 }
 
-/* 雨丝canvas */
 #rainCanvas{
     position:fixed;
     top:0;
@@ -44,14 +42,12 @@ body,html{
     pointer-events:none;
 }
 
-/* 题目 */
 .question{
     font-size:26px;
     line-height:1.6;
     text-align:left;
 }
 
-/* 选项 */
 .options{
     margin-top:20px;
 }
@@ -64,7 +60,6 @@ body,html{
     border-radius:10px;
 }
 
-/* 底部按钮 */
 .bottomBtn{
     width:160px;
     margin:0 auto 30px;
@@ -75,7 +70,6 @@ body,html{
     font-size:20px;
 }
 
-/* 提示弹窗 */
 .tipOverlay{
     position:fixed;
     top:0;
@@ -86,6 +80,7 @@ body,html{
     display:none;
     justify-content:center;
     align-items:center;
+    z-index:100;
 }
 
 .tip{
@@ -95,9 +90,9 @@ body,html{
     font-size:22px;
     text-align:center;
     max-width:80%;
+    word-break:keep-all;
 }
 
-/* 成绩弹窗 */
 .resultOverlay{
     position:fixed;
     width:100%;
@@ -106,6 +101,7 @@ body,html{
     display:none;
     justify-content:center;
     align-items:center;
+    z-index:100;
 }
 
 .resultBox{
@@ -138,12 +134,10 @@ body,html{
 
 <div class="container" id="container"></div>
 
-<!-- 答题弹窗 -->
 <div class="tipOverlay" id="tipOverlay">
     <div class="tip" id="tip"></div>
 </div>
 
-<!-- 成绩弹窗 -->
 <div class="resultOverlay" id="resultOverlay">
     <div class="resultBox">
         <h2>答题完成</h2>
@@ -191,16 +185,13 @@ questions.forEach((item,i)=>{
 function select(qIndex,optIndex){
     const tipOverlay=document.getElementById("tipOverlay");
     const tip=document.getElementById("tip");
-    const prevAnswer=answers[qIndex];
     answers[qIndex]=optIndex; //更新答案
-
     if(optIndex===questions[qIndex].a){
         tip.innerText="回答正确";
     }else{
         const correct=questions[qIndex].a;
         tip.innerText=`正确答案：${letters[correct]}. ${questions[qIndex].o[correct]}`;
     }
-
     tipOverlay.style.display="flex";
     setTimeout(()=>{
         tipOverlay.style.display="none";
@@ -234,7 +225,6 @@ function showResult(){
     }
     document.getElementById("scoreText").innerText=`得分：${score} / 100`;
     document.getElementById("resultOverlay").style.display="flex";
-    //点击任意关闭
     document.getElementById("resultOverlay").addEventListener("click",()=>{
         document.getElementById("resultOverlay").style.display="none";
     });
@@ -244,7 +234,7 @@ function restart(){
     location.reload();
 }
 
-//雨丝动画
+//雨丝动画（同一方向）
 const canvas=document.getElementById("rainCanvas");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -252,14 +242,13 @@ canvas.height=window.innerHeight;
 
 let rain=[];
 const rainCount=150;
-
 for(let i=0;i<rainCount;i++){
     rain.push({
         x:Math.random()*canvas.width,
         y:Math.random()*canvas.height,
-        l:Math.random()*20+10,
-        xs:Math.random()*2-1,
-        ys:Math.random()*4+4
+        l:Math.random()*15+10,
+        xs:2,   //倾斜速度X
+        ys:6    //下降速度Y
     });
 }
 
@@ -271,7 +260,7 @@ function drawRain(){
     for(let i=0;i<rainCount;i++){
         let r=rain[i];
         ctx.moveTo(r.x,r.y);
-        ctx.lineTo(r.x + r.xs*2,r.y + r.ys);
+        ctx.lineTo(r.x + r.xs*2, r.y + r.ys);
     }
     ctx.stroke();
     moveRain();
@@ -281,20 +270,4 @@ function moveRain(){
     for(let i=0;i<rainCount;i++){
         let r=rain[i];
         r.x += r.xs;
-        r.y += r.ys;
-        if(r.y>canvas.height || r.x>canvas.width){
-            r.x=Math.random()*canvas.width;
-            r.y=-20;
-        }
-    }
-    requestAnimationFrame(drawRain);
-}
-drawRain();
-
-//解决自动播放限制
-document.addEventListener("click",()=>{
-    document.getElementById("bgm").play();
-});
-</script>
-</body>
-</html>
+        r
