@@ -265,4 +265,36 @@ for(let i=0;i<rainCount;i++){
 
 function drawRain(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.strokeStyle
+    ctx.strokeStyle='rgba(200,255,255,0.5)';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    for(let i=0;i<rainCount;i++){
+        let r=rain[i];
+        ctx.moveTo(r.x,r.y);
+        ctx.lineTo(r.x + r.xs*2,r.y + r.ys);
+    }
+    ctx.stroke();
+    moveRain();
+}
+
+function moveRain(){
+    for(let i=0;i<rainCount;i++){
+        let r=rain[i];
+        r.x += r.xs;
+        r.y += r.ys;
+        if(r.y>canvas.height || r.x>canvas.width){
+            r.x=Math.random()*canvas.width;
+            r.y=-20;
+        }
+    }
+    requestAnimationFrame(drawRain);
+}
+drawRain();
+
+//解决自动播放限制
+document.addEventListener("click",()=>{
+    document.getElementById("bgm").play();
+});
+</script>
+</body>
+</html>
