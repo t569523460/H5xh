@@ -3,71 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>清明问答</title>
-
+<title>清明节知识问答</title>
 <style>
 body,html{
     margin:0;
     padding:0;
     overflow:hidden;
     font-family:"微软雅黑";
-    color:#1f2f1f;
+    background:#000;
 }
 
-/* 背景容器 */
-.bg{
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:url("bg.jpg") no-repeat center/cover;
-    z-index:-2;
-}
-
-/* 雨丝效果 */
-.rain{
-    position:fixed;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    z-index:-1;
-}
-
-.rain span{
-    position:absolute;
-    width:1px;
-    height:80px;
-    background:rgba(255,255,255,0.3);
-    animation:rain 1s linear infinite;
-}
-
-@keyframes rain{
-    0%{transform:translateY(-100px);}
-    100%{transform:translateY(100vh);}
-}
-
-/* 页面 */
 .container{
-    display:flex;
     width:100vw;
     height:100vh;
-    transition:0.5s;
+    display:flex;
+    transition:transform 0.5s;
 }
 
 .page{
     width:100vw;
     height:100vh;
     flex-shrink:0;
+    background:url("bg.jpg") no-repeat center/cover;
+    background-size:cover;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
     padding:40px 25px;
     box-sizing:border-box;
+    color:#1f2f1f;
 }
 
-/* 内容 */
+/* 雨丝canvas */
+#rainCanvas{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+}
+
+/* 题目 */
 .question{
     font-size:26px;
     line-height:1.6;
+    text-align:left;
+}
+
+/* 选项 */
+.options{
+    margin-top:20px;
 }
 
 .option{
@@ -78,8 +64,8 @@ body,html{
     border-radius:10px;
 }
 
-/* 按钮 */
-.btn{
+/* 底部按钮 */
+.bottomBtn{
     width:160px;
     margin:0 auto 30px;
     text-align:center;
@@ -89,186 +75,194 @@ body,html{
     font-size:20px;
 }
 
-/* 遮罩 */
-.mask{
+/* 提示弹窗 */
+.tipOverlay{
     position:fixed;
+    top:0;
+    left:0;
     width:100%;
     height:100%;
     background:rgba(0,0,0,0.4);
     display:none;
-    z-index:10;
+    justify-content:center;
+    align-items:center;
 }
 
-/* 弹窗 */
 .tip{
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    background:rgba(200,240,200,0.95);
-    padding:30px 50px;
-    border-radius:15px;
+    background:#fff;
+    padding:20px 30px;
+    border-radius:12px;
     font-size:22px;
-    display:none;
-    z-index:11;
+    text-align:center;
+    max-width:80%;
+}
 
-    /* 简单叶片渐变装饰 */
-    background-image:
-    radial-gradient(circle at top left, rgba(150,200,150,0.3), transparent),
-    radial-gradient(circle at bottom right, rgba(120,180,120,0.3), transparent);
+/* 成绩弹窗 */
+.resultOverlay{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+
+.resultBox{
+    background:#fff;
+    padding:40px;
+    border-radius:15px;
+    text-align:center;
+    width:70%;
+}
+
+.resultBox h2{
+    font-size:32px;
+}
+
+.resultBox p{
+    font-size:28px;
+}
+
+.resultBox button{
+    padding:12px 30px;
+    font-size:20px;
+    margin-top:20px;
 }
 </style>
 </head>
-
 <body>
 
-<div class="bg"></div>
-<div class="rain" id="rain"></div>
-
-<audio src="qingming.mp3" autoplay loop id="bgm"></audio>
+<audio id="bgm" src="qingming.mp3" autoplay loop></audio>
+<canvas id="rainCanvas"></canvas>
 
 <div class="container" id="container"></div>
 
-<div class="mask" id="mask"></div>
-<div class="tip" id="tip"></div>
+<!-- 答题弹窗 -->
+<div class="tipOverlay" id="tipOverlay">
+    <div class="tip" id="tip"></div>
+</div>
+
+<!-- 成绩弹窗 -->
+<div class="resultOverlay" id="resultOverlay">
+    <div class="resultBox">
+        <h2>答题完成</h2>
+        <p id="scoreText"></p>
+        <button onclick="restart()">重新答题</button>
+    </div>
+</div>
 
 <script>
-/* 生成雨丝 */
-const rainBox=document.getElementById("rain");
-for(let i=0;i<80;i++){
-    let span=document.createElement("span");
-    span.style.left=Math.random()*100+"vw";
-    span.style.animationDuration=(0.5+Math.random())+"s";
-    span.style.opacity=Math.random();
-    rainBox.appendChild(span);
-}
-
 const questions=[
-{q:"清明节通常在什么时候？",
- o:["4月5日","5月1日","3月1日","6月1日"],a:0},
-
-{q:"清明节主要习俗是什么？",
- o:["吃月饼","扫墓祭祖","贴春联","放鞭炮"],a:1},
-
-{q:"清明节又称什么节？",
- o:["端午节","踏青节","重阳节","中秋节"],a:1},
-
-{q:"以下哪项是清明传统食物？",
- o:["青团","饺子","汤圆","粽子"],a:0},
-
-{q:"清明踏青的意义是？",
- o:["避暑","亲近自然","祈雨","庆丰收"],a:1},
-
-{q:"清明节起源于哪个传统？",
- o:["春节","寒食节","七夕","元宵"],a:1},
-
-{q:"清明节常见活动不包括？",
- o:["扫墓","踏青","祭祖","赛龙舟"],a:3},
-
-{q:"“清明时节雨纷纷”出自谁？",
- o:["李白","杜牧","白居易","苏轼"],a:1},
-
-{q:"清明节表达的情感是？",
- o:["爱情表达","迎接新年","缅怀先人","欢庆丰收"],a:2},
-
-{q:"清明节属于哪一类节日？",
- o:["传统节日","西方节日","宗教节日","现代节日"],a:0}
+{q:"清明节通常在什么时候？",o:["4月5日","5月1日","3月1日","6月1日"],a:0},
+{q:"清明节主要习俗是什么？",o:["吃月饼","扫墓祭祖","贴春联","放鞭炮"],a:1},
+{q:"清明节又称什么节？",o:["端午节","踏青节","重阳节","中秋节"],a:1},
+{q:"以下哪项是清明传统食物？",o:["青团","饺子","汤圆","粽子"],a:0},
+{q:"清明踏青的意义是？",o:["避暑","亲近自然","祈雨","庆丰收"],a:1},
+{q:"清明节起源于哪个传统？",o:["春节","寒食节","七夕","元宵"],a:1},
+{q:"清明节常见活动不包括？",o:["扫墓","踏青","祭祖","赛龙舟"],a:3},
+{q:"“清明时节雨纷纷”出自谁？",o:["李白","杜牧","白居易","苏轼"],a:1},
+{q:"清明节表达的情感是？",o:["爱情表达","迎接新年","缅怀先人","欢庆丰收"],a:2},
+{q:"清明节属于哪一类节日？",o:["传统节日","西方节日","宗教节日","现代节日"],a:0}
 ];
 
-let current=0;
-let score=0;
-let answered=new Array(10).fill(false);
 const letters=["A","B","C","D"];
-
+let current=0;
+let answers=new Array(questions.length).fill(null);
 const container=document.getElementById("container");
 
+//生成页面
 questions.forEach((item,i)=>{
-    let page=document.createElement("div");
+    const page=document.createElement("div");
     page.className="page";
-
     page.innerHTML=`
     <div>
         <div class="question">${i+1}. ${item.q}</div>
-        ${item.o.map((op,idx)=>`
-        <div class="option" onclick="select(${i},${idx})">
-        ${letters[idx]}. ${op}
-        </div>`).join("")}
+        <div class="options">
+        ${item.o.map((op,idx)=>`<div class="option" onclick="select(${i},${idx})">${letters[idx]}. ${op}</div>`).join("")}
+        </div>
     </div>
-
-    <div class="btn" onclick="${i==9?'restart()':'prev()'}">
-        ${i==9?'重新开始':'上一题'}
-    </div>
+    <div class="bottomBtn" id="btn${i}">${i===9?'重新开始':'上一题'}</div>
     `;
-
     container.appendChild(page);
 });
 
-function select(qIndex,optionIndex){
-    if(answered[qIndex]) return;
+//选择答案
+function select(qIndex,optIndex){
+    const tipOverlay=document.getElementById("tipOverlay");
+    const tip=document.getElementById("tip");
+    const prevAnswer=answers[qIndex];
+    answers[qIndex]=optIndex; //更新答案
 
-    answered[qIndex]=true;
-
-    let tip=document.getElementById("tip");
-    let mask=document.getElementById("mask");
-
-    mask.style.display="block";
-    tip.style.display="block";
-
-    if(optionIndex===questions[qIndex].a){
-        score+=10;
+    if(optIndex===questions[qIndex].a){
         tip.innerText="回答正确";
     }else{
-        let c=questions[qIndex].a;
-        tip.innerText=`正确答案：${letters[c]}.${questions[qIndex].o[c]}`;
+        const correct=questions[qIndex].a;
+        tip.innerText=`正确答案：${letters[correct]}. ${questions[qIndex].o[correct]}`;
     }
 
+    tipOverlay.style.display="flex";
     setTimeout(()=>{
-        tip.style.display="none";
-        mask.style.display="none";
-
-        if(qIndex<9){
-            next();
+        tipOverlay.style.display="none";
+        if(qIndex<questions.length-1){
+            current++;
+            container.style.transform=`translateX(-${current*100}vw)`;
         }else{
             showResult();
         }
-
     },1500);
 }
 
-function next(){
-    current++;
-    container.style.transform=`translateX(-${current*100}vw)`;
-}
-
-function prev(){
-    if(current>0){
-        current--;
-        container.style.transform=`translateX(-${current*100}vw)`;
-    }
+//底部按钮
+for(let i=0;i<questions.length;i++){
+    const btn=document.getElementById(`btn${i}`);
+    if(i===0){btn.style.display="none";}
+    btn.addEventListener("click",()=>{
+        if(i<9){
+            current--;
+            container.style.transform=`translateX(-${current*100}vw)`;
+        }else{
+            restart();
+        }
+    });
 }
 
 function showResult(){
-    let tip=document.getElementById("tip");
-    let mask=document.getElementById("mask");
-
-    mask.style.display="block";
-    tip.style.display="block";
-    tip.innerText=`你的得分：${score}分`;
-
-    mask.onclick=()=>{
-        mask.style.display="none";
-        tip.style.display="none";
+    let score=0;
+    for(let i=0;i<questions.length;i++){
+        if(answers[i]===questions[i].a) score+=10;
     }
+    document.getElementById("scoreText").innerText=`得分：${score} / 100`;
+    document.getElementById("resultOverlay").style.display="flex";
+    //点击任意关闭
+    document.getElementById("resultOverlay").addEventListener("click",()=>{
+        document.getElementById("resultOverlay").style.display="none";
+    });
 }
 
 function restart(){
     location.reload();
 }
 
-document.addEventListener("click",()=>{
-    document.getElementById("bgm").play();
-});
-</script>
+//雨丝动画
+const canvas=document.getElementById("rainCanvas");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-</body>
-</html>
+let rain=[];
+const rainCount=150;
+
+for(let i=0;i<rainCount;i++){
+    rain.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        l:Math.random()*20+10,
+        xs:Math.random()*2-1,
+        ys:Math.random()*4+4
+    });
+}
+
+function drawRain(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle
