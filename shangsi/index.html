@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>上巳节 H5</title>
+    <style>
+        /* 基础样式 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: "苹方", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #000;
+        }
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: transform 0.6s ease, opacity 0.6s ease;
+            opacity: 0;
+            z-index: 0;
+        }
+        .page.active {
+            opacity: 1;
+            z-index: 1;
+        }
+        .text-box {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 90%;
+        }
+        .text-box h1 {
+            font-size: 2em;
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .text-box p {
+            font-size: 1.2em;
+            line-height: 1.6em;
+            color: #333;
+        }
+        /* 上下滑动箭头提示 */
+        .arrow {
+            position: absolute;
+            bottom: 30px;
+            font-size: 2em;
+            color: #fff;
+            animation: bounce 1.2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 音乐 -->
+    <audio id="bgm" src="shangsi_bgm.mp3" autoplay loop></audio>
+
+    <!-- 页面列表 -->
+    <div class="page active" style="background-image: url('shangsi_cover.jpg');">
+        <div class="text-box">
+            <h1>上巳节</h1>
+            <p>春水初生，万物萌动。上巳节，古人踏青祓禊，迎春赏花。</p>
+        </div>
+        <div class="arrow">⬇️</div>
+    </div>
+
+    <div class="page" style="background-image: url('shangsi_intro.jpg');">
+        <div class="text-box">
+            <h1>节日简介</h1>
+            <p>上巳节，又称“三月三”，源自古代中国祓除晦气、踏青赏景的习俗。每年农历三月初三举行。</p>
+        </div>
+        <div class="arrow">⬇️</div>
+    </div>
+
+    <div class="page" style="background-image: url('shangsi_customs.jpg');">
+        <div class="text-box">
+            <h1>传统习俗</h1>
+            <p>人们在河边踏青、洗浴、饮酒、吟诗，寄托祈福之意。文人雅士常借此机会聚会赋诗，形成文化风尚。</p>
+        </div>
+        <div class="arrow">⬇️</div>
+    </div>
+
+    <div class="page" style="background-image: url('shangsi_poetry.jpg');">
+        <div class="text-box">
+            <h1>诗词文化</h1>
+            <p>“桃红复含宿雨，柳绿更带朝烟”。上巳节的诗词多描绘春景与踏青之趣，展现古人对自然与生命的热爱。</p>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 0;
+        const pages = document.querySelectorAll('.page');
+        let startY = 0;
+        let endY = 0;
+
+        function showPage(index) {
+            pages.forEach((p, i) => {
+                p.classList.remove('active');
+                if(i === index) p.classList.add('active');
+            });
+        }
+
+        document.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            endY = e.changedTouches[0].clientY;
+            let diff = endY - startY;
+            if(diff < -50 && currentPage < pages.length - 1) {
+                currentPage++;
+                showPage(currentPage);
+            } else if(diff > 50 && currentPage > 0) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        // 点击箭头也可滑动
+        const arrows = document.querySelectorAll('.arrow');
+        arrows.forEach((arrow, idx) => {
+            arrow.addEventListener('click', () => {
+                if(currentPage < pages.length - 1){
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
