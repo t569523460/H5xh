@@ -12,6 +12,7 @@ body,html{
   height:100%;
   overflow:hidden;
   font-family:"微软雅黑",sans-serif;
+  background:#f5f5f5;
 }
 
 .page{
@@ -20,8 +21,13 @@ body,html{
   position:absolute;
   top:0;
   left:0;
-  background-size:cover;
+
+  /* 关键修改 ↓ */
+  background-size:contain;
+  background-repeat:no-repeat;
   background-position:center;
+  background-color:#f5f5f5;
+
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -35,7 +41,6 @@ body,html{
 h1{
   font-size:42px;
   margin-bottom:24px;
-  letter-spacing:2px;
 }
 
 p{
@@ -45,11 +50,11 @@ p{
 }
 
 /* 背景 */
-.page:nth-child(1){background:url(bg1.jpg);}
-.page:nth-child(2){background:url(bg2.jpg);}
-.page:nth-child(3){background:url(bg3.jpg);}
-.page:nth-child(4){background:url(bg4.jpg);}
-.page:nth-child(5){background:url(bg1.jpg);}
+.page:nth-child(1){background-image:url(bg1.jpg);}
+.page:nth-child(2){background-image:url(bg2.jpg);}
+.page:nth-child(3){background-image:url(bg3.jpg);}
+.page:nth-child(4){background-image:url(bg4.jpg);}
+.page:nth-child(5){background-image:url(bg1.jpg);}
 
 /* 箭头 */
 .arrow{
@@ -70,75 +75,69 @@ p{
 
 <body>
 
-<!-- BGM -->
-<audio id="bgm" src="bgm.mp3" autoplay loop></audio>
+<audio id="bgm" src="bgm.mp3" loop></audio>
 
 <div id="container">
 
-  <!-- 第1页 -->
-  <div class="page">
-    <h1>上巳春光</h1>
-    <p>
-      春风渐暖，万物复苏，农历三月初三的上巳节悄然来临。<br><br>
-      这是一个承载着古人浪漫与雅趣的传统节日，<br>
-      人们临水而行，踏青游春，在天地之间感受生命的流转。<br><br>
-      一场关于春天、关于水、关于诗意生活的文化记忆，正在展开。
-    </p>
-    <div class="arrow">﹀</div>
-  </div>
+<div class="page">
+<h1>上巳春光</h1>
+<p>
+春风渐暖，万物复苏，农历三月初三的上巳节悄然来临。<br><br>
+这是一个承载着古人浪漫与雅趣的传统节日，<br>
+人们临水而行，踏青游春，在天地之间感受生命的流转。<br><br>
+一场关于春天、关于水、关于诗意生活的文化记忆，正在展开。
+</p>
+<div class="arrow">﹀</div>
+</div>
 
-  <!-- 第2页 -->
-  <div class="page">
-    <h1>节日由来</h1>
-    <p>
-      上巳节起源于古代的祓禊仪式，最早可追溯至先秦时期。<br><br>
-      古人相信，在三月上巳这一天临水沐浴，可以洗去不祥与晦气，<br>
-      以洁净之身迎接春日的生机。<br><br>
-      到了魏晋时期，这一节日逐渐演变为文人雅集之日，<br>
-      人们不再只是祈福驱邪，更在自然山水间寄托情怀。
-    </p>
-    <div class="arrow">﹀</div>
-  </div>
+<div class="page">
+<h1>节日由来</h1>
+<p>
+上巳节起源于古代的祓禊仪式，最早可追溯至先秦时期。<br><br>
+古人相信，在三月上巳这一天临水沐浴，可以洗去不祥与晦气，<br>
+以洁净之身迎接春日的生机。<br><br>
+到了魏晋时期，这一节日逐渐演变为文人雅集之日，<br>
+人们不再只是祈福驱邪，更在自然山水间寄托情怀。
+</p>
+<div class="arrow">﹀</div>
+</div>
 
-  <!-- 第3页 -->
-  <div class="page">
-    <h1>曲水流觞</h1>
-    <p>
-      上巳节最具代表性的习俗，莫过于“曲水流觞”。<br><br>
-      文人们沿着弯曲的水流席地而坐，将酒杯置于流水之上，<br>
-      任其顺流而下，停在谁面前，谁便饮酒赋诗。<br><br>
-      这一雅趣将自然之美与人文之情融为一体，<br>
-      成就了中国传统文化中极具诗意的一幕。
-    </p>
-    <div class="arrow">﹀</div>
-  </div>
+<div class="page">
+<h1>曲水流觞</h1>
+<p>
+上巳节最具代表性的习俗，莫过于“曲水流觞”。<br><br>
+文人们沿着弯曲的水流席地而坐，将酒杯置于流水之上，<br>
+任其顺流而下，停在谁面前，谁便饮酒赋诗。<br><br>
+这一雅趣将自然之美与人文之情融为一体，<br>
+成就了中国传统文化中极具诗意的一幕。
+</p>
+<div class="arrow">﹀</div>
+</div>
 
-  <!-- 第4页 -->
-  <div class="page">
-    <h1>兰亭雅集</h1>
-    <p>
-      提到上巳节，最著名的便是东晋时期的兰亭雅集。<br><br>
-      王羲之与众多文人在会稽山阴兰亭修禊，<br>
-      饮酒赋诗，留下千古名篇《兰亭集序》。<br><br>
-      “曲水流觞，列坐其次”，<br>
-      将上巳节的文化意境推向巅峰，成为后世传颂的经典。
-    </p>
-    <div class="arrow">﹀</div>
-  </div>
+<div class="page">
+<h1>兰亭雅集</h1>
+<p>
+提到上巳节，最著名的便是东晋时期的兰亭雅集。<br><br>
+王羲之与众多文人在会稽山阴兰亭修禊，<br>
+饮酒赋诗，留下千古名篇《兰亭集序》。<br><br>
+“曲水流觞，列坐其次”，<br>
+将上巳节的文化意境推向巅峰，成为后世传颂的经典。
+</p>
+<div class="arrow">﹀</div>
+</div>
 
-  <!-- 第5页 -->
-  <div class="page">
-    <h1>春日余韵</h1>
-    <p>
-      时至今日，上巳节虽不再盛行，<br>
-      但那份亲近自然、寄情山水的生活方式仍令人向往。<br><br>
-      在快节奏的现代生活中，<br>
-      或许我们更需要这样一个节日，<br>
-      让心灵回归自然，让脚步慢下来。<br><br>
-      春水初生，春林初盛，<br>
-      愿你在这个季节，也能遇见属于自己的诗意时刻。
-    </p>
-  </div>
+<div class="page">
+<h1>春日余韵</h1>
+<p>
+时至今日，上巳节虽不再盛行，<br>
+但那份亲近自然、寄情山水的生活方式仍令人向往。<br><br>
+在快节奏的现代生活中，<br>
+或许我们更需要这样一个节日，<br>
+让心灵回归自然，让脚步慢下来。<br><br>
+春水初生，春林初盛，<br>
+愿你在这个季节，也能遇见属于自己的诗意时刻。
+</p>
+</div>
 
 </div>
 
@@ -147,63 +146,71 @@ let pages = document.querySelectorAll(".page");
 let current = 0;
 let startY = 0;
 
-// 手机触摸
+// 滑动
 document.addEventListener("touchstart", e=>{
-  startY = e.touches[0].clientY;
+startY = e.touches[0].clientY;
 });
 
 document.addEventListener("touchend", e=>{
-  let endY = e.changedTouches[0].clientY;
-  let diff = startY - endY;
+let endY = e.changedTouches[0].clientY;
+let diff = startY - endY;
 
-  if(diff > 50 && current < pages.length-1){
-    current++;
-  }else if(diff < -50 && current > 0){
-    current--;
-  }
+if(diff > 50 && current < pages.length-1){
+current++;
+}else if(diff < -50 && current > 0){
+current--;
+}
 
-  update();
+update();
 });
 
-// 鼠标滚轮（电脑端）
+// 滚轮
 let isScrolling = false;
 
 document.addEventListener("wheel", (e) => {
-  if(isScrolling) return;
+if(isScrolling) return;
+if(Math.abs(e.deltaY) < 30) return;
 
-  // 防止触控板过于灵敏
-  if(Math.abs(e.deltaY) < 30) return;
+isScrolling = true;
 
-  isScrolling = true;
-
-  if(e.deltaY > 0 && current < pages.length - 1){
-    current++;
-  }else if(e.deltaY < 0 && current > 0){
-    current--;
-  }
-
-  update();
-
-  setTimeout(()=>{
-    isScrolling = false;
-  }, 600);
-});
-
-// 页面更新
-function update(){
-  pages.forEach((p,i)=>{
-    p.style.transform = `translateY(${(i-current)*100}%)`;
-  });
+if(e.deltaY > 0 && current < pages.length - 1){
+current++;
+}else if(e.deltaY < 0 && current > 0){
+current--;
 }
 
-// 初始化
 update();
 
-// 解决自动播放问题（移动端）
-document.addEventListener("touchstart", ()=>{
-  let bgm = document.getElementById("bgm");
-  bgm.play();
-}, {once:true});
+setTimeout(()=>{isScrolling = false;},600);
+});
+
+// 更新
+function update(){
+pages.forEach((p,i)=>{
+p.style.transform = `translateY(${(i-current)*100}%)`;
+});
+}
+
+update();
+
+// ✅ 强制自动播放（重点优化）
+let bgm = document.getElementById("bgm");
+
+function playBgm(){
+bgm.play().catch(()=>{});
+}
+
+// 多重触发
+document.addEventListener("touchstart", playBgm, {once:true});
+document.addEventListener("click", playBgm, {once:true});
+
+// 微信环境
+document.addEventListener("WeixinJSBridgeReady", function () {
+playBgm();
+}, false);
+
+// 页面加载尝试
+window.onload = playBgm;
 </script>
 
 </body>
