@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>谷雨 H5</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body,html{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:"微软雅黑",sans-serif;
+}
+
+/* 背景 */
+body{
+  background:url(bg.jpg) no-repeat center/cover;
+}
+
+/* 页面容器 */
+.page{
+  width:100%;
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  transition:all 0.6s ease;
+}
+
+/* 半透明层 */
+.content{
+  width:80%;
+  padding:40px;
+  background:rgba(255,255,255,0.65);
+  border-radius:16px;
+  text-align:center;
+  backdrop-filter: blur(6px);
+}
+
+h1{
+  font-size:36px;
+  margin-bottom:20px;
+}
+
+p{
+  font-size:18px;
+  line-height:1.8;
+}
+
+/* 初始层叠效果 */
+.page{
+  transform:scale(0.9) translateX(100%);
+  opacity:0;
+}
+
+.page.active{
+  transform:scale(1) translateX(0);
+  opacity:1;
+  z-index:2;
+}
+
+.page.prev{
+  transform:scale(0.85) translateX(-30%);
+  opacity:0.6;
+  z-index:1;
+}
+
+/* 右侧箭头 */
+.arrow{
+  position:absolute;
+  right:15px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:26px;
+  animation:move 1.5s infinite;
+}
+
+@keyframes move{
+  0%{transform:translateY(-50%) translateX(0);}
+  50%{transform:translateY(-50%) translateX(8px);}
+  100%{transform:translateY(-50%) translateX(0);}
+}
+
+/* 按钮 */
+.start-btn{
+  padding:15px 30px;
+  font-size:20px;
+  background:#4CAF50;
+  color:#fff;
+  border:none;
+  border-radius:30px;
+  transition:all 0.5s;
+}
+
+/* 淡入淡出 */
+.fade-out{opacity:0;transform:scale(0.8);}
+.fade-in{animation:fadeIn 1s forwards;}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+/* 🌧️ 雨丝 */
+.rain{
+  position:fixed;
+  width:2px;
+  height:80px;
+  background:rgba(255,255,255,0.4);
+  top:-100px;
+  animation:rain 1s linear infinite;
+}
+
+@keyframes rain{
+  to{
+    transform:translate(-200px,800px);
+  }
+}
+
+/* 🌫️ 雾气 */
+.fog{
+  position:fixed;
+  width:200%;
+  height:100%;
+  background:rgba(255,255,255,0.1);
+  animation:fogMove 20s linear infinite;
+}
+
+@keyframes fogMove{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" src="bgm.mp3" loop></audio>
+
+<!-- 雾 -->
+<div class="fog" id="fog" style="display:none;"></div>
+
+<!-- 页面 -->
+<div class="page active">
+  <button class="start-btn" id="startBtn">开启谷雨之旅</button>
+
+  <div class="content" id="introText" style="display:none;">
+    <h1>谷雨时节</h1>
+    <p>
+      谷雨，是春季最后一个节气，雨生百谷，万物生长。<br><br>
+      在这一时节，天地之间弥漫着湿润与温和，<br>
+      春意渐浓，农事正忙，生机盎然。
+    </p >
+  </div>
+</div>
+
+<div class="page">
+  <div class="content">
+    <h1>节气含义</h1>
+    <p>
+      谷雨，意为“雨生百谷”，此时降水明显增多，<br>
+      对农作物生长尤为重要。<br><br>
+      古人云：“清明断雪，谷雨断霜”，<br>
+      标志着寒意彻底退去，春意完全铺展。
+    </p >
+  </div>
+  <div class="arrow">›</div>
+</div>
+
+<div class="page">
+  <div class="content">
+    <h1>谷雨习俗</h1>
+    <p>
+      谷雨时节，人们有饮谷雨茶、祭海、赏花等习俗。<br><br>
+      新茶清香，寓意新生；<br>
+      春花烂漫，象征繁盛。<br><br>
+      人们在自然之中，感受节气流转之美。
+    </p >
+  </div>
+  <div class="arrow">›</div>
+</div>
+
+<div class="page">
+  <div class="content">
+    <h1>春意将尽</h1>
+    <p>
+      谷雨之后，春将尽，夏将至。<br><br>
+      在这一转折之际，<br>
+      万物在最后一场春雨中蓬勃生长，<br>
+      为即将到来的夏日积蓄力量。
+    </p >
+  </div>
+  <div class="arrow">›</div>
+</div>
+
+<div class="page">
+  <div class="content">
+    <h1>余韵悠长</h1>
+    <p>
+      一场春雨，一段时光。<br><br>
+      愿你在谷雨之际，<br>
+      也能放慢脚步，感受自然的温柔节奏，<br>
+      在雨声中，听见生活的回响。
+    </p >
+  </div>
+</div>
+
+<script>
+let pages=document.querySelectorAll(".page");
+let current=0;
+let startX=0;
+
+// 页面更新（层叠效果）
+function update(){
+  pages.forEach((p,i)=>{
+    p.classList.remove("active","prev");
+    if(i===current) p.classList.add("active");
+    else if(i===current-1) p.classList.add("prev");
+  });
+}
+update();
+
+// 👉 手机横滑
+document.addEventListener("touchstart",e=>{
+  startX=e.touches[0].clientX;
+});
+
+document.addEventListener("touchend",e=>{
+  let endX=e.changedTouches[0].clientX;
+  let diff=startX-endX;
+
+  if(diff>50 && current<pages.length-1) current++;
+  else if(diff<-50 && current>0) current--;
+
+  update();
+});
+
+// 👉 滚轮（电脑）
+let lock=false;
+document.addEventListener("wheel",e=>{
+  if(lock) return;
+  lock=true;
+
+  if(e.deltaY>0 && current<pages.length-1) current++;
+  else if(e.deltaY<0 && current>0) current--;
+
+  update();
+
+  setTimeout(()=>lock=false,600);
+});
+
+// 👉 音乐
+let bgm=document.getElementById("bgm");
+function play(){
+  bgm.play().catch(()=>{});
+}
+document.addEventListener("touchstart",play,{once:true});
+document.addEventListener("click",play,{once:true});
+document.addEventListener("WeixinJSBridgeReady",play);
+window.onload=play;
+
+// 👉 按钮触发
+let btn=document.getElementById("startBtn");
+let text=document.getElementById("introText");
+
+btn.onclick=function(){
+  btn.classList.add("fade-out");
+  setTimeout(()=>btn.style.display="none",500);
+
+  text.style.display="block";
+  text.classList.add("fade-in");
+
+  startRain();
+};
+
+// 🌧️ 雨
+function startRain(){
+  for(let i=0;i<50;i++){
+    let r=document.createElement("div");
+    r.className="rain";
+    r.style.left=Math.random()*100+"vw";
+    r.style.animationDuration=(0.8+Math.random())+"s";
+    document.body.appendChild(r);
+  }
+  document.getElementById("fog").style.display="block";
+}
+</script>
+
+</body>
+</html>
