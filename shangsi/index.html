@@ -34,16 +34,17 @@ body,html{
 
 h1{
   font-size:42px;
-  margin-bottom:20px;
+  margin-bottom:24px;
+  letter-spacing:2px;
 }
 
 p{
-  font-size:18px;
-  line-height:1.8;
+  font-size:19px;
+  line-height:1.9;
   max-width:90%;
 }
 
-/* 页面位置 */
+/* 背景 */
 .page:nth-child(1){background:url(bg1.jpg);}
 .page:nth-child(2){background:url(bg2.jpg);}
 .page:nth-child(3){background:url(bg3.jpg);}
@@ -53,14 +54,15 @@ p{
 /* 箭头 */
 .arrow{
   position:absolute;
-  bottom:20px;
-  font-size:24px;
+  bottom:24px;
+  font-size:26px;
+  opacity:0.7;
   animation:updown 1.5s infinite;
 }
 
 @keyframes updown{
   0%{transform:translateY(0);}
-  50%{transform:translateY(8px);}
+  50%{transform:translateY(10px);}
   100%{transform:translateY(0);}
 }
 </style>
@@ -145,6 +147,7 @@ let pages = document.querySelectorAll(".page");
 let current = 0;
 let startY = 0;
 
+// 手机触摸
 document.addEventListener("touchstart", e=>{
   startY = e.touches[0].clientY;
 });
@@ -162,6 +165,31 @@ document.addEventListener("touchend", e=>{
   update();
 });
 
+// 鼠标滚轮（电脑端）
+let isScrolling = false;
+
+document.addEventListener("wheel", (e) => {
+  if(isScrolling) return;
+
+  // 防止触控板过于灵敏
+  if(Math.abs(e.deltaY) < 30) return;
+
+  isScrolling = true;
+
+  if(e.deltaY > 0 && current < pages.length - 1){
+    current++;
+  }else if(e.deltaY < 0 && current > 0){
+    current--;
+  }
+
+  update();
+
+  setTimeout(()=>{
+    isScrolling = false;
+  }, 600);
+});
+
+// 页面更新
 function update(){
   pages.forEach((p,i)=>{
     p.style.transform = `translateY(${(i-current)*100}%)`;
@@ -171,7 +199,7 @@ function update(){
 // 初始化
 update();
 
-// 解决自动播放问题
+// 解决自动播放问题（移动端）
 document.addEventListener("touchstart", ()=>{
   let bgm = document.getElementById("bgm");
   bgm.play();
